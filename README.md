@@ -7,8 +7,8 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 ## Table of Contents
 
 - [01 initial all](#01-initial-all)
-  - [prepare chr-based matrix](#prepare-chr-based-matrix)
-  - [prepare data for IPQ](#prepare-data-for-IPQ)
+  - [prepare chr-based LRR matrix and BAF matrix](#prepare-chr-based-lrr-matrix-and-baf-matrix)
+  - [prepare data for running IPQ](#prepare-data-for-running-IPQ)
   - [call PennCNV](#call-penncnv)
   - [call QuantiSNP](#call-quantisnp)
   - [call iPattern]($call-ipattern)
