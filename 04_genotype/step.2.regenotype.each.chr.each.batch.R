@@ -81,7 +81,8 @@ dt_cnvs <- readRDS(file = file.path(path_data, "cnvs_step3_clean.rds"))
 # PennCNV pfb
 cat("read in PFB\n")
 dat_PFB <- dt_PFB <- read.table(file = file.path(path_data, "SNP.pfb"), sep = "\t",
-                                header = TRUE, as.is = TRUE, check.names = FALSE, comment.char = "")
+                                header = TRUE, as.is = TRUE, check.names = FALSE,
+                                comment.char = "")
 dt_PFB <- dt_PFB[, c("Name", "PFB", "Position")] # add Position information here
 
 # read in matrix dat of LRR and BAF
