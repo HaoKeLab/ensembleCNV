@@ -36,7 +36,7 @@ prepare all BAF and LRR matrix
 
 call iPattern, PennCNV and QuantiSNP
 
-### prepare chr-based matrix (LRR and BAF)
+### prepare chr-based LRR matrix and BAF matrix
 
 Before running this script, the following data must by supplied.
 1, generate LRR and BAF (tab format) matrix from finalreport
