@@ -15,9 +15,9 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [02 batch effect](#02-batch-effect)
   - [snp-level LRR statics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
-- [03 create CNVR](#03-create-CNVR)
-  - [create CNVR for individual CNV calling method](#create-CNVR-for-individual-CNV-calling-method)
-  - [ensembleCNV](#ensenmbleCNV)
+- [03 create CNVR](#03-create-cnvr)
+  - [create CNVR for individual CNV calling method](#create-cnvr-for-individual-cnv-calling-method)
+  - [ensembleCNV](#ensenmblecnv)
 - [04 genotype](#04-genotype)
   - [split cnvrs into batches](#split-cnvr-into-batches)
   - [regenotype](#regenotype)
@@ -26,7 +26,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [06 result](#06-result)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
 - [test](#test)
-  - [test ensembleCNV](#test-ensembleCNV)
+  - [test ensembleCNV](#test-ensemblecnv)
   - [test regenotype](#test-regenotype)
 
 
