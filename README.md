@@ -151,9 +151,9 @@ script "run.R" contains all needed running command.
 ```sh
 ./step.1.randomly.select.snp.R file_snps path_output
 
-perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport", "file_matrix_LRR" in this script)
+perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport", "file_matrix_LRR")
 
-step.3.pca.new.R ( "filename_matrix" "path_input information" )
+step.3.pca.new.R ( add "filename_matrix", "path_input")
 ``` 
 
 ### PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
