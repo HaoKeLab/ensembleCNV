@@ -44,14 +44,39 @@ path_to_save_matrix_in_tab_format
 
 ### prepare data for IPQ
 
+iPattern
+```sh
+perl finalreport_to_iPattern.pl \
+-prefix path_to_save_ipattern_input_file \
+-suffix .txt \
+path_to_finalreport
+```
+
+PennCNV
+```sh
+perl finalreport_to_PennCNV.pl \
+-prefix path_to_save_penncnv_input_file \
+-suffix .txt \
+path_to_finalreport
+```
+
+QuantiSNP
+```sh
+perl finalreport_to_QuantiSNP.pl \
+-prefix path_to_save_quantisnp_input_file \
+-suffix .txt \
+path_to_finalreport
+```
+
 ### call PennCNV
 
 Here, calling PennCNV including following 5 steps:
 
-prepare files for running PennCNV:
+prepare files containing SNP.pfb and SNp.gcmodel for running PennCNV:
 ```sh
-step.0.prepare.files.sh
+step.0.prepare.files.sh contains all commands 
 ```
+
 run PennCNV through submiting jobs:
 ```sh 
 ./step.1.run.PennCNV.jobs.R \
@@ -72,7 +97,7 @@ check jobs and resubmit unfinishing callings:
 -e path/to/penncnv/2011Jun16/lib/hhall.hmm
 ```
 
-combine all PennCNV calling results:
+combine all PennCNV calling results (sample based):
 ```sh
 perl step.3.combine.PennCNV.pl \
 --in_dir path/to/res/ \
@@ -93,23 +118,21 @@ Here, calling QuantiSNP including 3 steps:
 
 prepare QuantiSNP and submit jobs:
 ```sh
-./prepare.QuantiSNP.R \
+./step.1.prepare.QuantiSNP.R \
 -i path/to/data/folder \
 -o path/to/result/folder
 ```
 check jobs and resubmit:
 ```sh
-./check_QuantiSNP.R \
+./step.2.check_QuantiSNP.R \
 -d path/to/data/folder \
 -r path/to/callingCNV/folder 
 ```
 
 combine CNV calling results:
+running this script, you need to add "in_dir", "out_dir", "out_file" information in the script.
 ```sh
-./combine.CNVcalling.QuantiSNP.R \
--r path/to/results/folder \
--o path/to/save/combined-result \
--n saving_name
+perl step.3.combine.QuantiSNP.pl
 ```
 
 
@@ -117,44 +140,30 @@ combine CNV calling results:
 
 sample script for calling iPattern:
 ```sh
-module load R/3.0.3
-module load python
-
-export IPNBASE='/sc/orga/projects/haok01a/chengh04/shared_genomics_resources/iPattern/FA/ipn_0.581'
-PYTHONPATH=$PYTHONPATH:'/sc/orga/projects/haok01a/chengh04/shared_genomics_resources/iPattern/FA/ipn_0.581/ipnlib'
-
-/sc/orga/projects/haok01a/chengh04/shared_genomics_resources/iPattern/FA/ipn_0.581/preprocess/ilmn/ilmn_run.py \
---gender-file /sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.iPattern/batch1/group1/FA_batch1_group1_gender.txt \
---bad-sample-file /sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.iPattern/batch1/group1/FA_batch1_group1_bad_samples.txt \
---data-file-list /sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.iPattern/batch1/group1/FA_batch1_group1_data_file.txt \
---experiment FA_batch1_group1 \
--o /sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.iPattern/batch1/group1 \
---do-log --do-cleanup --noqsub
+script "run.R" contains all needed running command.
 ```
 
 
 ## 02 batch effect
 
-### snp-level LRR statics
- 
-randomly select 100000 snps
+### PCA on snp-level LRR statics from randomly select 100000 snps
 
-```r
-randomly.select.snps.R
+```sh
+./step.1.randomly.select.snp.R file_snps path_output
+
+perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport", "file_matrix_LRR" in this script)
+
+step.3.pca.new.R ( "filename_matrix" "path_input information" )
+``` 
+
+### PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
+
+```sh
+
+generate iPattern, PennCNV and QuantiSNP calling sample level statics data using step.1.generate.data.R script
+
+do PCA using step.2.pca.R
 ```
-
-generate snps LRR matrix
-
-```perl
-perl generate.snps.LRR.matrix.pl
-```
-PCA
-
-```r
-PCA.R
-```
-
-### sample-level IPQ 10 statics
 
 ## 03 CNVR
 

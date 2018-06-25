@@ -2,9 +2,9 @@
 
 use Carp;
 
-$file_snps_selected = "/sc/orga/projects/haok01a/chengh04/MEGA/MegaEX_Inga/analysis_Part1/batch_effect/dat/snps.randomly.select.txt";
-$reportfile = "/sc/orga/projects/haok01a/chengh04/MEGA/MegaEX_Inga/FinalReport/Plates_Part1/MegaEX_Inga_Part1_FinalReport.txt";
-$file_marix_LRR="/sc/orga/projects/haok01a/chengh04/MEGA/MegaEX_Inga/analysis_Part1/batch_effect/res/matrix.LRR.snps.randomly.select.txt";
+$file_snps_selected = "";
+$reportfile = "";
+$file_marix_LRR="";
 
 ## read in selected snps
 open(IN, "< $file_snps_selected") or die "Can't open snps file $in_snps: $!";
