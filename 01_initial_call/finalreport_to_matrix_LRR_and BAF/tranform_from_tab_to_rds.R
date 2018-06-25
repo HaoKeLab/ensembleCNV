@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/usr/bin/env Rscript --vanilla
 
 ## after using perl script to split finalreport into LRR and BAF 'tab' format data
 # transform from .tab format to .rds

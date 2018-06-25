@@ -28,14 +28,18 @@ prepare all BAF and LRR matrix
 
 call iPattern, PennCNV and QuantiSNP
 
-### prepare chr-based matrix
+### prepare chr-based matrix (LRR and BAF)
 
 Before running this script, the following data must by supplied.
-1, 
+1, generate LRR and BAF (tab format) matrix from finalreport
 ```perl
-perl chr_split_finalreport.pl FA_finalreport.txt \
-idx_sampleID  idx_chr idx_position idx_snpName idx_LRR \
-path_save_chr path_save_summary
+perl finalreport_to_matrix_LRR_and_BAF.pl \
+path_to_finalreport \
+path_to_save_matrix_in_tab_format
+```
+2, tansform tab format matrix to .rds format
+```sh
+./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
 
 ### prepare data for IPQ
