@@ -267,8 +267,24 @@ matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 ## test
 here, we supply a samll test example for user to test.
 
+copy all the scripts and data folder in test working folder.
+
 ### Test ensembleCNV
+```sh
+mkdir res
+./step.2.ensembleCNV.R \
+-i ./test_data_ensembleCNV/cnvr1.ipattern.rds \
+-p ./test_data_ensembleCNV/cnvr1.penncnv.rds \
+-q ./test_data_ensembleCNV/cnvr1.quantisnp.rds \
+-s ./test_data_ensembleCNV/SNP.cnvr1.pfb \
+-c ./test_data_ensembleCNV/chr_centromere_hg19.rds \
+-o ./test_data_ensembleCNV/res
+```
 
 ### Test regenotype
+```sh
+mkdir script; cp 04_genotype/script/* .
+```
+and run test_regenotype.R line by line to generate regenotype copyt number results.
 
 
