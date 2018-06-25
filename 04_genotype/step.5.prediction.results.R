@@ -1,10 +1,17 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript --vanilla
+
+args <- commandArgs(trailingOnly = TRUE)
+
+n <- as.integer( args[1] ) ## number of samples
+path_cnvr <- args[2]
+path_pred <- args[3]
+path_res  <- args[4]
 
 ## all data save as vector to fast speed
-n.samples <- 1000
+n.samples <- n
+
 # create folder name with clean CNVR data
 file_cnvr <- "cnvrs_annotated_batch.rds"  # with batch annotated
-path_cnvr <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/FA_1000/res/"
 dt_cnvr <- readRDS(file = file.path(path_cnvr, file_cnvr))
 
 tbl <- table(dt_cnvr$chr, dt_cnvr$batch)
@@ -16,8 +23,8 @@ dat1 <- subset(dat, Freq != 0)
 cat("total number of folders:", nrow(dat1), "\n") #
 
 ## cnvrs chr-batch-based results
-path_res_chr_batch <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/FA_1000/res/pred"
-path_output <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/FA_1000/res/res_final"
+path_res_chr_batch <- path_pred
+path_output <- path_res
 
 dt_cnvr <- readRDS(file = file.path(path_cnvr, file_cnvr))
 

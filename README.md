@@ -26,6 +26,8 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [06 result](#06-result)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
 - [07 test](#07-test)
+  - [test ensemblCNV](#test-ensembleCNV)
+  - [test regenotype](#test-regenotype)
 
 
 ## 01 initial all
@@ -204,6 +206,27 @@ split all cnvrs generated from ensembleCNV step into chromosome based batches.
 ./step.1.split.cnvrs.into.batches.R --help for detail
 ```
 
+regenotype CNVRs in one batch:
+(1) path_data contains:
+samples_QC.rds (from PennCNV with columns: LRR_mean and LRR_sd )
+duplicate.pairs.rds (two columns: sample1.name sample2.name )
+SNP.pfb (from PennCNV)
+cnvs_step3_clean.rds (from ensembleCNV step)
+cnvrs_batch_annotated.rds (cnvrs adding columns: batch)
+(2) path_matrix (LRR and BAF folder to save matrix data)
+(3) path_sourcefile (all scripts need to be source )
+(4) path_result (save all regenotype results)
+
+```sh
+sample code:
+./step.2.regenotype.each.chr.each.batch.R \
+-c 1 -b 1 -t 0 -p path_data -o path_result -m path_matrix -s path_sourcefile
+
+./step.2.regenotype.each.chr.each.batch.R --help for detail
+
+```
+
+combine all sample-based regenotype results.
 
 
 
@@ -233,5 +256,9 @@ matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 ```
 ## 07 test
 here, we supply a samll test example for user to test.
+
+### Test enesembleCNV
+
+### Test regenotype
 
 

@@ -1,7 +1,7 @@
 #!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
 
 path_code   = ""
-name_script = "step.2.runme.minerva.each.chr.each.batch.R"
+name_script = "step.2.regenotype.each.chr.each.batch.R"
 
 script = file.path(path_code, name_script)
 

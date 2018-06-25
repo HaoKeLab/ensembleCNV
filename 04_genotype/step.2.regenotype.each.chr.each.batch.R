@@ -1,4 +1,4 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript --vanilla
 
 # load packages
 suppressMessages(require(optparse))
@@ -19,19 +19,32 @@ option_list = list(
   make_option(c("-b", "--batch"), action = "store", type = "integer", default = NA,
               help = "which batch."),
   make_option(c("-t", "--type"), action = "store", type = "integer", default = NA,
-              help = "which type (0-all ( run ), 1-failed ( rerun ))")
+              help = "which type (0-all ( run ), 1-failed ( rerun ))"),
+  make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
+              help = "path contain all running needed data"),
+  make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
+              help = "path save all results"),
+  make_option(c("-m", "--matrixpath"), action = "store", type = "charcter", default = NA,
+              help = "path save all LRR and BAF chromosome based data"),
+  make_option(c("-s", "--sourcefile"), action = "store", type = "character", default = NA,
+              help = "path contain all scripts need to be soucred")
 )
 
 opt = parse_args(OptionParser(option_list = option_list))
-pars = c(opt$chr, opt$batch, opt$type)
+pars = c(opt$chr, opt$batch, opt$type, opt$datapath, opt$resultpath, opt$matrixpath, opt$sourcefile)
 
 if ( any(is.na(pars)) ) {
   stop("All three parameters must be supplied.(--help for detail)")
 }
 
-chr1 = as.integer( opt$chr )
-batch1 = as.integer( opt$batch )
-type1 = as.integer( opt$type )
+chr1   <- as.integer( opt$chr )
+batch1 <- as.integer( opt$batch )
+type1  <- as.integer( opt$type )
+
+path_data   <- opt$datapath
+path_result <- opt$resultpath
+path_matrix <- opt$matrixpath
+path_sourcefile <- opt$sourcefile
 
 if ( type1 != 1 & type1 != 0) {
   stop("type parameter must be 0 or 1.")
@@ -40,7 +53,6 @@ if ( type1 != 1 & type1 != 0) {
 cat("parameters", "chr:", chr1, "batch:", batch1, "type:", type1, "\n")
 
 # source all the function using in the pipeline
-path_sourcefile = ""
 source(file = file.path(path_sourcefile, 'fun_BAF.R'))
 source(file = file.path(path_sourcefile, 'fun_gatk.R'))
 source(file = file.path(path_sourcefile, 'fun_LRR.R'))
@@ -50,15 +62,12 @@ source(file = file.path(path_sourcefile, 'fun_plot_diagnosis.R'))
 source(file = file.path(path_sourcefile, 'fun_plot_heatmap.R'))
 source(file = file.path(path_sourcefile, 'fun_pipeline_main.R'))
 
-path_data <- ""
 # use parameters 
 ## PennCNV ( sample LRR mean and SD )
-file_PennCNV = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/dat/PennCNV_sample_QC.rds"
-samples_LRR  = readRDS(file = file_PennCNV)
+samples_LRR <- readRDS(file = file.path(path_data, "samples_QC.rds"))
 
 ## dup pairs with column_name ( sample1.name sample2.name )
-path_dup_pairs <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/dat"
-dup_pairs <- readRDS(file = file.path(path_dup_pairs, "dup.pairs.2765.rds"))
+dup_pairs <- readRDS(file = file.path(path_data, "duplicate.pairs.rds"))
 
 ## paras_LRR ------------------------------------------------------
 paras_LRR <- list(LRR_mean = list(CN_1 = -0.4156184, CN_3 = 0.1734862),
@@ -66,19 +75,16 @@ paras_LRR <- list(LRR_mean = list(CN_1 = -0.4156184, CN_3 = 0.1734862),
 
 # main part for runing on minerva -----------------------------------------
 
-cat("read in cnvs\n")  ## also have 5batch and 3batch
-path_cnvs <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/res"
-dt_cnvs <- readRDS(file = file.path(path_cnvs, "cnvs_step3_clean.rds"))
+cat("read in cnvs\n")  
+dt_cnvs <- readRDS(file = file.path(path_data, "cnvs_step3_clean.rds"))
 # PFB 
 # PennCNV pfb
 cat("read in PFB\n")
-path_PFB <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy.New/CNV_method_rerun_hg19/from_zhongyang"
-dt_PFB <- read.table(file = file.path(path_PFB, "xiaobin_batch4_recluster.pfb"), sep = "\t",
-                     header = TRUE, as.is = TRUE, check.names = FALSE, comment.char = "")
+dat_PFB <- dt_PFB <- read.table(file = file.path(path_data, "SNP.pfb"), sep = "\t",
+                                header = TRUE, as.is = TRUE, check.names = FALSE, comment.char = "")
 dt_PFB <- dt_PFB[, c("Name", "PFB", "Position")] # add Position information here
 
 # read in matrix dat of LRR and BAF
-path_matrix <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/matrix_chr_batch/rds_5batch_hg19" 
 cat("read in BAF matrix\n")
 file_BAF <- paste0("matrix_chr_", chr1, "_BAF.rds")
 dt_matrix_BAF <- readRDS(file = file.path(paste(path_matrix, "BAF", sep = "/"), file_BAF))
@@ -90,7 +96,7 @@ dt_matrix_LRR <- readRDS(file = file.path(paste(path_matrix, "LRR", sep = "/"), 
 dt_matrix_LRR <- as.matrix(dt_matrix_LRR)
 
 samples   = rownames(dt_matrix_LRR)
-snps      = colnames(dt_matrix_LRR) ## snpname orderd by position ( hg19 )
+snps      = colnames(dt_matrix_LRR)
 n_snps    = length(snps)
 n_samples = length(samples)
 
@@ -101,21 +107,17 @@ cnvrs <- NULL
 if (type1 == 0) {
   
   file_cnvr <- "cnvrs_batch_annotate.rds"  # with batch annotated
-  path_cnvr <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/res"
-  
-  dt_cnvrs  <- readRDS(file = file.path(path_cnvr, file_cnvr))  # FA contains 2765 samples
+  dt_cnvrs  <- readRDS(file = file.path(path_data, file_cnvr))
   dt_cnvrs1 <- subset(dt_cnvrs, chr == chr1 & batch == batch1)
-  cnvrs <- unique( dt_cnvrs1$CNVR_ID )  ## all cnvrs in chr1 and batch1
+  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
   
 } else if (type1 == 1) {
   
   ## this path can be changed for user
-  path_cnvr <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/res_regenotypeCNV_raw/cnvr_failed"
   file_cnvr <- paste0("cnvrs_chr_", chr1, "_batch_", batch1, "_failed.rds")
   
-  dt_cnvrs1 <- readRDS(file = file.path(path_cnvr, file_cnvr))
-  cnvrs <- unique( dt_cnvrs1$CNVR_ID )  ## all failed cnvrs in chr1 and batch1
-  
+  dt_cnvrs1 <- readRDS(file = file.path(path_data, file_cnvr))
+  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
 }
 
 
@@ -130,7 +132,7 @@ create_path <- function(path_main, str_subpath) {
   return( path_sub )
 }
 # output pathsub_folder: summary/steps/diag/heatmap
-path_main = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/res_regenotypeCNV_raw"
+path_main <- path_result
 path_log  = create_path(path_main = path_main, str_subpath = "log")
 path_png  = create_path(path_main = path_main, str_subpath = "png")
 path_pred = create_path(path_main = path_main, str_subpath = "pred")
@@ -149,11 +151,10 @@ if ( !dir.exists(path_pred) ) {
 }
 
 ## must be changed here to save each CNVRID data
-path_cnvr_stat = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/res_regenotypeCNV_raw/dat_cnvrID"
+path_cnvr_stat <- file.path(path_result, "stats")
 dir.create(path = path_cnvr_stat, showWarnings = FALSE) ## save 
 
-# res_pred_all <- data.frame() ## save each CNVR
-res_pars_all <- data.frame() ##
+res_pars_all <- data.frame() 
 # --------------------------------------------------------------------
 for (i in 1:nrow(dt_cnvrs1)) {
 
