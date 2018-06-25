@@ -267,7 +267,7 @@ matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 ## test
 here, we supply a samll test example for user to test.
 
-### Test enesembleCNV
+### Test ensembleCNV
 
 ### Test regenotype
 
