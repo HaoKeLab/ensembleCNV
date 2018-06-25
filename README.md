@@ -50,7 +50,7 @@ path_to_save_matrix_in_tab_format
 ./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
 
-### prepare data for IPQ
+### prepare data for running IPQ
 
 iPattern
 ```sh
@@ -154,7 +154,8 @@ script "run.R" contains all needed running command.
 
 ## 02 batch effect
 
-### PCA on snp-level LRR statics from randomly select 100000 snps
+### snp-level LRR statics
+PCA on snp-level LRR statics from randomly select 100000 snps
 
 ```sh
 ./step.1.randomly.select.snp.R file_snps path_output
@@ -164,7 +165,8 @@ perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport"
 step.3.pca.new.R ( add "filename_matrix", "path_input")
 ``` 
 
-### PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
+### sample-level IPQ 10 statics
+PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
 
 ```sh
 
