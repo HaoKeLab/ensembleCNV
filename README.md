@@ -227,8 +227,18 @@ sample code:
 ```
 
 combine all sample-based regenotype results.
+and, generate mat_CN.rds (matrix of regenotype copy number),
+matrix_GQ.rds (matrix of regenotype gq score), 
+CNVR_ID.rds (rownames of matrix),
+Sample_ID.rds( columns of matrix).
 
-
+explation:
+path_cnvr (with cnvrs_annotated_batch.rds)
+path_pred (with chr-batch-based regenotype results)
+path_res (save results: matrix_CN.rds matrix_GQ.rds)
+```sh
+./step.5.prediction.results.R n.samples path_cnvr path_pred pred_res
+```
 
 ## 05 boundary refinement
 
