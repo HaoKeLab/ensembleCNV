@@ -269,7 +269,8 @@ here, we supply a samll test example for user to test.
 
 copy all the scripts and data folder in test working folder.
 
-### Test ensembleCNV
+### test ensembleCNV
+
 ```sh
 mkdir res
 ./step.2.ensembleCNV.R \
@@ -281,10 +282,11 @@ mkdir res
 -o ./res
 ```
 
-### Test regenotype
+### test regenotype
+
 ```sh
 mkdir script; cp 04_genotype/script/* .
 ```
-and run test_regenotype.R line by line to generate regenotype copyt number results.
+and, run test_regenotype.R line by line to generate regenotype copyt number results.
 
 
