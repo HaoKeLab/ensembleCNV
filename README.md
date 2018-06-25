@@ -278,7 +278,7 @@ mkdir res
 -q ./test_data_ensembleCNV/cnvr1.quantisnp.rds \
 -s ./test_data_ensembleCNV/SNP.cnvr1.pfb \
 -c ./test_data_ensembleCNV/chr_centromere_hg19.rds \
--o ./test_data_ensembleCNV/res
+-o ./res
 ```
 
 ### Test regenotype
