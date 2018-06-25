@@ -11,7 +11,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
   - [prepare data for running IPQ](#prepare-data-for-running-IPQ)
   - [call PennCNV](#call-penncnv)
   - [call QuantiSNP](#call-quantisnp)
-  - [call iPattern]($call-ipattern)
+  - [call iPattern](#call-ipattern)
 - [02 batch effect](#02-batch-effect)
   - [snp-level LRR statics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
@@ -19,7 +19,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [04 genotype](#04-genotype)
 - [05 boundary refinement](#05-boundary-refinement)
 - [06 result](#06-result)
-  - [compare duplicate pairs consistency rate](compare-duplicate-pairs-consistency-rate)
+  - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
 
 
 ## 01 initial all
