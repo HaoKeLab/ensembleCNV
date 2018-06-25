@@ -1,6 +1,10 @@
+#!/usr/bin/env Rscript --vanilla
 
+args <- commandArgs(trailingOnly = TRUE)
 
-
+path_input  <- args[1]
+cohort_name <- args[2]
+path_output <- args[3]
 
 # data --------------------------------------------------------------------
 
@@ -97,10 +101,9 @@ prepare_data <- function(path) {
 # dup_samples.rds with columns: sample1.name, sample1.name
 # matrix_iPattern.rds; matrix_PennCNV.rds; matrix_QuantiSNP.rds; 
 # matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
-path_input <- "" 
 
 data_plot <- prepare_data(path = path_input)
-
+saveRDS(data_plot, file = file.path( path_output, "dups.consistency.rds"))
 
 # plot --------------------------------------------------------------------
 
@@ -165,13 +168,17 @@ plots <- function(data, cohort) {
 require(ggplot2)
 require(cowplot)
 
-cohort_name = ""
 plots_all <- plots(data = data_plot, cohort = cohort_name)
 
-plot_grid(plots_all$p1, plots_all$p2, plots_all$p3,
+png( filename = file.path(path_output, "dups.consistency.png"),
+     width = 18, height = 6, units = "in", res = 512)
+
+pg <- plot_grid(plots_all$p1, plots_all$p2, plots_all$p3,
           nrow = 1, ncol = 3, labels = LETTERS[1:6], label_size = 20,
           vjust = 1.2, align = "h")
+print(pg)
 
+dev.off()
 
 
 

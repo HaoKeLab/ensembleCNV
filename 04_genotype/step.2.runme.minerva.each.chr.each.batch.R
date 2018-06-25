@@ -50,6 +50,7 @@ source(file = file.path(path_sourcefile, 'fun_plot_diagnosis.R'))
 source(file = file.path(path_sourcefile, 'fun_plot_heatmap.R'))
 source(file = file.path(path_sourcefile, 'fun_pipeline_main.R'))
 
+path_data <- ""
 # use parameters 
 ## PennCNV ( sample LRR mean and SD )
 file_PennCNV = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/ensembleCNV/5batch/dat/PennCNV_sample_QC.rds"

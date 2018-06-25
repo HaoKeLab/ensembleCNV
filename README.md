@@ -15,11 +15,17 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [02 batch effect](#02-batch-effect)
   - [snp-level LRR statics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
-- [03 CNVR](#03-CNVR)
+- [03 create CNVR](#03-create-CNVR)
+  - [create CNVR for individual CNV calling method](#create-CNVR-for-individual-CNV-calling-method)
+  - [ensembleCNV](#ensenmbleCNV)
 - [04 genotype](#04-genotype)
+  - [split cnvrs into batches](#split-cnvr-into-batches)
+  - [regenotype](#regenotype)
+  - [combine prediction results](#combine-prediction-results)
 - [05 boundary refinement](#05-boundary-refinement)
 - [06 result](#06-result)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
+- [07 test](#07-test)
 
 
 ## 01 initial all
@@ -165,35 +171,67 @@ generate iPattern, PennCNV and QuantiSNP calling sample level statics data using
 do PCA using step.2.pca.R
 ```
 
-## 03 CNVR
+## 03 create CNVR
 
-contain one method and IPQ merge
+Here, create CNVR for both individual CNV calling method and ensembleCNV.
+
+First, CNV calling results (.rds format) from iPattern, PennCNV and QuantiSNP 
+```sh
+step.1.data.R ( "path_output", "file_ipattern", "file_penncnv", "file_quantisnp" )
+```
+
+Second, create CNVR
+individual method:
+```sh 
+./step.2.create.CNVR.IPQ.R --help for detail
+```
+ensembleCNV method:
+```sh
+./step.2.ensembleCNV.R --help for detail
+```
+
+Third, generate matrix for individual CNV calling method:
+```sh
+./step.3.generate.matrix.R file_cnv cnvCaller path_output
+```
 
 ## 04 genotype
 
-genotyping for all CNVRs
+genotyping for all CNVRs containing two main steps:
+
+split all cnvrs generated from ensembleCNV step into chromosome based batches.
+```sh
+./step.1.split.cnvrs.into.batches.R --help for detail
+```
+
+
 
 
 ## 05 boundary refinement
 
-boundary refinement
+There are 5 steps in boundary refinement, as following:
 
+All scripts are in folder 05_boundary_refinement.
+
+The main part is script named as step.2.boundary_refinement.R:
 ```sh
-./boundary_refinement.R -c 1 \
--r path/to/cnvr.rds -l path/to/chr-lrr-matrix \
--p path/to/snp.pfb -m path/to/chr-centromere.rds \
--g path/to/save/png -o path/to/save/detail-results \
--s path/to/rcpp
-```
-you need to source following script.
-
-```r
-refine_step1.cpp
+./step.2.boundary_refinement.R --help for detail
 ```
 
 ## 06 result
 
-summary compare results
+summary compare results between all CNV calling methods with ensembleCNV method.
+copy all following files to path_input:
+dup_samples.rds with columns: sample1.name, sample1.name
+matrix_iPattern.rds; matrix_PennCNV.rds; matrix_QuantiSNP.rds; 
+matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 
-### compare duplicate pairs consistency rate
+### compare duplicate pairs consistency rate, call rate based on sample and CNVR.
+
+```sh
+./compare.dups.consistency.R path_input cohort_name path_output
+```
+## 07 test
+here, we supply a samll test example for user to test.
+
 

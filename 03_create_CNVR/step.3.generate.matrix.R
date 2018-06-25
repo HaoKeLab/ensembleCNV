@@ -1,8 +1,10 @@
+#!/usr/bin/env Rscirpt --vanilla
 
+args <- commandArgs(trailingOnly = TRUE)
 
-file_cnv    <- ""
-cnvCaller   <- ""
-path_output <- ""
+file_cnv    <- args[1]
+cnvCaller   <- args[2]
+path_output <- args[3]
 
 generate_matrix_one_method <- function(dt_cnvs) {
   
