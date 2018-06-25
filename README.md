@@ -190,7 +190,7 @@ individual method:
 ```sh 
 ./step.2.create.CNVR.IPQ.R --help for detail
 ```
-## ensembleCNV
+### ensembleCNV
 ensembleCNV from iPattern, PennCNV and QuantiSNP CNV calling results.
 ```sh
 ./step.2.ensembleCNV.R --help for detail
