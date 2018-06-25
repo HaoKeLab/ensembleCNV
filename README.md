@@ -19,6 +19,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [04 genotype](#04-genotype)
 - [05 boundary refinement](#05-boundary-refinement)
 - [06 result](#06-result)
+  - [compare duplicate pairs consistency rate](compare-duplicate-pairs-consistency-rate)
 
 
 ## 01 initial all
@@ -180,3 +181,6 @@ refine_step1.cpp
 ## 06 result
 
 summary compare results
+
+### compare duplicate pairs consistency rate
+

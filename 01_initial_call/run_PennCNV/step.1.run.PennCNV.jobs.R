@@ -1,6 +1,8 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscirpt
 
-suppressPackageStartupMessages(require(optparse))
+suppressMessages({
+  require( optparse, quietly = TRUE)
+})
 
 option_list <- list(
   make_option(c("-a", "--dat"), action = "store", default = NA, type = "character",
@@ -15,21 +17,7 @@ option_list <- list(
               help = "HMM model file.")
 )
 
-## sampleID column must be changed into pure SampleID
-
 opt = parse_args(OptionParser(option_list = option_list))
-
-## set as parameters
-## test on FA batch1
-# path_dat <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.PennCNV/batch1/dat"
-# path_main <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.PennCNV/batch1/res_job"
-
-# setwd(dir = path_dat) ## no need
-# system("module load penncnv") # use direct path of running command
-
-# file_pfb <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/pipeline.callCNV/PennCNV/SNP.pfb"
-# file_gcmodel <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/pipeline.callCNV/PennCNV/PCs_6_batches_12/SNP.gcmodel"
-# file_hmm <- "/hpc/packages/minerva-common/penncnv/2011Jun16/lib/hhall.hmm"
 
 path_dat     <- opt$dat
 path_main    <- opt$main
@@ -89,12 +77,6 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
                "-list", file_list,
                "-log", file_log,
                "-out", file_rawcnv)
-
-  # detect_cnv.pl -test --confidence \
-  # -hmm /hpc/packages/minerva-common/penncnv/2011Jun16/lib/hhall.hmm \
-  # -pfb ../../SNP.pfb -gcmodel ../SNP.gcmodel -list ../list.txt \
-  # -log ../FA_PCs_2_batches_3.log -out ../FA_PCs_2_batches_3.rawcnv
-
   cmd
 }
 
@@ -133,12 +115,5 @@ for ( i in 1:length(sample_files) ) {
   Sys.sleep(0.1)
 
 }
-
-
-
-
-
-
-
 
 

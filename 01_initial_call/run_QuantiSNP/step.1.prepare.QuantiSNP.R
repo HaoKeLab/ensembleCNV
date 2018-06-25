@@ -1,4 +1,4 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript
 
 suppressPackageStartupMessages(require(optparse))
 
@@ -17,11 +17,14 @@ if (is.na(opt$input) | is.na(opt$output)) {
 path_output <- opt$output
 path_dat <- opt$input
 
+
 ## gender file
+# change path_input and filename here 
+# file in .rds format, must have two columns: Sample_ID and Gender
 path_input <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.QuantiSNP/dat"
 dat_gender <- readRDS(file = file.path(path_input, "Sample_ID_transform_detail.rds"))
-dat_gender <- dat_gender[, c("Sample_ID_new", "Gender")]  ## use new sampleID gender and batch information
-names(dat_gender) <- c("Sample_ID", "Gender")
+dat_gender <- dat_gender[, c("Sample_ID", "Gender")]  ## use new sampleID gender and batch information
+
 
 cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 

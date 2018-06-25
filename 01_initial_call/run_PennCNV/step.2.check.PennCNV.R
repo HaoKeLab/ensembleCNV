@@ -1,6 +1,8 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript
 
-suppressPackageStartupMessages(require(optparse))
+suppressMessages({
+  require( optparse, quietly = TRUE)
+})
 
 options(warn = 2)
 
@@ -29,20 +31,8 @@ if (any(is.na(c(path_dat, path_main, file_pfb, file_gcmodel, file_hmm)))) {
   stop("all parameters must be supplied. (--help for detail)")
 }
 
-# check if all samples are finished ---------------------------------------
-
-# path_dat <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.PennCNV/batch1/dat"
-# path_main <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/run.PennCNV.jobs"
-
 path_list  <- file.path(path_main, "list")
 path_res  <- file.path(path_main, "res")  ## PennCNV results folder
-
-# setwd(dir = path_dat) ## test if working
-# system("module load penncnv")
-
-# file_pfb <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/pipeline.callCNV/PennCNV/SNP.pfb"
-# file_gcmodel <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/pipeline.callCNV/PennCNV/PCs_6_batches_12/SNP.gcmodel"
-# file_hmm <- "/hpc/packages/minerva-common/penncnv/2011Jun16/lib/hhall.hmm"
 
 # submit jobs functions ---------------------------------------------------
 
@@ -63,11 +53,6 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
                "-log", file_log,
                "-out", file_rawcnv)
   
-  # detect_cnv.pl -test --confidence \
-  # -hmm /hpc/packages/minerva-common/penncnv/2011Jun16/lib/hhall.hmm \
-  # -pfb ../../SNP.pfb -gcmodel ../SNP.gcmodel -list ../list.txt \
-  # -log ../FA_PCs_2_batches_3.log -out ../FA_PCs_2_batches_3.rawcnv
-  
   cmd
 } 
 
@@ -86,8 +71,6 @@ cmd_submitjob <- function(cmd.sample, samplename) {
 sample_files <- list.files(path = path_dat)
 cat("number of samples:", length(sample_files), "\n")
 
-## check folder 
-## check .rawcnv file
 n.success <- 0
 n.fail <- 0
 for ( i in 1:length(sample_files) ) {

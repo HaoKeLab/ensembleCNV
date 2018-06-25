@@ -1,6 +1,8 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript
 
-suppressPackageStartupMessages(require(optparse))
+suppressMessages({
+  require( optparse, quietly = TRUE)
+})
 
 option_list <- list(
   make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
@@ -21,13 +23,6 @@ if (any(is.na(c(path_input, file_pfb, name_rawcnv)))) {
   stop("all parameters must be supplied.( --help for detail )")
 }
 
-# path_res <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/run.PennCNV.jobs/res"
-# path_dat <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.PennCNV/batch1/dat"
-# 
-# sample_files <- list.files(path = path_dat) ## all dat files  ## form raw data files
-# samples  <- gsub(pattern = ".txt$", replacement = "", x = sample_files)
-# n.sample <- length(samples)
-
 # clean CNV ---------------------------------------------------------------
 
 setwd(dir = path_input)
@@ -35,8 +30,6 @@ path_clean <- path_input
 name_project <- name_rawcnv
 
 file_rawcnv <- paste(name_project, "rawcnv", sep = ".")
-## make the default pfb file
-# file_pfb <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/pipeline.callCNV/PennCNV/SNP.pfb"
 file_pfb <- file_pfb
 
 n_rawcnv <- system(paste("cat", file_rawcnv, "| wc -l"), intern = TRUE)

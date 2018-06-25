@@ -1,4 +1,4 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
+#!/usr/bin/env Rscript
 
 suppressPackageStartupMessages(require(optparse))
 
