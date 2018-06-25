@@ -184,12 +184,14 @@ First, CNV calling results (.rds format) from iPattern, PennCNV and QuantiSNP
 step.1.data.R ( "path_output", "file_ipattern", "file_penncnv", "file_quantisnp" )
 ```
 
-Second, create CNVR
+Second, 
+### create CNVR for individual CNV calling method
 individual method:
 ```sh 
 ./step.2.create.CNVR.IPQ.R --help for detail
 ```
-ensembleCNV method:
+## ensembleCNV
+ensembleCNV from iPattern, PennCNV and QuantiSNP CNV calling results.
 ```sh
 ./step.2.ensembleCNV.R --help for detail
 ```
