@@ -259,7 +259,7 @@ dup_samples.rds with columns: sample1.name, sample1.name
 matrix_iPattern.rds; matrix_PennCNV.rds; matrix_QuantiSNP.rds; 
 matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 
-### compare duplicate pairs consistency rate, call rate based on sample and CNVR.
+### compare duplicate pairs consistency rate
 
 ```sh
 ./compare.dups.consistency.R path_input cohort_name path_output
