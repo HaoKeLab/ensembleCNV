@@ -25,7 +25,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
 - [05 boundary refinement](#05-boundary-refinement)
 - [06 result](#06-result)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
-- [07 test](#07-test)
+- [test](#test)
   - [test ensemblCNV](#test-ensembleCNV)
   - [test regenotype](#test-regenotype)
 
