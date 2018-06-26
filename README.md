@@ -23,7 +23,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
   - [regenotype](#regenotype)
   - [combine prediction results](#combine-prediction-results)
 - [05 boundary refinement](#05-boundary-refinement)
-- [06 result](#06-result)
+- [06 performance assessment](#06-performance-assessment)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
 - [test](#test)
   - [test ensembleCNV](#test-ensemblecnv)
@@ -255,7 +255,7 @@ The main part is script named as step.2.boundary_refinement.R:
 ./step.2.boundary_refinement.R --help for detail
 ```
 
-## 06 result
+## 06 performance assessment
 
 summary compare results between all CNV calling methods with ensembleCNV method.
 copy all following files to path_input:
