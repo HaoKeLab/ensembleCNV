@@ -2,7 +2,7 @@
 
 ## Method Description
 
-EnsembleCNV, which first detect CNV by aggregating the complementary strengths from multiple existing callers, followed by re-genotype and boundary refinement. Test
+EnsembleCNV, which first detect CNV by aggregating the complementary strengths from multiple existing callers, followed by re-genotype and boundary refinement.
 
 ## Table of Contents
 
