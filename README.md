@@ -2,11 +2,15 @@
 
 ## Method Description
 
-EnsembleCNV, which first detect CNV by aggregating the complementary strengths from multiple existing callers, followed by re-genotype and boundary refinement.
+EsembleCNV is a novel ensemble learning framework to detect and genotype copy number variations (CNVs) using single nucleotide polymorphism (SNP) array data. EnsembleCNV a) identifies and eliminates batch effects at raw data level; b) assembles individual CNV calls into CNV regions (CNVRs) from multiple existing callers with complementary strengths by a heuristic algorithm; c) re-genotypes each CNVR with local likelihood model adjusted by global information across multiple CNVRs; d) refines CNVR boundaries by local correlation structure in copy number intensities; e) provides direct CNV genotyping accompanied with confidence score, directly accessible for downstream quality control and association analysis. 
+
+ensembleCNV, which is primarily implemented in two phases: (1) the detection phase: initially locating CNVRs by assembling CNV calls from multiple methods with complementary advantages; (2) the re-genotyping phase: refining the initial calls with local models tuned for each CNVR.
+
+which first detect CNV by aggregating the complementary strengths from multiple existing callers, followed by re-genotype and boundary refinement.
 
 ## Table of Contents
 
-- [01 initial all](#01-initial-all)
+- [01 Initial call](#01-initial-call)
   - [prepare chr-based LRR matrix and BAF matrix](#prepare-chr-based-lrr-matrix-and-baf-matrix)
   - [prepare data for running IPQ](#prepare-data-for-running-ipq)
   - [call PennCNV](#call-penncnv)
@@ -30,7 +34,7 @@ EnsembleCNV, which first detect CNV by aggregating the complementary strengths f
   - [test regenotype](#test-regenotype)
 
 
-## 01 initial all
+## 01 initial call
 
 prepare all BAF and LRR matrix 
 
