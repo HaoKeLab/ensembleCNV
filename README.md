@@ -8,10 +8,12 @@ More details can be found in the manuscript:
 
 Zhongyang Zhang, Haoxiang Cheng, Xiumei Hong, Antonio F. Di Narzo, Oscar Franzen, Shouneng Peng, Arno Ruusalepp, Jason C. Kovacic, Johan LM Bjorkegren, Xiaobin Wang, Ke Hao (2018) EnsembleCNV: An ensemble machine learning algorithm to identify and genotype copy number variation using SNP array data. bioRxiv 356667; doi: https://doi.org/10.1101/356667 
 
+The detailed step-by-step instructions are listed as follows.
+
 ## Table of Contents
 
 - [01 Initial call](#01-initial-call)
-  - [prepare chr-based LRR matrix and BAF matrix](#prepare-chr-based-lrr-matrix-and-baf-matrix)
+  - [prepare chromosome-wise LRR and BAF matrices](#prepare-chr-based-lrr-matrix-and-baf-matrix)
   - [prepare data for running IPQ](#prepare-data-for-running-ipq)
   - [call PennCNV](#call-penncnv)
   - [call QuantiSNP](#call-quantisnp)
