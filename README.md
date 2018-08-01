@@ -4,9 +4,9 @@
 
 EsembleCNV is a novel ensemble learning framework to detect and genotype copy number variations (CNVs) using single nucleotide polymorphism (SNP) array data. EnsembleCNV a) identifies and eliminates batch effects at raw data level; b) assembles individual CNV calls into CNV regions (CNVRs) from multiple existing callers with complementary strengths by a heuristic algorithm; c) re-genotypes each CNVR with local likelihood model adjusted by global information across multiple CNVRs; d) refines CNVR boundaries by local correlation structure in copy number intensities; e) provides direct CNV genotyping accompanied with confidence score, directly accessible for downstream quality control and association analysis. 
 
-ensembleCNV, which is primarily implemented in two phases: (1) the detection phase: initially locating CNVRs by assembling CNV calls from multiple methods with complementary advantages; (2) the re-genotyping phase: refining the initial calls with local models tuned for each CNVR.
+More details can be found in the manuscript:
 
-which first detect CNV by aggregating the complementary strengths from multiple existing callers, followed by re-genotype and boundary refinement.
+Zhongyang Zhang, Haoxiang Cheng, Xiumei Hong, Antonio F. Di Narzo, Oscar Franzen, Shouneng Peng, Arno Ruusalepp, Jason C. Kovacic, Johan LM Bjorkegren, Xiaobin Wang, Ke Hao (2018) EnsembleCNV: An ensemble machine learning algorithm to identify and genotype copy number variation using SNP array data. bioRxiv 356667; doi: https://doi.org/10.1101/356667 
 
 ## Table of Contents
 
