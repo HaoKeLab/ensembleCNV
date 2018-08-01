@@ -14,10 +14,10 @@ The detailed step-by-step instructions are listed as follows.
 
 - [01 Initial call](#01-initial-call)
   - [prepare chromosome-wise LRR and BAF matrices](#prepare-chr-based-lrr-matrix-and-baf-matrix)
-  - [prepare data for running IPQ](#prepare-data-for-running-ipq)
-  - [call PennCNV](#call-penncnv)
-  - [call QuantiSNP](#call-quantisnp)
-  - [call iPattern](#call-ipattern)
+  - [prepare data for running individual CNV callers](#prepare-data-for-running-ipq)
+    - [call PennCNV](#call-penncnv)
+    - [call QuantiSNP](#call-quantisnp)
+    - [call iPattern](#call-ipattern)
 - [02 batch effect](#02-batch-effect)
   - [snp-level LRR statics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
@@ -36,7 +36,7 @@ The detailed step-by-step instructions are listed as follows.
   - [test regenotype](#test-regenotype)
 
 
-## 01 initial call
+## 01 Initial call
 
 prepare all BAF and LRR matrix 
 
