@@ -13,7 +13,7 @@ The detailed step-by-step instructions are listed as follows.
 ## Table of Contents
 
 - [01 Initial call](#01-initial-call)
-  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensembleCNV)
+  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensemblecnv)
   - [Prepare data for individual CNV callers](#prepare-data-for-running-ipq)
     - [Run PennCNV](#call-penncnv)
     - [Run QuantiSNP](#call-quantisnp)
@@ -64,7 +64,7 @@ perl finalreport_to_matrix_LRR_and_BAF.pl \
 path_to_finalreport \
 path_to_LRR_BAF_matrices
 ```
-(2) tansform tab format matrix to .rds format
+(2) Tansform tab format matrix to .rds format for quick loading in R
 ```sh
 ./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
