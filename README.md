@@ -71,7 +71,9 @@ path_to_LRR_BAF_matrices
 
 ### Prepare data for individual CNV callers
 
-iPattern
+We provide perl scripts to extract information from 
+
+#### iPattern
 ```sh
 perl finalreport_to_iPattern.pl \
 -prefix path_to_save_ipattern_input_file \
@@ -79,7 +81,7 @@ perl finalreport_to_iPattern.pl \
 path_to_finalreport
 ```
 
-PennCNV
+#### PennCNV
 ```sh
 perl finalreport_to_PennCNV.pl \
 -prefix path_to_save_penncnv_input_file \
@@ -87,7 +89,7 @@ perl finalreport_to_PennCNV.pl \
 path_to_finalreport
 ```
 
-QuantiSNP
+#### QuantiSNP
 ```sh
 perl finalreport_to_QuantiSNP.pl \
 -prefix path_to_save_quantisnp_input_file \
