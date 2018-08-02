@@ -14,7 +14,7 @@ The detailed step-by-step instructions are listed as follows.
 
 - [01 Initial call](#01-initial-call)
   - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensembleCNV)
-  - [Prepare data for running individual CNV callers](#prepare-data-for-running-ipq)
+  - [Prepare data for individual CNV callers](#prepare-data-for-running-ipq)
     - [Run PennCNV](#call-penncnv)
     - [Run QuantiSNP](#call-quantisnp)
     - [Run iPattern](#call-ipattern)
@@ -69,7 +69,7 @@ path_to_LRR_BAF_matrices
 ./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
 
-### prepare data for running IPQ
+### Prepare data for individual CNV callers
 
 iPattern
 ```sh
