@@ -56,7 +56,7 @@ The raw data needs to be converted into proper format required by ensembleCNV as
 
 ### Prepare chromosome-wise LRR and BAF matrices for ensembleCNV
 
-We provide a perl script to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes.
+We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes.
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```perl
@@ -71,7 +71,9 @@ path_to_LRR_BAF_matrices
 
 ### Prepare data for individual CNV callers
 
-iPattern
+We provide perl scripts to extract information from 
+
+#### iPattern
 ```sh
 perl finalreport_to_iPattern.pl \
 -prefix path_to_save_ipattern_input_file \
@@ -79,7 +81,7 @@ perl finalreport_to_iPattern.pl \
 path_to_finalreport
 ```
 
-PennCNV
+#### PennCNV
 ```sh
 perl finalreport_to_PennCNV.pl \
 -prefix path_to_save_penncnv_input_file \
@@ -87,7 +89,7 @@ perl finalreport_to_PennCNV.pl \
 path_to_finalreport
 ```
 
-QuantiSNP
+#### QuantiSNP
 ```sh
 perl finalreport_to_QuantiSNP.pl \
 -prefix path_to_save_quantisnp_input_file \
