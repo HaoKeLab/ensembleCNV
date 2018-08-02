@@ -13,15 +13,15 @@ The detailed step-by-step instructions are listed as follows.
 ## Table of Contents
 
 - [01 Initial call](#01-initial-call)
-  - [prepare chromosome-wise LRR and BAF matrices](#prepare-chr-based-lrr-matrix-and-baf-matrix)
-  - [prepare data for running individual CNV callers](#prepare-data-for-running-ipq)
-    - [call PennCNV](#call-penncnv)
-    - [call QuantiSNP](#call-quantisnp)
-    - [call iPattern](#call-ipattern)
-- [02 batch effect](#02-batch-effect)
-  - [snp-level LRR statics](#snp-level-lrr-statics)
+  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chr-based-lrr-matrix-and-baf-matrix)
+  - [Prepare data for running individual CNV callers](#prepare-data-for-running-ipq)
+    - [Run PennCNV](#call-penncnv)
+    - [Run QuantiSNP](#call-quantisnp)
+    - [Run iPattern](#call-ipattern)
+- [02 Batch effect](#02-batch-effect)
+  - [snp-level LRR statistics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
-- [03 create CNVR](#03-create-cnvr)
+- [03 Create CNVR](#03-create-cnvr)
   - [create CNVR for individual CNV calling method](#create-cnvr-for-individual-cnv-calling-method)
   - [ensembleCNV](#ensenmblecnv)
 - [04 genotype](#04-genotype)
@@ -42,16 +42,16 @@ prepare all BAF and LRR matrix
 
 call iPattern, PennCNV and QuantiSNP
 
-### prepare chr-based LRR matrix and BAF matrix
+### Prepare chromosome-wise LRR and BAF matrices
 
 Before running this script, the following data must by supplied.
-1, generate LRR and BAF (tab format) matrix from finalreport
+(1) generate LRR and BAF (tab format) matrix from finalreport
 ```perl
 perl finalreport_to_matrix_LRR_and_BAF.pl \
 path_to_finalreport \
 path_to_save_matrix_in_tab_format
 ```
-2, tansform tab format matrix to .rds format
+(2) tansform tab format matrix to .rds format
 ```sh
 ./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
