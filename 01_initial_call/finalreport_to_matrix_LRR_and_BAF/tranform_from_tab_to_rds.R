@@ -17,8 +17,8 @@ chr_end   <- as.integer(args[4]) ## end chr
 
 
 # create LRR/BAF folder ---------------------------------------------------/
-if ( dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"))
-if ( dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"))
+if ( !dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"))
+if ( !dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"))
 
 # read in annotate files --------------------------------------------------/
 dat_snpName = fread( input = file.path(path_input, "snps_name.txt"), header = FALSE)
