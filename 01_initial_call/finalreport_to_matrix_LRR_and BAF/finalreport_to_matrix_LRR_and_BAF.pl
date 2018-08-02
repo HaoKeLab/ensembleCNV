@@ -66,6 +66,11 @@ my %samples = ();
 my $sample_order = 1;
 my $sample_before = ();
 
+my %handle = ();
+for (1..22) {
+	$handle{$_} = ();
+}
+
 my %handle_LRR = ();
 my %handle_BAF = ();
 for (1..22) {
@@ -88,8 +93,6 @@ for (1..22) {
 
 my %snp_chr_position = ();  
 my $flag_snp = "init";
-
-open(IN, "< $reportfile") or confess "Error: Can not open file $reportfile: $!";
 
 my $flag_sampleID = "old";
 my $flag_snp_save = "yes";
@@ -278,7 +281,6 @@ while($line = <REPORT>) {
 	}
 }
 
-close IN;
 map { close $handle_save_LRR{$_} } keys %handle_save_LRR;
 map { close $handle_save_BAF{$_} } keys %handle_save_BAF;
 
