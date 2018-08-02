@@ -1,9 +1,9 @@
-#!/usr/bin/env Rscript --vanilla
+
+args <- commandArgs(trailingOnly = TRUE)
 
 ## after using perl script to split finalreport into LRR and BAF 'tab' format data
 # transform from .tab format to .rds
 
-args <- commandArgs(trailingOnly = TRUE)
 
 suppressMessages({
   require(data.table, quietly = TRUE)
