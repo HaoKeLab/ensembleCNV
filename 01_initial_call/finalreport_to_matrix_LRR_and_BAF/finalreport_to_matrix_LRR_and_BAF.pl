@@ -241,19 +241,19 @@ while($line = <REPORT>) {
 
 		if ($flag_snp_save eq "yes") {
 
-			open($fh_snp_number, ">$file_snp_number");
+			open($fh_snp_number, ">$file_snps_number");
 			foreach my $item_chr (keys %snp_chr_number) {
 				print $fh_snp_number "$item_chr\t$snp_chr_number{$item_chr}\n";
 			}
 			close $fh_snp_number;
 
-			open($fh_snp_name, ">$file_snp_name");
+			open($fh_snp_name, ">$file_snps_name");
 			foreach my $item_chr (keys %snp_chr_name) {
 				print $fh_snp_name "$item_chr\t$snp_chr_name{$item_chr}\n";
 			}
 			close $fh_snp_name;
 
-			open($fh_snp_position, ">$file_snp_position");
+			open($fh_snp_position, ">$file_snps_position");
 			foreach my $item_snp (keys %snp_chr_position) {
 				print $fh_snp_position "$item_snp\t$snp_chr_position{$item_snp}\n";
 			}
@@ -284,7 +284,7 @@ while($line = <REPORT>) {
 map { close $handle_save_LRR{$_} } keys %handle_save_LRR;
 map { close $handle_save_BAF{$_} } keys %handle_save_BAF;
 
-open(OUT, ">$file_sample");
+open(OUT, ">$file_samples_order");
 
 foreach my $item (keys %samples) {
 	print OUT "$item\t$samples{$item}\n";
