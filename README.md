@@ -13,7 +13,7 @@ The detailed step-by-step instructions are listed as follows.
 ## Table of Contents
 
 - [01 Initial call](#01-initial-call)
-  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chr-based-lrr-matrix-and-baf-matrix)
+  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices)
   - [Prepare data for running individual CNV callers](#prepare-data-for-running-ipq)
     - [Run PennCNV](#call-penncnv)
     - [Run QuantiSNP](#call-quantisnp)
