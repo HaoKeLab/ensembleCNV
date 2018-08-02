@@ -3,22 +3,23 @@
 use Data::Dumper;
 use Carp;
 
-## This script is for generating chromosome-based matrix of LRR and BAF from Genome studio finalreport.
-## The generated LRR and BAF matrixs are used to regenotype CNVR.
-## Finalreport from Genome Studio must includes following columns: "Sample ID", "Chr", "Position", "SNP Name", "Log R Ratio", "B Allele Freq"
+## This script is used to generate chromosome-wise LRR and BAF matrices from GenomeStudio finalreport.
+## The LRR and BAF matrices are used in CNV genotyping.
+## Finalreport from GenomeStudio is supposed to include the following columns: 
+## "Sample ID", "Chr", "Position", "SNP Name", "Log R Ratio", "B Allele Freq"
 
 ## module load perl5
 
 ## input
-my $reportfile = $ARGV[0];     ## finalreport from genome studio
+my $reportfile = $ARGV[0];     ## finalreport from Genome Studio
 my $path_output = $ARGV[1];    ## path to save results (LRR and BAF chr-matrix)
 
 print "Finalreport:", $reportfile, "\n";
 print "Path_output:", $path_output, "\n";
 
 ## mkdir LRR folder
-mkdir join('', $path_output, "LRR");
-mkdir join('', $path_output, "BAF");
+mkdir join('/', $path_output, "LRR");
+mkdir join('/', $path_output, "BAF");
 
 my ($count_line, $name_index, $sample_index, $LRR_index, $BAF_index, $chr_index, $position_index) = 0;	
 my (@field);
@@ -33,7 +34,7 @@ $_ = <REPORT>;
 s/[\r\n]+$//;
 $count_line++;
 @field = split (/\t/, $_);
-@field >= 4 or confess "Error: invalid header line (at least 4 tab-delimited fields, including 'SNP Name', 'Sample ID', 'B Allele Freq', 'Log R Ratio' expected) in report file $reportfile: <$_>\n";
+@field >= 6 or confess "Error: invalid header line (at least 6 tab-delimited fields, including 'SNP Name', 'Sample ID', 'B Allele Freq', 'Log R Ratio', 'Chr', 'Position' expected) in report file $reportfile: <$_>\n";
 
 for my $i (0 .. @field-1) {
 	$field[$i] eq 'SNP Name' and $name_index = $i;
@@ -53,8 +54,8 @@ defined $position_index or confess "Error: the 'Position' field is not found in 
 defined $chr_index or confess "Error: the 'Chr' field is not found in header line in report file $reportfile: <$_>\n";
 
 ## output file name
-my $path_LRR = join("", $path_output, "LRR/");
-my $path_BAF = join("", $path_output, "BAF/");
+my $path_LRR = join("/", $path_output, "LRR/");
+my $path_BAF = join("/", $path_output, "BAF/");
 my @LRR_ends = ($path_LRR, ".tab");
 my @BAF_ends = ($path_BAF, ".tab");
 my $file_samples_order = $path_output."samples_order.txt";

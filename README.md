@@ -45,8 +45,8 @@ In the GenomeStudio, the exported final report text file is supposed to include 
   - SNP Name 
   - Chr
   - Position
-  - Allele 1 - Forward (or Allele 1 - Top)
-  - Allele 2 - Forward (or Allele 2 - Top)
+  - Allele 1 - Forward (or Allele 1 - Top) (used by iPattern)
+  - Allele 2 - Forward (or Allele 2 - Top) (used by iPattern)
   - X (used by iPattern)
   - Y (used by iPattern)
   - Log R Ratio (used by PennCNV, QuantiSNP, and ensembleCNV)
@@ -64,7 +64,7 @@ perl finalreport_to_matrix_LRR_and_BAF.pl \
 path_to_finalreport \
 path_to_LRR_BAF_matrices
 ```
-(2) Tansform tab format matrix to .rds format for quick loading in R
+(2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
 ./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
