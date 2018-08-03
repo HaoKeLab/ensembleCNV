@@ -66,12 +66,13 @@ path_to_LRR_BAF_matrices
 ```
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
-./tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
+Rscript tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
+Here ``path_input`` is supposed to be path_to_LRR_BAF_matrices
 
 ### Prepare data for individual CNV callers
 
-We provide perl scripts to extract information from 
+We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/prepare_IPQ_input_file) to extract information from final report and convert the data into the formatted input files required by iPattern, PennCNV and QuantiSNP.
 
 #### iPattern
 ```sh
