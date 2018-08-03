@@ -164,6 +164,7 @@ while($line = <REPORT>) {
 	$LRR1 = $line[$LRR_index];
 	$BAF1 = $line[$BAF_index];
 
+    ## initialize the first sample
 	if ((! exists $samples{$sample1}) && ($flag_sampleID eq "old")) {
 		$samples{$sample1} = $sample_order;
 		$sample_order = $sample_order + 1;
@@ -182,6 +183,7 @@ while($line = <REPORT>) {
 		}
 	} 
 
+    ## add data to current sample1
 	if ( (exists $samples{$sample1}) && ($flag_sampleID eq "new") ) {
 
 		if ( exists $handle_LRR{$chr1} ) {
@@ -194,11 +196,12 @@ while($line = <REPORT>) {
 				$snp_chr_position{$snp1} = $position1;
 			}
 		}
-
 	}
 
+    ## initialize following samples
 	if ( (! exists $samples{$sample1}) && ($flag_sampleID eq "new") ) {
 
+		## starting with a new sample, so save data from the previous sample
 		foreach my $item (sort keys %handle_LRR) {
 			if (! exists $handle_save_LRR{$item}) {
 
@@ -223,6 +226,7 @@ while($line = <REPORT>) {
 
 			$combine_chr_snp = join("___", @array_chr_snp);
 
+			## only apply for the first sample
 			if ($flag_snp eq  "init") {
 				$snp_chr_number{$item} = scalar(@array_chr_snp);
 				$snp_chr_name{$item} = $combine_chr_snp;
@@ -239,6 +243,7 @@ while($line = <REPORT>) {
 			print { $handle_save_BAF{$item} } qq($chr_BAF\n);
 		}
 
+        ## only apply for the first sample
 		if ($flag_snp_save eq "yes") {
 
 			open($fh_snp_number, ">$file_snps_number");
@@ -261,6 +266,7 @@ while($line = <REPORT>) {
 
 			$flag_snp_save = "no";
 		}
+		
 		$flag_snp = "pass";  ## use the first sample information
 		my %handle_LRR = ();
 		my %handle_BAF = ();
@@ -272,6 +278,7 @@ while($line = <REPORT>) {
 		$samples{$sample1} = $sample_order;
 		$sample_order  = $sample_order + 1;
 		print "$sample1\n";
+		
 		if ( exists $handle_LRR{$chr1} ) {
 			# $handle{$chr1}{$snp1} = $LRR1;
 
