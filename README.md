@@ -68,7 +68,7 @@ path_to_LRR_BAF_matrices
 ```sh
 Rscript tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
-Here ``path_input`` is supposed to be path_to_LRR_BAF_matrices
+Here `path_input` is supposed to be path_to_LRR_BAF_matrices
 
 ### Prepare data for individual CNV callers
 
