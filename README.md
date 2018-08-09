@@ -70,7 +70,7 @@ Rscript tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
 Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step.
 
-When finishing running the scripts, there will be two folders `LRR` and `BAF`
+When finishing running the scripts, there will be two folders `LRR` and `BAF` created under `path_to_LRR_BAF_matrices`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
 ### Prepare data for individual CNV callers
 
