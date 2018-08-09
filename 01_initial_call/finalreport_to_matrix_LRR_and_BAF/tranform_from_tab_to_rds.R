@@ -3,7 +3,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 ## after using perl script to split finalreport into LRR and BAF 'tab' format data
-# transform from .tab format to .rds
+## transform from .tab format to .rds
 
 
 suppressMessages({
@@ -11,10 +11,10 @@ suppressMessages({
   require(tibble, quietly = TRUE)
 })
 
-path_input <- args[1] ## path_output from perl code
-path_output <- args[2] ## path to save .rds data
-chr_start <- as.integer(args[3]) ## start chr
-chr_end   <- as.integer(args[4]) ## end chr
+path_input  <- args[1]  ## path_output from perl code
+path_output <- args[2]  ## path to save .rds data
+chr_start   <- as.integer(args[3])  ## start chr
+chr_end     <- as.integer(args[4])  ## end chr
 
 
 # create LRR/BAF folder ---------------------------------------------------/
@@ -61,6 +61,9 @@ for ( chr1 in chr_start:chr_end ) {
   dat_chr1_LRR <- column_to_rownames( dat_chr1_LRR, var = "V1")
   dat_chr1_BAF <- column_to_rownames( dat_chr1_BAF, var = "V1")
   
+  stopifnot( ncol(dat_chr1_LRR) == n1 )
+  stopifnot( ncol(dat_chr1_BAF) == n1 )
+    
   names(dat_chr1_LRR) <- snp1
   names(dat_chr1_BAF) <- snp1
   
@@ -71,18 +74,6 @@ for ( chr1 in chr_start:chr_end ) {
   saveRDS( dat_chr1_BAF, file = file.path(path_output, "BAF", paste0("matrix_chr_", chr1, "_BAF.rds")))
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
