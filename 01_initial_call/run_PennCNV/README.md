@@ -6,38 +6,38 @@ Running PennCNV includes the following 5 steps:
 
 (1) Prepare SNP.pfb and SNP.gcmodel files
 
-See scripts in `step.0.prepare.files.sh`
+See scripts in `step.1.prepare.files.sh` for details.
 
-run PennCNV through submiting jobs:
+(2) Run PennCNV for each sample in parallel (through job scheduling system on cluster)
 ```sh 
-Rscript step.1.run.PennCNV.jobs.R \
--a /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
--b /wk_dir/res_job \
--c /wk_dir/SNP.pfb \
--d /wk_dir/SNP.gcmodel \
--e /path_to_penncnv/lib/hhall.hmm
+Rscript step.2.run.PennCNV.jobs.R \
+--data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
+--wkdir /wk_dir/ \
+--pfb /wk_dir/SNP.pfb \
+-gcmodel /wk_dir/SNP.gcmodel \
+--hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
-check jobs and resubmit unfinishing callings:
+(3) Check job status and resubmit unfinishing jobs
 ```sh
-./step.2.check.PennCNV.R \
--a path/to/dat \
--b path/to/res_job \
--c path/to/SNP.pfb \
--d path/to/SNP.gcmodel \
--e path/to/penncnv/2011Jun16/lib/hhall.hmm
+Rscrip step.3.check.PennCNV.jobs.R \
+--data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
+--wkdir /wk_dir/ \
+--pfb /wk_dir/SNP.pfb \
+-gcmodel /wk_dir/SNP.gcmodel \
+--hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
 combine all PennCNV calling results (sample based):
 ```sh
-perl step.3.combine.PennCNV.pl \
+perl step.4.combine.PennCNV.res.pl \
 --in_dir path/to/res/ \
 --out_dir path/to/output/
 ```
 
 clean PennCNV and generate final results:
 ```sh
-./step.4.clean.PennCNV.R \
+Rscript step.5.clean.PennCNV.res.R \
 -i path/to/result/folder \
 -p path/to/SNP.pfb \
 -n saving_name

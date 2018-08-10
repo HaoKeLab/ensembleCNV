@@ -10,9 +10,9 @@ suppressMessages({
 
 option_list <- list(
   make_option(c("-a", "--data"), action = "store", default = NA, type = "character",
-              help = "path to text data file for each sample."),
-  make_option(c("-d", "--main"), action = "store", default = NA, type = "character",
-              help = "main path for each sample's list file and res."),
+              help = "path to tab-delimit text data files for each sample."),
+  make_option(c("-d", "--wkdir"), action = "store", default = NA, type = "character",
+              help = "working directory."),
   make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
               help = "pfb file."),
   make_option(c("-g", "--gcmodel"), action = "store", default = NA, type = "character",
@@ -23,20 +23,20 @@ option_list <- list(
 
 opt = parse_args(OptionParser(option_list = option_list))
 
-path_dat     <- opt$dat
-path_main    <- opt$main
+path_data    <- opt$data
+path_wkdir   <- opt$wkdir
 file_pfb     <- opt$pfb
 file_gcmodel <- opt$gcmodel
 file_hmm     <- opt$hmm
 
-if (any(is.na(c(path_dat, path_main, file_pfb, file_gcmodel, file_hmm)))) {
-  stop("all parameters must be supplied. (--help for details)")
+if (any(is.na(c(path_data, path_wkdir, file_pfb, file_gcmodel, file_hmm)))) {
+  stop("All parameters must be supplied. (--help for details)")
 }
 
 # create path -------------------------------------------------------------
 
-path_list  <- file.path(path_main, "list")
-path_res   <- file.path(path_main, "res")
+path_list  <- file.path(path_wkdir, "list")
+path_res   <- file.path(path_wkdir, "res")
 
 if ( !dir.exists(path_list) ) {
   dir.create(path = path_list, showWarnings = FALSE, recursive = TRUE)
@@ -48,16 +48,18 @@ if ( !dir.exists(path_res) ) {
 
 # generate list.txt for each sample ---------------------------------------
 
-sample_files <- list.files(path = path_dat)
+sample_files <- list.files(path = path_data)
 
 cat("number of samples:", length(sample_files), "\n")
 
 for ( i in 1:length(sample_files) ) {
 
   sample_file <- sample_files[i]
-  dat1 <- data.frame(file_name = file.path(path_dat, sample_file), ## add whole path information
+  sample_list <- sub("\\.txt$", ".list", sample_file)
+  
+  dat1 <- data.frame(file_name = file.path(path_data, sample_file), ## add whole path information
                      stringsAsFactors = FALSE)
-  write.table(dat1, file = file.path(path_list, sample_file), sep = "\t",
+  write.table(dat1, file = file.path(path_list, sample_list), sep = "\t",
               row.names = FALSE, col.names = FALSE, quote = FALSE)
 }
 
@@ -67,13 +69,14 @@ for ( i in 1:length(sample_files) ) {
 cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
                         filename_sample, path_list, path_res_sample) {
 
-  file_list <- file.path(path_list, filename_sample)
+  file_list <- file.path(path_list, 
+                         sub("\\.txt$", ".list", filename_sample)
 
   samplename <- gsub(pattern = ".txt$", replacement = "", filename_sample)
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
 
-  cmd <- paste("/hpc/packages/minerva-common/penncnv/2011Jun16/bin/detect_cnv.pl",
+  cmd <- paste("/path_to_penncnv/bin/detect_cnv.pl",
                "-test --confidence",
                "-hmm", file_hmm,
                "-pfb", file_pfb,
@@ -86,7 +89,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
 
 cmd_submitjob <- function(cmd.sample, samplename) {
 
-  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P acc_haok01a", ##-R 'span[ptile=6]'
+  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]",
                     "-J", samplename,
                     "-q premium",
                     shQuote(cmd.sample))
