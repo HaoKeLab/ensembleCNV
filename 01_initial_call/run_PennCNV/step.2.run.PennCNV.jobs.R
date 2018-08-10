@@ -36,7 +36,7 @@ if (any(is.na(c(path_data, path_wkdir, file_pfb, file_gcmodel, file_hmm)))) {
 # create path -------------------------------------------------------------
 
 path_list  <- file.path(path_wkdir, "list")
-path_res   <- file.path(path_wkdir, "res")
+path_res   <- file.path(path_wkdir, "res") ## PennCNV results folder
 
 if ( !dir.exists(path_list) ) {
   dir.create(path = path_list, showWarnings = FALSE, recursive = TRUE)

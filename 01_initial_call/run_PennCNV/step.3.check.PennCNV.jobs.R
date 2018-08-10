@@ -1,5 +1,9 @@
 #!/usr/bin/env Rscript
 
+## The script was used to run PennCNV on Minerva high performance cluster.
+## You need to modifiy it according to the system you are using if you would like to use it.
+## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information
+
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
@@ -7,45 +11,47 @@ suppressMessages({
 options(warn = 2)
 
 option_list <- list(
-  make_option(c("-a", "--dat"), action = "store", default = NA, type = "character",
-              help = "dat path from each sample for running PennCNV."),
-  make_option(c("-b", "--main"), action = "store", default = NA, type = "character",
-              help = "main path for each sample's list file and res."),
-  make_option(c("-c", "--pfb"), action = "store", default = NA, type = "character",
+  make_option(c("-a", "--data"), action = "store", default = NA, type = "character",
+              help = "path to tab-delimit text data files for each sample."),
+  make_option(c("-d", "--wkdir"), action = "store", default = NA, type = "character",
+              help = "working directory."),
+  make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
               help = "pfb file."),
-  make_option(c("-d", "--gcmodel"), action = "store", default = NA, type = "character",
+  make_option(c("-g", "--gcmodel"), action = "store", default = NA, type = "character",
               help = "gcmodel file."),
-  make_option(c("-e", "--hmm"), action = "store", default = NA, type = "character",
-              help = "hmm file.")
+  make_option(c("-m", "--hmm"), action = "store", default = NA, type = "character",
+              help = "HMM model file.")
 )
 
 opt = parse_args(OptionParser(option_list = option_list))
 
-path_dat     <- opt$dat
-path_main    <- opt$main
+path_data    <- opt$data
+path_wkdir   <- opt$wkdir
 file_pfb     <- opt$pfb
 file_gcmodel <- opt$gcmodel
 file_hmm     <- opt$hmm
 
-if (any(is.na(c(path_dat, path_main, file_pfb, file_gcmodel, file_hmm)))) {
-  stop("all parameters must be supplied. (--help for detail)")
+if (any(is.na(c(path_data, path_wkdir, file_pfb, file_gcmodel, file_hmm)))) {
+  stop("All parameters must be supplied. (--help for details)")
 }
 
-path_list  <- file.path(path_main, "list")
-path_res  <- file.path(path_main, "res")  ## PennCNV results folder
+path_list  <- file.path(path_wkdir, "list")
+path_res  <- file.path(path_wkdir, "res")  ## PennCNV results folder
 
 # submit jobs functions ---------------------------------------------------
 
 cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel, 
                         filename_sample, path_list, path_res_sample) {
   
-  file_list <- file.path(path_list, filename_sample) 
+  file_list <- file.path(path_list, 
+                         sub("\\.txt$", ".list", filename_sample)
   
   samplename <- gsub(pattern = ".txt$", replacement = "", filename_sample)
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
   
-  cmd <- paste("/hpc/packages/minerva-common/penncnv/2011Jun16/bin/detect_cnv.pl -test --confidence",
+  cmd <- paste("/path_to_penncnv/bin/detect_cnv.pl", 
+               "-test --confidence",
                "-hmm", file_hmm,
                "-pfb", file_pfb,
                "-gcmodel", file_gcmodel,
@@ -58,7 +64,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
 
 cmd_submitjob <- function(cmd.sample, samplename) {
   
-  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P acc_haok01a", ##-R 'span[ptile=6]' 
+  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]",
                     "-J", samplename,
                     "-q premium",
                     shQuote(cmd))
@@ -109,12 +115,8 @@ for ( i in 1:length(sample_files) ) {
   }
 }
 
-cat("summary, total:", length(sample_files),
+cat("total number of samples:", length(sample_files),
     "number of success:", n.success,
     "number of fail:", n.fail, "\n")
-
-
-
-
 
 

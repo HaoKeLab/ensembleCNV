@@ -14,7 +14,7 @@ Rscript step.2.run.PennCNV.jobs.R \
 --data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
 --wkdir /wk_dir/ \
 --pfb /wk_dir/SNP.pfb \
--gcmodel /wk_dir/SNP.gcmodel \
+--gcmodel /wk_dir/SNP.gcmodel \
 --hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
@@ -24,7 +24,7 @@ Rscrip step.3.check.PennCNV.jobs.R \
 --data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
 --wkdir /wk_dir/ \
 --pfb /wk_dir/SNP.pfb \
--gcmodel /wk_dir/SNP.gcmodel \
+--gcmodel /wk_dir/SNP.gcmodel \
 --hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
