@@ -1,4 +1,4 @@
-### call PennCNV
+### Run PennCNV
 
 Here, calling PennCNV including following 5 steps:
 
