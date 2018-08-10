@@ -15,9 +15,6 @@ The detailed step-by-step instructions are listed as follows.
 - [01 Initial call](#01-initial-call)
   - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensemblecnv)
   - [Prepare data for individual CNV callers](#prepare-data-for-running-ipq)
-    - [Run PennCNV](#call-penncnv)
-    - [Run QuantiSNP](#call-quantisnp)
-    - [Run iPattern](#call-ipattern)
 - [02 Batch effect](#02-batch-effect)
   - [snp-level LRR statistics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
@@ -79,7 +76,7 @@ We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01
 #### iPattern
 ```sh
 perl finalreport_to_iPattern.pl \
--prefix path_to_save_ipattern_input_file \
+-prefix path_to_save_ipattern_input_file/ \
 -suffix .txt \
 path_to_finalreport
 ```
@@ -87,7 +84,7 @@ path_to_finalreport
 #### PennCNV
 ```sh
 perl finalreport_to_PennCNV.pl \
--prefix path_to_save_penncnv_input_file \
+-prefix path_to_save_penncnv_input_file/ \
 -suffix .txt \
 path_to_finalreport
 ```
@@ -95,10 +92,12 @@ path_to_finalreport
 #### QuantiSNP
 ```sh
 perl finalreport_to_QuantiSNP.pl \
--prefix path_to_save_quantisnp_input_file \
+-prefix path_to_save_quantisnp_input_file/ \
 -suffix .txt \
 path_to_finalreport
 ```
+
+To run each individual CNV caller, we provide auxiliary scripts for [iPattern](), [PennCNV] and [QuantiSNP]. We encourage users to consult with the original documents for these methods for more details. 
 
 ### call PennCNV
 
@@ -176,7 +175,7 @@ script "run.R" contains all needed running command.
 ```
 
 
-## 02 batch effect
+## 02 Batch effect
 
 ### snp-level LRR statics
 PCA on snp-level LRR statics from randomly select 100000 snps
@@ -199,7 +198,7 @@ generate iPattern, PennCNV and QuantiSNP calling sample level statics data using
 do PCA using step.2.pca.R
 ```
 
-## 03 create CNVR
+## 03 Create CNVR
 
 Here, create CNVR for both individual CNV calling method and ensembleCNV.
 
@@ -214,7 +213,7 @@ individual method:
 ```sh 
 ./step.2.create.CNVR.IPQ.R --help for detail
 ```
-### ensembleCNV
+### Merge CNV calls from individual callers
 ensembleCNV from iPattern, PennCNV and QuantiSNP CNV calling results.
 ```sh
 ./step.2.ensembleCNV.R --help for detail
@@ -225,7 +224,7 @@ Third, generate matrix for individual CNV calling method:
 ./step.3.generate.matrix.R file_cnv cnvCaller path_output
 ```
 
-## 04 genotype
+## 04 CNV genotyping for each CNVR
 
 genotyping for all CNVRs containing two main steps:
 
@@ -268,7 +267,7 @@ path_res (save results: matrix_CN.rds matrix_GQ.rds)
 ./step.5.prediction.results.R n.samples path_cnvr path_pred pred_res
 ```
 
-## 05 boundary refinement
+## 05 Boundary refinement
 
 There are 5 steps in boundary refinement, as following:
 
@@ -279,7 +278,7 @@ The main part is script named as step.2.boundary_refinement.R:
 ./step.2.boundary_refinement.R --help for detail
 ```
 
-## 06 performance assessment
+## 06 Performance assessment
 
 summary compare results between all CNV calling methods with ensembleCNV method.
 copy all following files to path_input:
