@@ -1,15 +1,18 @@
 ### Run PennCNV
 
-Here, calling PennCNV including following 5 steps:
+Note: The auxiliary scripts we provide here were used on our high performance cluster. The users need to modifiy the scripts according to the specific system the users are using. Please refer to original [PennCNV documents](http://penncnv.openbioinformatics.org/en/latest/) for more information.
 
-prepare files containing SNP.pfb and SNp.gcmodel for running PennCNV:
+Running PennCNV includes the following 5 steps:
+
+(1) Prepare SNP.pfb and SNP.gcmodel
+
 ```sh
 step.0.prepare.files.sh contains all commands 
 ```
 
 run PennCNV through submiting jobs:
 ```sh 
-./step.1.run.PennCNV.jobs.R \
+Rscript step.1.run.PennCNV.jobs.R \
 -a path/to/dat \
 -b path/to/res_job \
 -c path/to/SNP.pfb \
