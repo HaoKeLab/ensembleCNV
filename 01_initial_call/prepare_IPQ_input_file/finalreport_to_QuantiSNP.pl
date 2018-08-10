@@ -97,7 +97,7 @@ sub splitIlluminaReport {
 		@field >= 6 or confess "Error: invalid data line (at least 6 tab- or comma-delimited fields expected) in report file $reportfile: <$_>\n";
 		defined $field[$name_index] or confess "Error: the 'SNP Name' field is not found in data line in report file $reportfile: <$_>\n";
 
-		next if ($field[$chr_index]=~/0|XY|Y|MT/);  ##/X|Y|MT/
+		next if ($field[$chr_index]=~/^0|XY|Y|MT/);  ##/X|Y|MT/
 		next unless ($field[$lrr_index]=~/\d/);
 		next unless ($field[$baf_index]=~/\d/);
 		#defined $field[$sample_index] or confess "Error: the 'Sample ID' field is not found in data line in report file $reportfile line $.; line is:\n<$_>\n";
