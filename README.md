@@ -14,7 +14,7 @@ The detailed step-by-step instructions are listed as follows.
 
 - [01 Initial call](#01-initial-call)
   - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensemblecnv)
-  - [Prepare data for individual CNV callers](#prepare-data-for-running-ipq)
+  - [Prepare data for individual CNV callers](#prepare-data-for-individual-cnv-callers)
 - [02 Batch effect](#02-batch-effect)
   - [snp-level LRR statistics](#snp-level-lrr-statics)
   - [sample-level IPQ 10 statics](#sample-level-ipq-10-statics)
