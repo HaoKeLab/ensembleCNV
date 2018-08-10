@@ -94,7 +94,7 @@ sub splitIlluminaReport {
 		@field >= 4 or confess "Error: invalid data line (at least 4 tab- or comma-delimited fields expected) in report file $reportfile: <$_>\n";
 		defined $field[$name_index] or confess "Error: the 'SNP Name' field is not found in data line in report file $reportfile: <$_>\n";
 
-		next if ($field[$chr_index]=~/0|XY|Y|MT/); ##/X|Y|MT/
+		next if ($field[$chr_index]=~/^0|XY|Y|MT/); ##/X|Y|MT/
 		#defined $field[$sample_index] or confess "Error: the 'Sample ID' field is not found in data line in report file $reportfile line $.; line is:\n<$_>\n";
 	
 		# Sometimes a "blank" sampleID can be produced in BeadStuidio files
