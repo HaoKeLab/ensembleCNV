@@ -24,7 +24,7 @@ file_pfb    <- opt$pfb
 name_rawcnv <- opt$name
 
 if (any(is.na(c(path_input, file_pfb, name_rawcnv)))) {
-  stop("all parameters must be supplied.( --help for detail )")
+  stop("All parameters must be supplied.( --help for details )")
 }
 
 # clean CNV ---------------------------------------------------------------
@@ -49,7 +49,7 @@ while(flag == 0) {
   n_rawcnv <- as.integer(system(paste("cat", cnv1_in, "|", "wc -l"), intern = TRUE))
   cnv1_out <- paste(name_project, idx, "rawcnv", sep = ".")
   
-  cmd1 <- paste("/hpc/packages/minerva-common/penncnv/2011Jun16/bin/clean_cnv.pl",
+  cmd1 <- paste("path_to_penncnv/bin/clean_cnv.pl",
                 "combineseg", cnv1_in, "--signalfile", file_pfb, 
                 "--fraction 0.2", "--bp >", cnv1_out)
   
@@ -73,26 +73,27 @@ while(flag == 0) {
   
 }
 
-## transform format of CNV results
+## convert final PennCNV results to tab-delimit text file
 # convert_cnv.pl --intype penncnv --outtype tab Valentina_112samples.2.rawcnv > Valentina_112samples.txt
 cnv_penncnv <- paste(name_project, idx, "rawcnv", sep = ".")
 cnv_tab <- paste(name_project, "txt", sep = ".")
-cat("transform format of CNV final result.\n")
-cmd.transform <- paste("/hpc/packages/minerva-common/penncnv/2011Jun16/bin/convert_cnv.pl",
+cat("Convert final PennCNV results to tab-delimit text file.\n")
+cmd.transform <- paste("/path_to_penncnv/bin/convert_cnv.pl",
                        "--intype", "penncnv", "--outtype", "tab", cnv_penncnv, ">", cnv_tab)
 system(cmd.transform)
 
 ## extract individual level statistics for QC 
-cat("extract individual level statistics for QC.\n")
+cat("Extract individual level statistics for QC.\n")
 cnv_log <- paste(name_project, "log", sep = ".")
 cnv_qc <- paste0(name_project, "_qc.txt")
-cmd.extract <- paste("/hpc/packages/minerva-common/penncnv/2011Jun16/bin/filter_cnv.pl", cnv_penncnv,
-                     "-qclogfile", cnv_log, "-qcsumout", cnv_qc, ">", "step4.txt")
+cmd.extract <- paste("/path_to_penncnv/bin/filter_cnv.pl", cnv_penncnv,
+                     "-qclogfile", cnv_log, "-qcsumout", cnv_qc, ">", "step5.log")
 system(cmd.extract)
 
 # Change SampleID column information --------------------------------------
-# path to pure SampleID
-## CNV
+# remove the path before Sample_ID to get a "clean" Sample_ID
+
+## CNV results
 dat_CNV <- read.table(file = cnv_tab, sep = "\t",
                       header = FALSE, comment.char = "", check.names = FALSE, stringsAsFactors = FALSE)
 samples_path <- dat_CNV$V5
@@ -106,7 +107,8 @@ dat_CNV$V5 <- sampleIDs  ## change
 write.table(dat_CNV, file = paste0(name_project, "_new.txt"),
             sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
 
-## Sample_Stat
+
+## Sample-wise summary statistics
 dat_Sample_Stat <- read.table(file = cnv_qc, sep = "\t",
                               header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
 files <- dat_Sample_Stat$File

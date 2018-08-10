@@ -40,5 +40,5 @@ perl step.4.combine.PennCNV.res.pl \
 Rscript step.5.clean.PennCNV.res.R \
 -i /path/to/result/folder \
 -f /path/to/SNP.pfb \
--n saving_name
+-n file_name_of_combined_results ## [file_name_of_combined_results].rawcnv from step 4
 ```
