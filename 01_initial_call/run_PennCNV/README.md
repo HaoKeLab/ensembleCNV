@@ -4,20 +4,18 @@ Note: The auxiliary scripts we provide here were used on our high performance cl
 
 Running PennCNV includes the following 5 steps:
 
-(1) Prepare SNP.pfb and SNP.gcmodel
+(1) Prepare SNP.pfb and SNP.gcmodel files
 
-```sh
-step.0.prepare.files.sh contains all commands 
-```
+See scripts in `step.0.prepare.files.sh`
 
 run PennCNV through submiting jobs:
 ```sh 
 Rscript step.1.run.PennCNV.jobs.R \
--a path/to/dat \
--b path/to/res_job \
--c path/to/SNP.pfb \
--d path/to/SNP.gcmodel \
--e path/to/penncnv/2011Jun16/lib/hhall.hmm
+-a /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
+-b /wk_dir/res_job \
+-c /wk_dir/SNP.pfb \
+-d /wk_dir/SNP.gcmodel \
+-e /path_to_penncnv/lib/hhall.hmm
 ```
 
 check jobs and resubmit unfinishing callings:

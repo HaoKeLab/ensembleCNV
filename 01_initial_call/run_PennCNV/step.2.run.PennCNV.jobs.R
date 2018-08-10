@@ -1,19 +1,23 @@
 #!/usr/bin/env Rscirpt
 
+## The script was used to run PennCNV on Minerva high performance cluster.
+## You need to modifiy it according to the system you are using if you would like to use it.
+## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information 
+
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
 
 option_list <- list(
-  make_option(c("-a", "--dat"), action = "store", default = NA, type = "character",
-              help = "dat path from each sample for running PennCNV."),
-  make_option(c("-b", "--main"), action = "store", default = NA, type = "character",
+  make_option(c("-a", "--data"), action = "store", default = NA, type = "character",
+              help = "path to text data file for each sample."),
+  make_option(c("-d", "--main"), action = "store", default = NA, type = "character",
               help = "main path for each sample's list file and res."),
-  make_option(c("-c", "--pfb"), action = "store", default = NA, type = "character",
+  make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
               help = "pfb file."),
-  make_option(c("-d", "--gcmodel"), action = "store", default = NA, type = "character",
+  make_option(c("-g", "--gcmodel"), action = "store", default = NA, type = "character",
               help = "gcmodel file."),
-  make_option(c("-e", "--hmm"), action = "store", default = NA, type = "character",
+  make_option(c("-m", "--hmm"), action = "store", default = NA, type = "character",
               help = "HMM model file.")
 )
 
@@ -26,7 +30,7 @@ file_gcmodel <- opt$gcmodel
 file_hmm     <- opt$hmm
 
 if (any(is.na(c(path_dat, path_main, file_pfb, file_gcmodel, file_hmm)))) {
-  stop("all parameters must be supplied. (--help for detail)")
+  stop("all parameters must be supplied. (--help for details)")
 }
 
 # create path -------------------------------------------------------------
