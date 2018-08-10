@@ -28,17 +28,17 @@ Rscrip step.3.check.PennCNV.jobs.R \
 --hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
-combine all PennCNV calling results (sample based):
+(4) Combine PennCNV results from each sample, including the content in .rawcnv and .log files
 ```sh
 perl step.4.combine.PennCNV.res.pl \
---in_dir path/to/res/ \
---out_dir path/to/output/
+--in_dir /path/to/res/ \
+--out_dir /path/to/output/
 ```
 
-clean PennCNV and generate final results:
+(5) Merge closely adjacent CNVs and generate final results
 ```sh
 Rscript step.5.clean.PennCNV.res.R \
--i path/to/result/folder \
--p path/to/SNP.pfb \
+-i /path/to/result/folder \
+-f /path/to/SNP.pfb \
 -n saving_name
 ```

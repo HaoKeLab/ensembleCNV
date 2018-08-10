@@ -1,5 +1,9 @@
 #!/usr/bin/env Rscript
 
+## The script was used to run PennCNV on Minerva high performance cluster.
+## You need to modifiy it according to the system you are using if you would like to use it.
+## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information
+
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
@@ -7,7 +11,7 @@ suppressMessages({
 option_list <- list(
   make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
               help = "input path for combined PennCNV result."),
-  make_option(c("-p", "--pfb"), action = "store", default = NA, type = "character",
+  make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
               help = "pfb file"),
   make_option(c("-n", "--name"), action = "store", default = NA, type = "character",
               help = "rawcnv filename")
