@@ -19,6 +19,6 @@ Rscript step.2.check.QuantiSNP.R \
 
 (3) Combine PennCNV results from each sample, including the content in .cnv files
 ```sh
-## To run this script, you need to add "in_dir", "out_dir", "out_file" information in the script.
+## To run this script, you need to add "in_dir" and "out_dir" information in the script.
 perl step.3.combine.QuantiSNP.pl
 ```

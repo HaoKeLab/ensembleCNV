@@ -64,7 +64,7 @@ option_list <- list(
   make_option(c("-d", "--data"), default = NA, type = "character", action = "store",
               help = "data folder for runing QuantiSNP."),
   make_option(c("-r", "--result"), default = NA, type = "character", action = "store",
-              help = "path to CNV results.")
+              help = "path to CNV results generated in the first step.")
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
@@ -77,37 +77,16 @@ if (is.na(opt$data) | is.na(opt$result)) {
 path_data <- opt$data
 path_res <- opt$result
 
-
-## check QuantiSNP jobs failed or not finished
-# path_input <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/genotype_QC/2017-recluster-QC/REPORT" # for 2017
-# path_input <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/genotype_QC/2015-recluster-QC/REPORT" ## for 2015
-# name_input <- "QC.samples.xls"
-
-# dat_gender <- read.table(file = file.path(path_input, name_input),
-#                          sep = "\t", header = TRUE, check.names = FALSE, as.is = TRUE)
-
-# dat_gender <- read.table(file = file_gender,
-#                          sep = "\t", header = TRUE, check.names = FALSE, as.is = TRUE)
-# 
-# 
-# samples <- dat_gender$IID  ## all folder names
-# genders <- dat_gender$sex.inferred ## all genders
-
 ## gender file
-path_input <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/code_batch/run.QuantiSNP/dat"
-dat_gender <- readRDS(file = file.path(path_input, "Sample_ID_transform_detail.rds"))
-dat_gender <- dat_gender[, c("Sample_ID_new", "Gender")]
-names(dat_gender) <- c("Sample_ID", "Gender")
+# change path_input and filename here 
+# file in .rds format, must have two columns: Sample_ID and Gender
+path_input <- "" ## path to other auxiliary information
+dat_gender <- readRDS(file = file.path(path_input, "gender_file.rds"))
+
+cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 
 samples <- dat_gender$Sample_ID
 genders <- dat_gender$Gender
-
-# for 2017
-# path_res <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/callCNV/Kovacic_128samples_042717/QuantiSNP/res"
-# path_dat <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/callCNV/Kovacic_128samples_042717/QuantiSNP/data"
-# for 2015
-# path_res <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/callCNV/Valentina_112samples_120214/QuantiSNP/res"
-# path_dat <- "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/callCNV/Valentina_112samples_120214/QuantiSNP/data"
 
 for (i in 1:length(samples)) {
   
@@ -117,7 +96,7 @@ for (i in 1:length(samples)) {
   
   if (dir.exists(paths = path_sample1)) {
     
-    # check if have generated .cnv file
+    # check if .cnv file have been generated
     files <- list.files(path = path_sample1)
     idx1 <- grep(pattern = ".cnv", files)
     if (length(idx1) == 1) {
