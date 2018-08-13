@@ -1,6 +1,8 @@
 #!/usr/bin/env Rscript
 
 # generate the list of 100000 randomly selected SNPs
+# Input is SNP_Table.txt generated from Genome Studio
+# including at least 3 columns: SNP Name, Chr, Position
 
 suppressMessages({
   require( data.table, quietly = TRUE)
@@ -15,10 +17,8 @@ dat_snps <- fread( input = file_snps )
 dat_snps <- as.data.frame(dat_snps, stringsAsFactors = FALSE)
 dat_snps <- subset(dat_snps, Chr %in% 1:22)
 
-snps <- sample( dat_snps$Name )
+snps <- sample( dat_snps$SNP.Name )
 snps.selected <- snps[ 1:100000 ]
 
 write.table(snps.selected, file = file.path(path_output, "snps.down.sample.txt"),
             sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
-
-

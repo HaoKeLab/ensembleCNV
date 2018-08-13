@@ -2,16 +2,17 @@
 
 use Carp;
 
-$file_snps_selected = "";
-$reportfile = "";
-$file_marix_LRR="";
+## input
+my $file_snps_selected = $ARGV[0];   ## seleted SNPs file from the first step
+my $reportfile         = $ARGV[1];   ## finalreport from Genome Studio
+my $file_marix_LRR     = $ARGV[2];   ## output LRR matrix file
 
 ## read in selected snps
 open(IN, "< $file_snps_selected") or die "Can't open snps file $in_snps: $!";
 %snps=();
 while ($line=<IN>) {
 	chomp $line;
-	print "$line\n";
+	#print "$line\n";
 	$snps{$line}++;
 }
 
