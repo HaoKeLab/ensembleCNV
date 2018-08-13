@@ -7,7 +7,7 @@ suppressMessages({
 })
 
 args <- commandArgs( trailingOnly = TRUE )
-file_snps <- args[1] ## SNP_Table.txt file from Genome Studio
+file_snps <- args[1]   ## SNP_Table.txt file from Genome Studio
 path_output <- args[2] ## path to save randomly select snps
 
 ## only from chr: 1-22
