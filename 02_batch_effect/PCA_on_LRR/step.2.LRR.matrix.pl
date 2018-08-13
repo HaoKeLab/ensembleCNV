@@ -8,22 +8,22 @@ my $reportfile         = $ARGV[1];   ## finalreport from Genome Studio
 my $file_marix_LRR     = $ARGV[2];   ## output LRR matrix file
 
 ## read in selected snps
-open(IN, "< $file_snps_selected") or die "Can't open snps file $in_snps: $!";
+open(IN, "< $file_snps_selected") or die "Error: can't open snps file $in_snps: $!";
 %snps=();
 while ($line=<IN>) {
 	chomp $line;
 	#print "$line\n";
 	$snps{$line}++;
 }
-
 close IN;
+
 @snps=(keys %snps);
-print "total number of snps:".scalar(@snps)."\n";
+print "total number of SNPs: ".scalar(@snps)."\n";
 
 ## build matrix file for all samples using 100000 selected snps
 %samples=(); ## for all samples
 %hash=();
-open(REPORT, "< $reportfile") or die "can't open finalreport $in_file: $!";
+open(REPORT, "< $reportfile") or die "Error: can't open finalreport $in_file: $!";
 
 my (@field);
 my ($count_line, $sample_index, $name_index, $LRR_index) = 0;
@@ -51,7 +51,7 @@ defined $sample_index or confess "Error: the 'Sample ID' field is not found in h
 defined $LRR_index or confess "Error: the 'Log R Ratio' field is not found in header line in report file $reportfile: <$_>\n";
 
 my $flagsample=0; ##  lrr save flag
-my $lrrsample=(); ##
+my $lrrsample=();
 my $SampleIDraw=();
 my $total=0;
 my $flageof=0;
