@@ -1,6 +1,6 @@
 ### Run PennCNV
 
-Note: The auxiliary scripts we provide here were used on our high performance cluster. The users need to modifiy the scripts according to the specific system the users are using. Please refer to original [PennCNV documents](http://penncnv.openbioinformatics.org/en/latest/) for more information.
+Note: The auxiliary scripts we provide here were used on our high performance cluster. The users need to modifiy the scripts according to the specific system the users are using. Please refer to original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for more information.
 
 Running PennCNV includes the following 5 steps:
 
