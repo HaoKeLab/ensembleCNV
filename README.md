@@ -13,7 +13,7 @@ The detailed step-by-step instructions are listed as follows.
 ## Table of Contents
 
 - [01 Initial call](#01-initial-call)
-  - [Prepare chromosome-wise LRR and BAF matrices](#prepare-chromosome-wise-lrr-and-baf-matrices-for-ensemblecnv)
+  - [Prepare chromosome-wise LRR and BAF matrices for CNV genotyping](#prepare-chromosome-wise-lrr-and-baf-matrices-for-cnv-genotyping)
   - [Prepare data for individual CNV callers](#prepare-data-for-individual-cnv-callers)
 - [02 Batch effect](#02-batch-effect)
   - [PCA on raw LRR data](#pca-on-raw-lrr-data)
@@ -51,7 +51,7 @@ In the GenomeStudio, the exported final report text file is supposed to include 
 
 The raw data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
-### Prepare chromosome-wise LRR and BAF matrices for ensembleCNV
+### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
 We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes.
 
@@ -102,14 +102,23 @@ To run each individual CNV caller, we provide auxiliary scripts for [iPattern](h
 
 ## 02 Batch effect
 
-We used two orthogonal signals to identify batch effects in CNV calling: (i) Along with CNV calls, the three detection methods generate sample-wise summary statistics, such as standard deviations (SD) of LRR, SD of BAF, wave factor in LRR, BAF drift, and the number of CNVs detected, reflecting the quality of CNV calls at the sample level.  Since these quantities are highly correlated among themselves and between methods, we used PCA to summarize their information. (ii) Batch effects may also be reflected in the first two or three PCs when PCA is applied on the raw LRR matrix. We randomly selected 100,000 probes and applied PCA to the down-sampled matrix. By examining the first two or three PCs visualized in scatter plots, we can identify sample outliers or batches that deviate from the majority of the normally behaved samples. While isolated outliers were excluded from downstream analysis, if batch effects were identified, we re-normalized the samples within each outstanding batch with Genome Studio. 
+Two orthogonal signals can be used to identify batch effects in CNV calling: (i) Batch effects may be reflected in the first two or three PCs when principle component analysis (PCA) is applied on the raw LRR matrix. We randomly select 100,000 probes and apply PCA to the down-sampled matrix to save computational time. (ii) Along with CNV calls, the three detection methods generate sample-wise summary statistics, such as standard deviations (SD) of LRR, SD of BAF, wave factor in LRR, BAF drift, and the number of CNVs detected, reflecting the quality of CNV calls at the sample level.  Since these quantities are highly correlated among themselves and between methods, we also use PCA to summarize their information.  By examining the first two or three PCs visualized in scatter plots, we can identify sample outliers or batches that deviate from the majority of the normally behaved samples. 
+
+Note: While isolated outliers should be excluded from downstream analysis, if batch effects are identified, the users need to re-normalize the samples within each outstanding batch with Genome Studio respectively. The initial CNV calling step with individual CNV callers need to be performed again on updated data. The re-called CNVs will be combined with the remaining call set of good quality. Also, the chromosome-wise LRR and BAF matrices prepared for CNV genotyping need to be updated as done in the [initial step](#prepare-chromosome-wise-lrr-and-baf-matrices-for-cnv-genotyping).
 
 ### PCA on raw LRR data
+
 PCA on snp-level LRR statics from randomly select 100000 snps
 
-```sh
-./step.1.randomly.select.snp.R file_snps path_output
 
+
+```sh
+Rscript step.1.down.sampling.R \
+/path/to/SNP_Table.txt \ ## SNP_Table.txt generated from Genome Studio
+path_to_output
+```
+
+```sh
 perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport", "file_matrix_LRR")
 
 step.3.pca.new.R ( add "filename_matrix", "path_input")
