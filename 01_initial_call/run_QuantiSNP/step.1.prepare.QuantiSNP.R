@@ -26,7 +26,6 @@ path_output <- opt$output
 # file in .rds format, must have two columns: Sample_ID and Gender
 path_input <- "" ## path to other auxiliary information
 dat_gender <- readRDS(file = file.path(path_input, "gender_file.rds"))
-dat_gender <- dat_gender[, c("Sample_ID", "Gender")]
 
 cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 

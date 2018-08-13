@@ -4,21 +4,21 @@ Note: The auxiliary scripts we provide here were used on our high performance cl
 
 Running QuantiSNP includes the following 3 steps:
 
-(1) Prepare QuantiSNP and submit jobs:
+(1) Run PennCNV for each sample in parallel (through job scheduling system on cluster)
 ```sh
 Rscript step.1.prepare.QuantiSNP.R \
 -i /path/to/data/ \ ## generated with finalreport_to_QuantiSNP.pl
 -o /path/to/results/
 ```
-(2) Check jobs and resubmit:
+(2) Check job status and resubmit unfinishing jobs
 ```sh
 Rscript step.2.check.QuantiSNP.R \
--d /path/to/data/ \
--r /path/to/callingCNV/folder 
+-d /path/to/data/ \ ## generated with finalreport_to_QuantiSNP.pl
+-r /path/to/results/ 
 ```
 
-(3) Combine CNV calling results:
-running this script, you need to add "in_dir", "out_dir", "out_file" information in the script.
+(3) Combine PennCNV results from each sample, including the content in .cnv files
 ```sh
+## To run this script, you need to add "in_dir", "out_dir", "out_file" information in the script.
 perl step.3.combine.QuantiSNP.pl
 ```
