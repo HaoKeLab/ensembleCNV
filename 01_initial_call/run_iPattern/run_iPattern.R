@@ -34,16 +34,13 @@ write.table(NULL, file = file.path( path_run_ipattern, paste(nm_prefix, "bad_sam
             sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 
-# run-iPattern ---------------------------------------------------------------
+# run-iPattern on linux command line ------------------------------------------
 
-# module load R/3.0.3 ## other will cause errors on Minvera
-# module load python
-
-path_to_ipattern=""
+path_to_ipattern="" ## where iPattern is installed
 export IPNBASE="$path_to_ipattern/ipn_0.581"
 PYTHONPATH=$PYTHONPATH:"$path_to_ipattern/ipn_0.581/ipnlib"
 
-INPUT_PATH=""
+INPUT_PATH="" ## where gender_file.txt, bad_file.txt and data_file.txt are located
 
 ${path_to_ipattern}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 --gender-file ${INPUT_PATH}/gender_file.txt \

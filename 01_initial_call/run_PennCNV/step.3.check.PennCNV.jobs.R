@@ -4,6 +4,8 @@
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information
 
+path_to_penncnv <- ""  ## where PennCNV is installed
+
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
@@ -50,7 +52,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
   
-  cmd <- paste("/path_to_penncnv/bin/detect_cnv.pl", 
+  cmd <- paste(file.path(path_to_penncnv, "bin/detect_cnv.pl"), 
                "-test --confidence",
                "-hmm", file_hmm,
                "-pfb", file_pfb,

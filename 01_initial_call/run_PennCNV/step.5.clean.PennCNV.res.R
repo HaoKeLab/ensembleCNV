@@ -4,6 +4,8 @@
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information
 
+path_to_penncnv <- ""  ## where PennCNV is installed
+
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
@@ -49,7 +51,7 @@ while(flag == 0) {
   n_rawcnv <- as.integer(system(paste("cat", cnv1_in, "|", "wc -l"), intern = TRUE))
   cnv1_out <- paste(name_project, idx, "rawcnv", sep = ".")
   
-  cmd1 <- paste("path_to_penncnv/bin/clean_cnv.pl",
+  cmd1 <- paste(file.path(path_to_penncnv, "bin/clean_cnv.pl"),
                 "combineseg", cnv1_in, "--signalfile", file_pfb, 
                 "--fraction 0.2", "--bp >", cnv1_out)
   
@@ -74,11 +76,10 @@ while(flag == 0) {
 }
 
 ## convert final PennCNV results to tab-delimit text file
-# convert_cnv.pl --intype penncnv --outtype tab Valentina_112samples.2.rawcnv > Valentina_112samples.txt
 cnv_penncnv <- paste(name_project, idx, "rawcnv", sep = ".")
 cnv_tab <- paste(name_project, "txt", sep = ".")
 cat("Convert final PennCNV results to tab-delimit text file.\n")
-cmd.transform <- paste("/path_to_penncnv/bin/convert_cnv.pl",
+cmd.transform <- paste(file.path(path_to_penncnv, "bin/convert_cnv.pl"),
                        "--intype", "penncnv", "--outtype", "tab", cnv_penncnv, ">", cnv_tab)
 system(cmd.transform)
 
@@ -86,7 +87,7 @@ system(cmd.transform)
 cat("Extract individual level statistics for QC.\n")
 cnv_log <- paste(name_project, "log", sep = ".")
 cnv_qc <- paste0(name_project, "_qc.txt")
-cmd.extract <- paste("/path_to_penncnv/bin/filter_cnv.pl", cnv_penncnv,
+cmd.extract <- paste(file.path(path_to_penncnv, "bin/filter_cnv.pl"), cnv_penncnv,
                      "-qclogfile", cnv_log, "-qcsumout", cnv_qc, ">", "step5.log")
 system(cmd.extract)
 
@@ -122,10 +123,6 @@ dat_Sample_Stat$File <- files_new
 
 write.table(dat_Sample_Stat, file = paste0(name_project, "_qc_new.txt"),
             sep = "\t", col.names = TRUE, row.names = FALSE, quote = FALSE)
-
-
-
-
 
 
 

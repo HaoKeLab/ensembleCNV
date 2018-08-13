@@ -6,8 +6,8 @@
 
 ## To run this script, you need to add "in_dir" and "out_dir" information in the script.
 
-$in_dir="";
-$out_dir="";
+$in_dir="";   ## input directory
+$out_dir="";  ## output directory
 $out_file=$out_dir."quantisnp.cnv";
 
 opendir(DIR, $in_dir) or "cannot open $in_dir: $!";

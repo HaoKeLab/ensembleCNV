@@ -6,8 +6,8 @@
 
 use Getopt::Long;
 
-$in_dir="";
-$out_dir="";
+$in_dir="";   ## input directory
+$out_dir="";  ## output directory
 
 GetOptions("in_dir=s" => \$in_dir,
 		   "out_dir=s" => \$out_dir);

@@ -4,6 +4,8 @@
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original QuantiSNP documents (https://sites.google.com/site/quantisnp/) for more information 
 
+path_to_quantisnp <- ""  ## where QuantiSNP is installed
+
 suppressPackageStartupMessages(require(optparse))
 
 ## function ------------------------------------------------------------------
@@ -12,16 +14,16 @@ run.quantisnp <- function(path_output, path_dat, sample_name, gender) {
   ## define program variables
   EMITERS    <- "10"        ## number of EM iterations to use during training
   LSETTING   <- "2000000"   ## characteristic CNV length parameter
-  GCDIR      <- "path_to_quantisnp/data/b37/"   ## set path to GC data files (contents of gc_data.zip)
-  PARAMSFILE <- "path_to_quantisnp/config/params.dat"      ## path to parameters file
-  LEVELSFILE <- "path_to_quantisnp/config/levels-hd.dat"   ## path to levels file
+  GCDIR      <- file.path(path_to_quantisnp, "data/b37/")              ## path to GC data files (contents of gc_data.zip)
+  PARAMSFILE <- file.path(path_to_quantisnp, "config/params.dat")      ## path to parameters file
+  LEVELSFILE <- file.path(path_to_quantisnp, "config/levels-hd.dat")   ## path to levels file
+  MCRROOT    <- file.path(path_to_quantisnp, "MATLAB_RT/lib/v79/")     ## path to MCR Run-Time Libraries
   CHRRANGE   <- "1:23"   ## chromosome
   CHRX       <- "23"     ## which chromosome is X?
   OUTDIR     <- file.path(path_output, sample_name)    ## output directory
   SAMPLEID   <- sample_name ## sample name
   GENDER     <- gender      ## sample gender
   INFILE     <- file.path(path_dat, paste0(sample_name, ".txt"))   ## input data file
-  MCRROOT    <- "path_to_quantisnp/MATLAB_RT/lib/v79/"   ## set path to MCR Run-Time Libraries
   
   if (!file.exists(OUTDIR)) dir.create(OUTDIR)
   
