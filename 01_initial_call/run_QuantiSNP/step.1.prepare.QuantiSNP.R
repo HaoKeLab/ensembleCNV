@@ -21,11 +21,16 @@ if (is.na(opt$input) | is.na(opt$output)) {
 path_dat <- opt$input
 path_output <- opt$output
 
-## gender file
-# change path_input and filename here 
-# file in .rds format, must have two columns: Sample_ID and Gender
-path_input <- "" ## path to other auxiliary information
-dat_gender <- readRDS(file = file.path(path_input, "gender_file.rds"))
+## path to other auxiliary information (e.g. gender file)
+path_input <- "" 
+
+## gender file: in tab-delimited format and has two columns: Sample_ID and Gender
+## for example
+# Sample_ID	Gender
+# sample_1	female
+# sample_2	male
+
+dat_gender <- read.delim(file = file.path(path_input, "gender_file.txt"), as.is = TRUE)
 
 cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 
