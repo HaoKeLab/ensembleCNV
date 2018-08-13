@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+## build matrix file for all samples using 100000 selected SNPs
+
 use Carp;
 
 ## input
@@ -20,9 +22,7 @@ close IN;
 @snps=(keys %snps);
 print "total number of SNPs: ".scalar(@snps)."\n";
 
-## build matrix file for all samples using 100000 selected snps
-%samples=(); ## for all samples
-%hash=();
+## parse the header of final report
 open(REPORT, "< $reportfile") or die "Error: can't open finalreport $in_file: $!";
 
 my (@field);
@@ -50,11 +50,15 @@ defined $name_index or confess "Error: the 'SNP Name' field is not found in head
 defined $sample_index or confess "Error: the 'Sample ID' field is not found in header line in report file $reportfile: <$_>\n";
 defined $LRR_index or confess "Error: the 'Log R Ratio' field is not found in header line in report file $reportfile: <$_>\n";
 
-my $flagsample=0; ##  lrr save flag
-my $lrrsample=();
-my $SampleIDraw=();
-my $total=0;
-my $flageof=0;
+## parse data part of final report
+%samples = (); ## for all samples
+%hash = ();
+
+my $flagsample = 0; ##  lrr save flag
+my $lrrsample = ();
+my $SampleIDraw = ();
+my $total = 0;
+my $flageof = 0;
 
 while ($line = <REPORT>) {
 	$flageof=1 if eof; ## add file eof flag
@@ -63,26 +67,26 @@ while ($line = <REPORT>) {
 	@line=split(/\t/, $line);	
 
 	## tansform Log R Ratio
-	if (exists($samples{$line[$sample_index]})&&exists($snps{$line[$name_index]})) {
+	if (exists($samples{$line[$sample_index]}) && exists($snps{$line[$name_index]})) { ##%snps has been converted to @snps in line 22??
 
-		$lrrvalue=$line[$LRR_index];
-		$lrrvalue=~ tr/\015//d;
-		$lrrsample=$lrrsample."\t".$lrrvalue;
-		$flagsample=1;
-		$SampleIDraw=$line[$sample_index];	
+		$lrrvalue = $line[$LRR_index];
+		$lrrvalue =~ tr/\015//d;
+		$lrrsample = $lrrsample."\t".$lrrvalue;
+		$flagsample = 1;
+		$SampleIDraw = $line[$sample_index];	
 		$total++;
 
 		if ($flageof == 1) {
-			$hash{$SampleIDraw}=$lrrsample;
-			print "SampleID:$SampleIDraw\t".scalar(keys %samples)."\t$total\n";
+			$hash{$SampleIDraw} = $lrrsample;
+			print "SampleID: $SampleIDraw\t".scalar(keys %samples)."\t$total\n";
 			last;
 		}
 
-	} elsif (exists($samples{$line[$sample_index]})) {
+	} elsif (exists($samples{$line[$sample_index]})) { ## logic here has problem
 			
 		if ($flageof == 1) {
-			$hash{$SampleIDraw}=$lrrsample;
-			print "SampleID:$SampleIDraw\t".scalar(keys %samples)."\t$total\n";
+			$hash{$SampleIDraw} = $lrrsample;
+			print "SampleID: $SampleIDraw\t".scalar(keys %samples)."\t$total\n";
 			last;
 		} else {
 			next;
@@ -90,38 +94,36 @@ while ($line = <REPORT>) {
 			
 	} else {
 
-		if ($flagsample==0) {
+		if ($flagsample == 0) {
 			## first sample
 			if (exists($snps{$line[$name_index]})) {
 				$samples{$line[$sample_index]}++;
-				$lrrvalue=$line[$LRR_index];
-				$lrrvalue=~ tr/\015//d;
-				$lrrsample=$lrrvalue;
+				$lrrvalue = $line[$LRR_index];
+				$lrrvalue =~ tr/\015//d;
+				$lrrsample = $lrrvalue;
 				$total++;
 			}
-		} elsif ($flagsample==1) {
+		} elsif ($flagsample == 1) {
 			if (exists($snps{$line[$name_index]})) {
 
-				$hash{$SampleIDraw}=$lrrsample;
-				print "SampleID:$SampleIDraw\t".scalar(keys %samples)."\t$total\n";
+				$hash{$SampleIDraw} = $lrrsample;
+				print "SampleID: $SampleIDraw\t".scalar(keys %samples)."\t$total\n";
 
 				$samples{$line[$sample_index]}++;
-				$lrrsample=();
-				$lrrvalue=$line[$LRR_index];
-				$lrrvalue=~ tr/\015//d;
-				$lrrsample=$lrrvalue;
-				$total=1;
+				$lrrsample = ();
+				$lrrvalue = $line[$LRR_index];
+				$lrrvalue =~ tr/\015//d;
+				$lrrsample = $lrrvalue;
+				$total = 1;
 			}
 		}
-
 	}
-
 }
 
 close IN;
 
 ## save LRR matrix
-open(OUT, ">", $file_marix_LRR) or die $!;
+open(OUT, ">", $file_marix_LRR) or die "Error: can't open file $file_marix_LRR: $!";
 foreach my $item (keys %hash) {
 	print OUT "$item\t$hash{$item}\n";
 }
