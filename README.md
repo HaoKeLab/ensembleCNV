@@ -102,7 +102,9 @@ To run each individual CNV caller, we provide auxiliary scripts for [iPattern](h
 
 ## 02 Batch effect
 
-### snp-level LRR statics
+We used two orthogonal signals to identify batch effects in CNV calling: (i) Along with CNV calls, the three detection methods generate sample-wise summary statistics, such as standard deviations (SD) of LRR, SD of BAF, wave factor in LRR, BAF drift, and the number of CNVs detected, reflecting the quality of CNV calls at the sample level.  Since these quantities are highly correlated among themselves and between methods, we used PCA to summarize their information. (ii) Batch effects may also be reflected in the first two or three PCs when PCA is applied on the raw LRR matrix. We randomly selected 100,000 probes and applied PCA to the down-sampled matrix. By examining the first two or three PCs visualized in scatter plots, we can identify sample outliers or batches that deviate from the majority of the normally behaved samples. While isolated outliers were excluded from downstream analysis, if batch effects were identified, we re-normalized the samples within each outstanding batch with Genome Studio. 
+
+### PCA on raw LRR data
 PCA on snp-level LRR statics from randomly select 100000 snps
 
 ```sh
@@ -113,7 +115,7 @@ perl step.2.generate.snps.LRR.matrix.pl (add "file_snps_selected", "finalreport"
 step.3.pca.new.R ( add "filename_matrix", "path_input")
 ``` 
 
-### sample-level IPQ 10 statics
+### PCA on summary statistics
 PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
 
 ```sh
