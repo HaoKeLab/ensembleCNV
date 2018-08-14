@@ -51,17 +51,17 @@ defined $sample_index or confess "Error: the 'Sample ID' field is not found in h
 defined $LRR_index or confess "Error: the 'Log R Ratio' field is not found in header line in report file $reportfile: <$_>\n";
 
 ## parse data part of final report
-%samples = (); ## for all samples
-%hash = ();
+%samples = (); ## hash for sample ID 
+%hash = ();    ## hash of LRR values at selected SNPs for one sample
 
-my $flagsample = 0; ##  lrr save flag
-my $lrrsample = ();
-my $SampleIDraw = ();
-my $total = 0;
-my $flageof = 0;
+my $flagsample = 0;    ## indicator of the first sample =0; following samples =1
+my $lrrsample = ();    ## tab-delimited LRR values for one sample
+my $SampleIDraw = ();  ## temporary sample ID of one sample
+my $total = 0;         ## counter of current number of LRR values recorded in $lrrsample
+my $flageof = 0;       ## indicaotr of eof =0 not EOF; =1 EOF
 
 while ($line = <REPORT>) {
-	$flageof=1 if eof; ## add file eof flag
+	$flageof = 1 if eof; ## add file eof flag
 	chomp $line;
 
 	@line=split(/\t/, $line);	
@@ -82,7 +82,7 @@ while ($line = <REPORT>) {
 			last;
 		}
 
-	} elsif (exists($samples{$line[$sample_index]})) { ## logic here has problem
+	} elsif (exists($samples{$line[$sample_index]})) {
 			
 		if ($flageof == 1) {
 			$hash{$SampleIDraw} = $lrrsample;
@@ -95,7 +95,8 @@ while ($line = <REPORT>) {
 	} else {
 
 		if ($flagsample == 0) {
-			## first sample
+			
+			## initialize the first sample
 			if (exists($snps{$line[$name_index]})) {
 				$samples{$line[$sample_index]}++;
 				$lrrvalue = $line[$LRR_index];
@@ -104,11 +105,14 @@ while ($line = <REPORT>) {
 				$total++;
 			}
 		} elsif ($flagsample == 1) {
+
 			if (exists($snps{$line[$name_index]})) {
 
+				## complete the previous sample
 				$hash{$SampleIDraw} = $lrrsample;
 				print "SampleID: $SampleIDraw\t".scalar(keys %samples)."\t$total\n";
 
+				## initialize another new sample
 				$samples{$line[$sample_index]}++;
 				$lrrsample = ();
 				$lrrvalue = $line[$LRR_index];
