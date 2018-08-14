@@ -125,9 +125,13 @@ perl step.2.generate.LRR.matrix.pl \
 /path/to/output_LRR_matrix_file
 ```
 
+(3) PCA on LRR matrix.
 ```sh
-step.3.LRR.PCA.R ( add "filename_matrix", "path_input")
+Rscript step.3.LRR.PCA.R \
+/path/to/wk_dir/ \       ## working directory where the LRR matrix is located and results will be saved for PCA
+filename_of_LRR_matrix   ## the LRR matrix generated in step (2)
 ``` 
+When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in `.rds` format, and scatter plots of the first three PCs will also be generated. 
 
 ### PCA on summary statistics
 PCA on sample-level iPattern, PennCNV and QuantiSNP generated 10 statics
