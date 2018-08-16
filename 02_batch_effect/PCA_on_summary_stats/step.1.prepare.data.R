@@ -7,6 +7,50 @@ path_output    <- ""
 
 require(data.table)
 
+# ipattern ----------------------------------------------------------------
+## for number of samples larger than 500, samples must be splited to run ipattern
+read_ipattern_batch <- function(path_ipattern_batch, name_batch) {
+  
+  ## NumCNV
+  dat <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_all_calls.txt")),
+                    header = FALSE, sep = "\t", comment.char = "#", as.is = TRUE)
+  names(dat) <- c("CNV_type", "chr", "posStart", "posEnd",
+                  "numSNP", "on_probe.num", "clusterIdx",
+                  "gain_loss_score", "cluster_score", "gain_loss_sample.num",
+                  "conf", "Sample_ID", "CNV_event_ID", "CNVR_ID")
+  dat <- subset(dat, chr %in% c(1:22))
+  tbl <- table(dat$Sample_ID)
+  dat_tbl <- as.data.frame(tbl)
+  names(dat_tbl) <- c("Sample_ID", "iPattern.NumCNV")
+  NumSample <- nrow(dat_tbl)
+  
+  ## sample.stats.txt
+  dat_statics <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_sample.stats.txt")),
+                            header = FALSE, sep = "\t", nrows = NumSample, as.is = TRUE)
+  names(dat_statics) <- c("Sample_ID", "iPattern.LRR_SD", "other")
+  dat_statics <- dat_statics[, c("Sample_ID", "iPattern.LRR_SD")]
+  samples <- dat_statics$Sample_ID
+  samples <- unlist(lapply(1:length(samples), FUN = function(k) {
+    sample1 <- samples[k]
+    strs <- unlist(strsplit(sample1, split = "/", fixed = TRUE))
+    str1 <- strs[length(strs)]
+  }))
+  
+  samples <- gsub(".rescale", "", samples)
+  dat_statics$Sample_ID <- samples
+  
+  res <- merge(dat_statics, dat_tbl)
+  res$Sample_ID <- gsub(pattern = "^X", replacement = "", res$Sample_ID, perl = TRUE)  ## check
+  res
+}
+
+nm1_batch = ""
+
+dat_statics_ipattern <- read_ipattern_batch(path_ipattern_batch = path_ipattern, name_batch = nm1_batch)
+
+saveRDS(dat_statics_ipattern, file = file.path(path_output, "ipattern.sample.level.statics.rds"))
+
+
 # penncnv sample-level ----------------------------------------------------/
 dat_penncnv <- read.table(file = file.path(path_penncnv, "CNV.PennCNV_qc_new.txt"),
                           sep = "\t",
@@ -74,48 +118,6 @@ dat_statics_quantisnp <- read_quantisnp(path_res = path_quantisnp)
 saveRDS(dat_statics_quantisnp, file = file.path(path_output, "quantisnp.sample.level.statics.rds"))
 
 
-# ipattern ----------------------------------------------------------------
-## for number of samples larger than 500, samples must be splited to run ipattern
-read_ipattern_batch <- function(path_ipattern_batch, name_batch) {
-  
-  ## NumCNV
-  dat <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_all_calls.txt")),
-                    header = FALSE, sep = "\t", comment.char = "#", as.is = TRUE)
-  names(dat) <- c("CNV_type", "chr", "posStart", "posEnd",
-                  "numSNP", "on_probe.num", "clusterIdx",
-                  "gain_loss_score", "cluster_score", "gain_loss_sample.num",
-                  "conf", "Sample_ID", "CNV_event_ID", "CNVR_ID")
-  dat <- subset(dat, chr %in% c(1:22))
-  tbl <- table(dat$Sample_ID)
-  dat_tbl <- as.data.frame(tbl)
-  names(dat_tbl) <- c("Sample_ID", "iPattern.NumCNV")
-  NumSample <- nrow(dat_tbl)
-  
-  ## sample.stats.txt
-  dat_statics <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_sample.stats.txt")),
-                            header = FALSE, sep = "\t", nrows = NumSample, as.is = TRUE)
-  names(dat_statics) <- c("Sample_ID", "iPattern.LRR_SD", "other")
-  dat_statics <- dat_statics[, c("Sample_ID", "iPattern.LRR_SD")]
-  samples <- dat_statics$Sample_ID
-  samples <- unlist(lapply(1:length(samples), FUN = function(k) {
-    sample1 <- samples[k]
-    strs <- unlist(strsplit(sample1, split = "/", fixed = TRUE))
-    str1 <- strs[length(strs)]
-  }))
-  
-  samples <- gsub(".rescale", "", samples)
-  dat_statics$Sample_ID <- samples
-  
-  res <- merge(dat_statics, dat_tbl)
-  res$Sample_ID <- gsub(pattern = "^X", replacement = "", res$Sample_ID, perl = TRUE)  ## check
-  res
-}
-
-nm1_batch = ""
-
-dat_statics_ipattern <- read_ipattern_batch(path_ipattern_batch = path_ipattern, name_batch = nm1_batch)
-
-saveRDS(dat_statics_ipattern, file = file.path(path_output, "ipattern.sample.level.statics.rds"))
 
 # IPQ ---------------------------------------------------------------------
 

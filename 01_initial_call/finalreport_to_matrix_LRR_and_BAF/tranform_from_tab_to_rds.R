@@ -1,7 +1,5 @@
 #!/usr/bin/Rscript
 
-## ZZ, 08/09/2018, finishing review
-
 args <- commandArgs(trailingOnly = TRUE)
 
 ## after using perl script to split finalreport into LRR and BAF 'tab' format data
