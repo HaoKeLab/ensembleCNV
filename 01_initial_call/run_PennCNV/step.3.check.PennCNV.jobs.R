@@ -75,7 +75,7 @@ cmd_submitjob <- function(cmd.sample, samplename) {
 
 # main loop ---------------------------------------------------------------
 
-sample_files <- list.files(path = path_dat)
+sample_files <- list.files(path = path_data)
 cat("number of samples:", length(sample_files), "\n")
 
 n.success <- 0
