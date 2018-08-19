@@ -13,8 +13,8 @@ See scripts in `step.1.prepare.files.sh` for details.
 Rscript step.2.run.PennCNV.jobs.R \
 --data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
 --wkdir /wk_dir/ \
---pfb /wk_dir/SNP.pfb \
---gcmodel /wk_dir/SNP.gcmodel \
+--pfb /path/to/SNP.pfb \
+--gcmodel /path/to/SNP.gcmodel \
 --hmm /path_to_penncnv/lib/hhall.hmm
 ```
 
@@ -23,8 +23,8 @@ Rscript step.2.run.PennCNV.jobs.R \
 Rscrip step.3.check.PennCNV.jobs.R \
 --data /path_to_data/ \ ## generated with finalreport_to_PennCNV.pl
 --wkdir /wk_dir/ \
---pfb /wk_dir/SNP.pfb \
---gcmodel /wk_dir/SNP.gcmodel \
+--pfb /path/to/SNP.pfb \
+--gcmodel /path/to/SNP.gcmodel \
 --hmm /path_to_penncnv/lib/hhall.hmm
 ```
 

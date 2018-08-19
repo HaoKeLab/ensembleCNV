@@ -45,10 +45,9 @@ path_res  <- file.path(path_wkdir, "res")  ## PennCNV results folder
 cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel, 
                         filename_sample, path_list, path_res_sample) {
   
-  file_list <- file.path(path_list, 
-                         sub("\\.txt$", ".list", filename_sample)
+  file_list <- file.path(path_list, sub("\\.txt$", ".list", filename_sample))
   
-  samplename <- gsub(pattern = ".txt$", replacement = "", filename_sample)
+  samplename <- gsub(pattern = "\\.txt$", replacement = "", filename_sample)
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
   
@@ -66,7 +65,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
 
 cmd_submitjob <- function(cmd.sample, samplename) {
   
-  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]",
+  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]", ## need to modify based on specific system
                     "-J", samplename,
                     "-q premium",
                     shQuote(cmd))
@@ -84,7 +83,7 @@ n.fail <- 0
 for ( i in 1:length(sample_files) ) {
   
   sample_file <- sample_files[i]
-  samplename  <- gsub(pattern = ".txt$", replacement = "", sample_file)
+  samplename  <- gsub(pattern = "\\.txt$", replacement = "", sample_file)
   
   path_res_sample <- file.path(path_res, samplename)
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))

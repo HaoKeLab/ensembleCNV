@@ -71,10 +71,10 @@ for ( i in 1:length(sample_files) ) {
 cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
                         filename_sample, path_list, path_res_sample) {
 
-  file_list <- file.path(path_list, 
-                         sub("\\.txt$", ".list", filename_sample)
+  file_list <- file.path(path_list, sub("\\.txt$", ".list", filename_sample))
 
-  samplename <- gsub(pattern = ".txt$", replacement = "", filename_sample)
+  samplename <- gsub(pattern = "\\.txt$", replacement = "", filename_sample)
+  
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
 
@@ -103,7 +103,7 @@ cmd_submitjob <- function(cmd.sample, samplename) {
 for ( i in 1:length(sample_files) ) {
 
   sample_file <- sample_files[i]
-  samplename <- gsub(pattern = ".txt$", replacement = "", sample_file)
+  samplename <- gsub(pattern = "\\.txt$", replacement = "", sample_file)
 
   path_res_sample <- file.path(path_res, samplename)
   dir.create(path = path_res_sample, showWarnings = FALSE, recursive = TRUE)
