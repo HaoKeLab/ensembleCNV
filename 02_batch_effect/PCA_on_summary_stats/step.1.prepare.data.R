@@ -1,11 +1,15 @@
 #!/urs/bin/env Rscript
 
-path_penncnv   <- ""
-path_ipattern  <- ""
-path_quantisnp <- ""
-path_output    <- ""
+args <- commandArgs( trailingOnly = TRUE )
 
-require(data.table)
+path_ipattern  <- args[1]
+path_penncnv   <- args[2]
+path_quantisnp <- args[3]
+path_output    <- args[4]
+
+suppressMessages({
+  require(data.table)
+})
 
 # ipattern ----------------------------------------------------------------
 ## for number of samples larger than 500, samples must be splited to run ipattern
@@ -63,12 +67,14 @@ dat_penncnv$WF <- abs(dat_penncnv$WF)
 fp <- c( "LRR_SD", "BAF_SD", "BAF_drift", "WF", "NumCNV" )
 dat_penncnv <- dat_penncnv[, c("File", fp)]
 names(dat_penncnv) <- c("Sample_ID", paste("PennCNV", fp, sep = "."))
+dat_stats_penncnv <- dat_penncnv
 
-dat_statics_penncnv <- dat_penncnv
-saveRDS(dat_statics_penncnv, file = file.path(path_output, "penncnv.sample.level.statics.rds"))
+write.table(dat_stats_penncnv, 
+            file = file.path(path_output, "penncnv.sample.stats.txt"),
+            quote = F, row.names = F, sep = "\t")
+
 
 # quantisnp\ --------------------------------------------------------------/
-
 read_quantisnp_per_sample <- function(path_res, sample_id) {
   
   ## get numCNV
@@ -92,8 +98,10 @@ read_quantisnp_per_sample <- function(path_res, sample_id) {
   LRR_SD <- mean(dat$LRR_SD, na.rm = TRUE)
   BAF_SD <- mean(dat$BAF_SD, na.rm = TRUE)
   
-  res1 <- data.frame(Sample_ID = Sample_ID, QuantiSNP.NumCNV = numCNV,
-                     QuantiSNP.LRR_SD = LRR_SD, QuantiSNP.BAF_SD = BAF_SD,
+  res1 <- data.frame(Sample_ID = Sample_ID, 
+                     QuantiSNP.NumCNV = numCNV,
+                     QuantiSNP.LRR_SD = LRR_SD, 
+                     QuantiSNP.BAF_SD = BAF_SD,
                      stringsAsFactors = FALSE)
   return(res1) ## for one sample
 }
@@ -101,7 +109,7 @@ read_quantisnp_per_sample <- function(path_res, sample_id) {
 read_quantisnp <- function(path_res) {
   
   samples <- list.files(path = path_res)
-  res <- data.frame() ## all QuantiSNP statics
+  res <- data.frame() ## all QuantiSNP statistics
   for (i in 1:length(samples)) {
     
     sample1 <- samples[i]
@@ -113,9 +121,11 @@ read_quantisnp <- function(path_res) {
   res
 }
 
-dat_statics_quantisnp <- read_quantisnp(path_res = path_quantisnp)
+dat_stats_quantisnp <- read_quantisnp(path_res = path_quantisnp)
 
-saveRDS(dat_statics_quantisnp, file = file.path(path_output, "quantisnp.sample.level.statics.rds"))
+write.table(dat_stats_quantisnp, 
+            file = file.path(path_output, "quantisnp.sample.stats.txt"),
+            quote = F, row.names = F, sep = "\t")
 
 
 

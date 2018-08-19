@@ -26,13 +26,14 @@ wk_dir=""           ## working directory
 
 ## compile pfb file
 perl ${path_to_penncnv}/compile_pfb.pl \
--listfile #{wk_dir}/list_pfb.txt \
+-listfile ${wk_dir}/list_pfb.txt \
 -snpposfile ${wk_dir}/SNP_pos.txt \
 -output ${wk_dir}/SNP.pfb
 
 ## compile gcmodel file for GC content ajdustment
+## please refer to PennCNV documents about how to prepare gc5Base_hg19.txt.sorted
 perl ${path_to_penncnv}/cal_gc_snp.pl \
-${wk_dir}/gc5Base_hg19.txt.sorted \ ## please refer to PennCNV documents about how to prepare this data
+${wk_dir}/gc5Base_hg19.txt.sorted \
 ${wk_dir}/SNP.pfb \
--output SNP.gcmodel
+-output ${wk_dir}/SNP.gcmodel
 

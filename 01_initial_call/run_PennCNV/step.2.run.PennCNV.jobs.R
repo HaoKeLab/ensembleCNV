@@ -91,7 +91,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
 
 cmd_submitjob <- function(cmd.sample, samplename) {
 
-  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]",
+  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]", ## need to modify based on specific system
                     "-J", samplename,
                     "-q premium",
                     shQuote(cmd.sample))
