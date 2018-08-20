@@ -8,12 +8,14 @@ Running QuantiSNP includes the following 3 steps:
 ```sh
 Rscript step.1.prepare.QuantiSNP.R \
 -i /path/to/data/ \ ## generated with finalreport_to_QuantiSNP.pl
+-g /path/to/gender_file.txt \ ## look into the code for details
 -o /path/to/results/
 ```
 (2) Check job status and resubmit unfinishing jobs
 ```sh
 Rscript step.2.check.QuantiSNP.R \
 -d /path/to/data/ \ ## generated with finalreport_to_QuantiSNP.pl
+-g /path/to/gender_file.txt \ ## look into the code for details
 -r /path/to/results/ 
 ```
 

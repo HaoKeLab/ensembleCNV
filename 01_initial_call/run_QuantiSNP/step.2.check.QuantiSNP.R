@@ -15,8 +15,8 @@ run.quantisnp <- function(path_output, path_dat, sample_name, gender) {
   EMITERS    <- "10"        ## number of EM iterations to use during training
   LSETTING   <- "2000000"   ## characteristic CNV length parameter
   GCDIR      <- file.path(path_to_quantisnp, "data/b37/")              ## path to GC data files (contents of gc_data.zip)
-  PARAMSFILE <- file.path(path_to_quantisnp, "config/params.dat")      ## path to parameters file
-  LEVELSFILE <- file.path(path_to_quantisnp, "config/levels-hd.dat")   ## path to levels file
+  PARAMSFILE <- file.path(path_to_quantisnp, "2.3/quantisnp/config/params.dat")      ## path to parameters file
+  LEVELSFILE <- file.path(path_to_quantisnp, "2.3/quantisnp/config/levels-hd.dat")   ## path to levels file
   MCRROOT    <- file.path(path_to_quantisnp, "MATLAB_RT/lib/v79/")     ## path to MCR Run-Time Libraries
   CHRRANGE   <- "1:23"   ## chromosome
   CHRX       <- "23"     ## which chromosome is X?
@@ -27,7 +27,7 @@ run.quantisnp <- function(path_output, path_dat, sample_name, gender) {
   
   if (!file.exists(OUTDIR)) dir.create(OUTDIR)
   
-  cmd <- paste("path_to_quantisnp/linux64/run_quantisnp.sh",
+  cmd <- paste(file.path(path_to_quantisnp, "2.3/quantisnp/linux64/run_quantisnp.sh"),
                MCRROOT, 
                paste("--chr", CHRRANGE),
                paste("--outdir", OUTDIR), 
@@ -65,6 +65,8 @@ run.quantisnp <- function(path_output, path_dat, sample_name, gender) {
 option_list <- list(
   make_option(c("-d", "--data"), default = NA, type = "character", action = "store",
               help = "data folder for runing QuantiSNP."),
+  make_option(c("-g", "--gender"), action = "store", default = NA, type = "character",
+              help = "gender file for runing QuantiSNP"),  
   make_option(c("-r", "--result"), default = NA, type = "character", action = "store",
               help = "path to CNV results generated in the first step.")
 )
@@ -77,10 +79,8 @@ if (is.na(opt$data) | is.na(opt$result)) {
 
 # get paras
 path_data <- opt$data
+gender_file <- opt$gender
 path_res <- opt$result
-
-## path to other auxiliary information (e.g. gender file)
-path_input <- "" 
 
 ## gender file: in tab-delimited format and has two columns: Sample_ID and Gender
 ## for example
@@ -88,7 +88,7 @@ path_input <- ""
 # sample_1	female
 # sample_2	male
 
-dat_gender <- read.delim(file = file.path(path_input, "gender_file.txt"), as.is = TRUE)
+dat_gender <- read.delim(file = gender_file, as.is = TRUE)
 
 cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 
@@ -96,6 +96,8 @@ cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
 samples <- dat_gender$Sample_ID
 genders <- dat_gender$Gender
 
+n.success <- 0
+n.fail <- 0
 for (i in 1:length(samples)) {
   
   sample_name <- samples[i]
@@ -108,15 +110,22 @@ for (i in 1:length(samples)) {
     files <- list.files(path = path_sample1)
     idx1 <- grep(pattern = ".cnv", files)
     if (length(idx1) == 1) {
+      n.success	<- n.success + 1
       cat("Sample_ID:", sample_name, "SUCCESS.\n")
     } else {
+      n.fail <-	n.fail + 1
       cat("Sample_ID:", sample_name, "FAILED.\n")
       run.quantisnp(path_output = path_res, path_dat = path_data, sample_name = sample_name, gender = gender)
     }
 
   } else {
+  	n.fail <-	n.fail + 1
     cat("Sample_ID:", sample_name, "FAILED.\n")
     run.quantisnp(path_output = path_res, path_dat = path_data, sample_name = sample_name, gender = gender)
   }
   
 }
+
+cat("total number of samples:", length(samples),
+    "number of success:", n.success,
+    "number of fail:", n.fail, "\n")
