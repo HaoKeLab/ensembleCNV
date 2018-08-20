@@ -16,11 +16,12 @@ Rscript step.1.prepare.QuantiSNP.R \
 Rscript step.2.check.QuantiSNP.R \
 -d /path/to/data/ \ ## generated with finalreport_to_QuantiSNP.pl
 -g /path/to/gender_file.txt \ ## look into the code for details
--r /path/to/results/ 
+-r /path/to/results/
 ```
 
 (3) Combine PennCNV results from each sample, including the content in .cnv files
 ```sh
-## To run this script, you need to add "in_dir" and "out_dir" information in the script.
-perl step.3.combine.QuantiSNP.pl
+perl step.3.combine.QuantiSNP.pl \
+--in_dir /path/to/results/ \
+--out_dir /path/to/output/
 ```

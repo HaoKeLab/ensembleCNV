@@ -4,11 +4,15 @@
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original QuantiSNP documents (https://sites.google.com/site/quantisnp/) for more information 
 
-## To run this script, you need to add "in_dir" and "out_dir" information in the script.
+use Getopt::Long;
 
 $in_dir="";   ## input directory
 $out_dir="";  ## output directory
-$out_file=$out_dir."quantisnp.cnv";
+
+GetOptions("in_dir=s" => \$in_dir,
+		   "out_dir=s" => \$out_dir);
+
+$out_file=$out_dir."/quantisnp.cnv";
 
 opendir(DIR, $in_dir) or "cannot open $in_dir: $!";
 open(OUT1, ">", $out_file) or die $!;
