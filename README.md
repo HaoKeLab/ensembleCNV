@@ -137,7 +137,7 @@ When the analysis is finished, in the working directory, the first three PCs of 
 
 Besides CNV calls, iPattern, PennCNV and QuantiSNP also generate 10 sample-level statistics: (a) SD of normalzied total intensity, and b) number of CNVs detected per sample from iPattern; (c) SD of LRR, (d) SD of BAF, (e) wave factor in LRR, (f) BAF drift, and (g) number of CNVs detected per sample from PennCNV; (h) SD of LRR, (i) SD of BAF, and (j) number of CNVs detected per sample from QuantiSNP. PCA can be performed in the follwoing 2 steps.
 
-(1) Generate iPattern, PennCNV and QuantiSNP sample-level summary statistics
+(1) Generate iPattern, PennCNV and QuantiSNP sample-level summary statistics.
 ```sh
 Rscript step.1.prepare.stats.R \
 /path/to/iPattern/results/ \
@@ -146,7 +146,7 @@ Rscript step.1.prepare.stats.R \
 /paht/to/IPQ.stats.txt  ## the output file of summary statistics from iPattern, PennCNV and QuantiSNP results
 ```
 
-(2)
+(2) PCA on sample-level summary statistics.
 ```sh
 Rscript step.2.stats.PCA.R \
 /path/to/wk_dir/ ## this is the path to IPQ.stats.txt generated in step (1)
