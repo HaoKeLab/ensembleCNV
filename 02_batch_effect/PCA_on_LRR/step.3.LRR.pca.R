@@ -35,17 +35,17 @@ suppressMessages({
   
   ## check which SNPs with all values being NA
   idxs.na.snps <- which( is.na(col_mean) )
-  if (length(idxs.na.snps)>0) mat.pca <- mat[, -idxs.na.snps] ##***
+  if (length(idxs.na.snps)>0) mat <- mat[, -idxs.na.snps] ##***
   
-  dat.pca <- as.data.frame( mat.pca )
+  dat.pca <- as.data.frame( mat )
   rownames(dat.pca) <- sampleID
   
   PCA <- prcomp(dat.pca)
   PC  <- predict(PCA)
-  PC  <- as.data.frame(PC, stringsAsFactors = FALSE)
-  PC  <- PC[, c("PC1", "PC2", "PC3")]
+  PC  <- data.frame(Sample_ID = rownames(PC), 
+                    PC[, c("PC1", "PC2", "PC3")], 
+                    stringsAsFactors = FALSE)
   
-  #saveRDS(PC, file = file.path(wk_dir, "result_PCA.rds"))
   write.table(PC, file = file.path(wk_dir, "result_PCA.txt"),
               quote = F, row.names = F, sep = "\t")
   

@@ -13,10 +13,12 @@ suppressMessages({
 
 # ipattern ----------------------------------------------------------------
 ## for number of samples larger than 500, samples must be splited to run ipattern
-read_ipattern_batch <- function(path_ipattern_batch, name_batch) {
+read_ipattern_batch <- function(path_ipattern) {
   
   ## NumCNV
-  dat <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_all_calls.txt")),
+  cnv_file <- list.files(path = path_ipattern, pattern = "_all_calls.txt$")
+  
+  dat <- read.table(file = file.path(path_ipattern, cnv_file),
                     header = FALSE, sep = "\t", comment.char = "#", as.is = TRUE)
   names(dat) <- c("CNV_type", "chr", "posStart", "posEnd",
                   "numSNP", "on_probe.num", "clusterIdx",
@@ -29,52 +31,58 @@ read_ipattern_batch <- function(path_ipattern_batch, name_batch) {
   NumSample <- nrow(dat_tbl)
   
   ## sample.stats.txt
-  dat_statics <- read.table(file = file.path(path_ipattern_batch, paste0(name_batch, "_sample.stats.txt")),
-                            header = FALSE, sep = "\t", nrows = NumSample, as.is = TRUE)
-  names(dat_statics) <- c("Sample_ID", "iPattern.LRR_SD", "other")
-  dat_statics <- dat_statics[, c("Sample_ID", "iPattern.LRR_SD")]
-  samples <- dat_statics$Sample_ID
-  samples <- unlist(lapply(1:length(samples), FUN = function(k) {
+  stat_file <- list.files(path = path_ipattern, pattern = "_sample.stats.txt$")
+  
+  dat_stat <- read.table(file = file.path(path_ipattern, stat_file),
+                         header = FALSE, sep = "\t", nrows = NumSample, as.is = TRUE)
+  names(dat_stat) <- c("Sample_ID", "iPattern.LRR_SD", "iPattern.base_CN")
+  dat_stat <- dat_stat[, c("Sample_ID", "iPattern.LRR_SD")]
+  
+  ## clean sample ID: remove path information, remove subfix ".rescale"
+  samples <- dat_stat$Sample_ID
+  samples <- unlist( lapply(1:length(samples), FUN = function(k) {
     sample1 <- samples[k]
     strs <- unlist(strsplit(sample1, split = "/", fixed = TRUE))
     str1 <- strs[length(strs)]
-  }))
+  }) )
+  samples <- gsub("\\.rescale$", "", samples)
+  dat_stat$Sample_ID <- samples
   
-  samples <- gsub(".rescale", "", samples)
-  dat_statics$Sample_ID <- samples
-  
-  res <- merge(dat_statics, dat_tbl)
+  res <- merge(dat_stat, dat_tbl)
+  ## if Sample_ID starts with number
   res$Sample_ID <- gsub(pattern = "^X", replacement = "", res$Sample_ID, perl = TRUE)  ## check
+  
   res
 }
 
-nm1_batch = ""
+dat_stats_ipattern <- read_ipattern_batch(path_ipattern = path_ipattern)
 
-dat_statics_ipattern <- read_ipattern_batch(path_ipattern_batch = path_ipattern, name_batch = nm1_batch)
+write.table(dat_stats_ipattern, 
+            file = file.path(path_output, "ipattern.stats.txt"),
+            quote = F, row.names = F, sep = "\t")
 
-saveRDS(dat_statics_ipattern, file = file.path(path_output, "ipattern.sample.level.statics.rds"))
 
-
-# penncnv sample-level ----------------------------------------------------/
+# penncnv sample-level -----------------------------------------------------
 dat_penncnv <- read.table(file = file.path(path_penncnv, "CNV.PennCNV_qc_new.txt"),
                           sep = "\t",
                           header = TRUE,
                           check.names = FALSE,
                           stringsAsFactors = FALSE)
-dat_penncnv$File <- gsub(".txt$", "", dat_penncnv$File, perl = TRUE) 
+dat_penncnv$File <- gsub("\\.txt$", "", dat_penncnv$File, perl = TRUE) 
 dat_penncnv$WF <- abs(dat_penncnv$WF)
 
 fp <- c( "LRR_SD", "BAF_SD", "BAF_drift", "WF", "NumCNV" )
 dat_penncnv <- dat_penncnv[, c("File", fp)]
 names(dat_penncnv) <- c("Sample_ID", paste("PennCNV", fp, sep = "."))
+
 dat_stats_penncnv <- dat_penncnv
 
 write.table(dat_stats_penncnv, 
-            file = file.path(path_output, "penncnv.sample.stats.txt"),
+            file = file.path(path_output, "penncnv.stats.txt"),
             quote = F, row.names = F, sep = "\t")
 
 
-# quantisnp\ --------------------------------------------------------------/
+# quantisnp ---------------------------------------------------------------
 read_quantisnp_per_sample <- function(path_res, sample_id) {
   
   ## get numCNV
@@ -83,6 +91,8 @@ read_quantisnp_per_sample <- function(path_res, sample_id) {
   numCNV <- sum(dat_cnv$Chromosome %in% c(1:22))
   
   ## get LRR.SD and BAF.SD
+  ## Note: in the .qc file, QuantiSNP has formatting issue
+  ##       the column name "Gender" is written at the start of the second line
   file_qc <- file.path(file.path(path_res, sample_id), paste0(sample_id, ".qc"))
   dat_line2 <- read.table(file = file_qc, skip = 1, nrows = 1, header = FALSE, stringsAsFactors = FALSE)
   dat_line2 <- dat_line2[, -1]
@@ -124,22 +134,22 @@ read_quantisnp <- function(path_res) {
 dat_stats_quantisnp <- read_quantisnp(path_res = path_quantisnp)
 
 write.table(dat_stats_quantisnp, 
-            file = file.path(path_output, "quantisnp.sample.stats.txt"),
+            file = file.path(path_output, "quantisnp.stats.txt"),
             quote = F, row.names = F, sep = "\t")
 
 
 
 # IPQ ---------------------------------------------------------------------
 
-res_IP <- merge(dat_statics_ipattern, dat_statics_penncnv)
-stopifnot( nrow(res_IP) == nrow(dat_statics_ipattern))
+res_IP <- merge(dat_stats_ipattern, dat_stats_penncnv)
+stopifnot( nrow(res_IP) == nrow(dat_stats_ipattern))
 
-res_IPQ <- merge(res_IP, dat_statics_quantisnp)
+res_IPQ <- merge(res_IP, dat_stats_quantisnp)
 stopifnot( nrow(res_IPQ) == nrow(res_IP) )
 
-saveRDS(res_IPQ, file = file.path(path_output, "IPQ.sample.level.statics.rds"))
-
-
+write.table(res_IPQ, 
+            file = file.path(path_output, "IPQ.stats.txt"),
+            quote = F, row.names = F, sep = "\t")
 
 
 
