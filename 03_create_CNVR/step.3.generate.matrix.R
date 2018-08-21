@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscirpt --vanilla
+#!/usr/bin/env Rscirpt
 
 args <- commandArgs(trailingOnly = TRUE)
 
