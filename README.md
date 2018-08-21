@@ -131,23 +131,28 @@ Rscript step.3.LRR.PCA.R \
 /path/to/wk_dir/ \       ## working directory where the LRR matrix is located and results will be saved for PCA
 filename_of_LRR_matrix   ## the LRR matrix generated in step (2)
 ``` 
-When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in `.rds` format, and scatter plots of the first three PCs will also be generated. 
+When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file, and scatter plots of the first three PCs will also be generated. 
 
 ### PCA on summary statistics
 
 Besides CNV calls, iPattern, PennCNV and QuantiSNP also generate 10 sample-level statistics: (a) SD of normalzied total intensity, and b) number of CNVs detected per sample from iPattern; (c) SD of LRR, (d) SD of BAF, (e) wave factor in LRR, (f) BAF drift, and (g) number of CNVs detected per sample from PennCNV; (h) SD of LRR, (i) SD of BAF, and (j) number of CNVs detected per sample from QuantiSNP. PCA can be performed in the follwoing 2 steps.
 
-(1) generate iPattern, PennCNV and QuantiSNP calling sample level statics data using
-
+(1) Generate iPattern, PennCNV and QuantiSNP sample-level summary statistics
 ```sh
-Rscript step.1.prepare.data.R \
+Rscript step.1.prepare.stats.R \
+/path/to/iPattern/results/ \
+/path/to/PennCNV/results/ \
+/path/to/QuantiSNP/results/ \
+/paht/to/IPQ.stats.txt  ## the output file of summary statistics from iPattern, PennCNV and QuantiSNP results
 ```
 
 (2)
-
 ```sh
 Rscript step.2.stats.PCA.R \
+/path/to/wk_dir/ ## this is the path to IPQ.stats.txt generated in step (1)
 ```
+When the analysis is finished, in the working directory, the PCs of all samples will be saved in tab-delimited text file, and scatter plots of the first three PCs will also be generated. 
+
 
 ## 3 Create CNVR
 

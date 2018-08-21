@@ -1,26 +1,31 @@
 #!/usr/bin/env Rscipt
 
+args <- commandArgs( trailingOnly = TRUE )
+wk_dir  <- args[1] ## path to IPQ.stats.txt generated in step (1)
+
 suppressMessages({
   require(ggplot2)
   require(cowplot)
 })
 
-path_input  <- ""
-path_output <- ""
-# PCA -------------------------------------------------------------------/
+# PCA --------------------------------------------------------------------
 
-dat <- readRDS(file = file.path(path_input, "IPQ.sample.level.statics.rds"))
+dat <- readRDS(file = file.path(wk_dir, "IPQ.stats.txt"))
 
 idx1 <- which( names(dat) == "Sample_ID" )
 dat_pca <- dat[, -idx1]
-mat = as.matrix(dat_pca)
+mat <- as.matrix(dat_pca)
+rownames <- dat$Sample_ID
 
+PCA <- prcomp(mat, scale. = TRUE)
+PC  <- predict(PCA)
 
-PCA = prcomp(mat, scale. = TRUE)
-PC  = predict(PCA)
-PC  = as.data.frame(PC, stringsAsFactors = FALSE)
+PC  <- data.frame(Sample_ID = rownames(PC), 
+                  PC, 
+                  stringsAsFactors = FALSE)
 
-rownames(PC) <- dat$Sample_ID
+write.table(PC, file = file.path(wk_dir, "IPQ_stats_PCA_res.txt"),
+            quote = F, row.names = F, sep = "\t")
 
 p12 <- ggplot() + 
   geom_point(data = PC, aes(PC1, PC2), shape = 1, size = 3) + 
@@ -52,7 +57,7 @@ p23 <- ggplot() +
         plot.title = element_text(size = 20, hjust = 0.5)) + 
   ggtitle("PC3 ~ PC2")
 
-png(filename = file.path(path_output, "PCA.IPQ.sample.level.statics.png"),
+png(filename = file.path(wk_dir, "IPQ_stats_PCA_plots.png"),
     width = 12, height = 12, units = "in", res = 512)
 p <- plot_grid(p12, p13, p23, nrow = 2, labels = LETTERS[1:3])
 print(p)

@@ -46,7 +46,7 @@ suppressMessages({
                     PC[, c("PC1", "PC2", "PC3")], 
                     stringsAsFactors = FALSE)
   
-  write.table(PC, file = file.path(wk_dir, "result_PCA.txt"),
+  write.table(PC, file = file.path(wk_dir, "LRR_PCA_res.txt"),
               quote = F, row.names = F, sep = "\t")
   
   ## plot PCA results
@@ -74,7 +74,7 @@ suppressMessages({
           axis.text = element_text(size = 15, face = "bold")) + 
     ggtitle("PC3 ~ PC2")
   
-  png(filename = file.path(wk_dir, "plots_PCA.png"),
+  png(filename = file.path(wk_dir, "LRR_PCA_plots.png"),
       width = 12, height = 12, units = "in", res = 512)  
     p <- plot_grid(p12, p13, p23, nrow = 2)
     print(p)
