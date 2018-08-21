@@ -45,7 +45,9 @@ suppressMessages({
   PC  <- as.data.frame(PC, stringsAsFactors = FALSE)
   PC  <- PC[, c("PC1", "PC2", "PC3")]
   
-  saveRDS(PC, file = file.path(wk_dir, "result_PCA.rds"))
+  #saveRDS(PC, file = file.path(wk_dir, "result_PCA.rds"))
+  write.table(PC, file = file.path(wk_dir, "result_PCA.txt"),
+              quote = F, row.names = F, sep = "\t")
   
   ## plot PCA results
   p12 <- ggplot(data = PC, aes(PC1, PC2)) + 

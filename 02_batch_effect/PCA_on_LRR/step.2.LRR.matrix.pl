@@ -5,9 +5,9 @@
 use Carp;
 
 ## input
-my $file_snps_selected = $ARGV[0];   ## seleted SNPs file from the first step
-my $reportfile         = $ARGV[1];   ## finalreport from Genome Studio
-my $file_marix_LRR     = $ARGV[2];   ## output LRR matrix file
+my $file_snps_selected  = $ARGV[0];   ## seleted SNPs file from the first step
+my $reportfile          = $ARGV[1];   ## finalreport from Genome Studio
+my $file_matrix_LRR     = $ARGV[2];   ## output LRR matrix file
 
 ## read in selected snps
 open(IN, "< $file_snps_selected") or die "Error: can't open snps file $in_snps: $!";
@@ -127,7 +127,7 @@ while ($line = <REPORT>) {
 close IN;
 
 ## save LRR matrix
-open(OUT, ">", $file_marix_LRR) or die "Error: can't open file $file_marix_LRR: $!";
+open(OUT, ">", $file_matrix_LRR) or die "Error: can't open file $file_matrix_LRR: $!";
 foreach my $item (keys %hash) {
 	print OUT "$item\t$hash{$item}\n";
 }
