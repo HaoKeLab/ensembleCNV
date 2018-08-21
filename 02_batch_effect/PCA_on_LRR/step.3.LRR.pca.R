@@ -35,7 +35,7 @@ suppressMessages({
   
   ## check which SNPs with all values being NA
   idxs.na.snps <- which( is.na(col_mean) )
-  if (length(idx.na.snps)>0) mat.pca <- mat[, -idxs.na.snps] ##***
+  if (length(idxs.na.snps)>0) mat.pca <- mat[, -idxs.na.snps] ##***
   
   dat.pca <- as.data.frame( mat.pca )
   rownames(dat.pca) <- sampleID
