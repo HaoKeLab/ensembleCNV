@@ -10,12 +10,12 @@ suppressMessages({
 
 # PCA --------------------------------------------------------------------
 
-dat <- readRDS(file = file.path(wk_dir, "IPQ.stats.txt"))
+dat <- read.delim(file = file.path(wk_dir, "IPQ.stats.txt"), as.is = TRUE)
 
 idx1 <- which( names(dat) == "Sample_ID" )
 dat_pca <- dat[, -idx1]
 mat <- as.matrix(dat_pca)
-rownames <- dat$Sample_ID
+rownames(mat) <- dat$Sample_ID
 
 PCA <- prcomp(mat, scale. = TRUE)
 PC  <- predict(PCA)

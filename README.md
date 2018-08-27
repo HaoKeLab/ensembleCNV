@@ -143,7 +143,7 @@ Rscript step.1.prepare.stats.R \
 /path/to/iPattern/results/ \
 /path/to/PennCNV/results/ \
 /path/to/QuantiSNP/results/ \
-/paht/to/IPQ.stats.txt  ## the output file of summary statistics from iPattern, PennCNV and QuantiSNP results
+/path/to/output/  ## saving summary statistics from iPattern, PennCNV and QuantiSNP results
 ```
 
 (2) PCA on sample-level summary statistics.

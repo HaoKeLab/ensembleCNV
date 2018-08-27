@@ -1,0 +1,6 @@
+samples.alt <- sub("-", ".", samples.raw)
+for (i in 1:length(samples.alt)) {#
+	idx1 <- which(dat_stats_ipattern$Sample_ID == samples.alt[i])#
+	dat_stats_ipattern$Sample_ID[ idx1 ] <- samples.raw[i]#
+}
+res_IP <- merge(dat_stats_ipattern, dat_stats_penncnv)

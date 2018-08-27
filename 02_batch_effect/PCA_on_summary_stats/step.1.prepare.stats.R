@@ -12,7 +12,7 @@ suppressMessages({
 })
 
 # ipattern ----------------------------------------------------------------
-## for number of samples larger than 500, samples must be splited to run ipattern
+## for number of samples larger than 500, samples may need to be splited into batches to run ipattern
 read_ipattern_batch <- function(path_ipattern) {
   
   ## NumCNV
@@ -55,14 +55,16 @@ read_ipattern_batch <- function(path_ipattern) {
   res
 }
 
+cat("Processing iPattern results ...\n")
 dat_stats_ipattern <- read_ipattern_batch(path_ipattern = path_ipattern)
 
 write.table(dat_stats_ipattern, 
             file = file.path(path_output, "ipattern.stats.txt"),
             quote = F, row.names = F, sep = "\t")
-
+cat("Done.\n")
 
 # penncnv sample-level -----------------------------------------------------
+cat("Processing PennCNV results ...\n")
 dat_penncnv <- read.table(file = file.path(path_penncnv, "CNV.PennCNV_qc_new.txt"),
                           sep = "\t",
                           header = TRUE,
@@ -80,7 +82,7 @@ dat_stats_penncnv <- dat_penncnv
 write.table(dat_stats_penncnv, 
             file = file.path(path_output, "penncnv.stats.txt"),
             quote = F, row.names = F, sep = "\t")
-
+cat("Done.\n")
 
 # quantisnp ---------------------------------------------------------------
 read_quantisnp_per_sample <- function(path_res, sample_id) {
@@ -123,7 +125,7 @@ read_quantisnp <- function(path_res) {
   for (i in 1:length(samples)) {
     
     sample1 <- samples[i]
-    cat("i:", i, length(samples), "SampleID:", sample1, "\n")
+    #cat("i:", i, length(samples), "SampleID:", sample1, "\n")
     
     res1 <- read_quantisnp_per_sample(path_res = path_res, sample_id = sample1)
     res <- rbind(res, res1)
@@ -131,15 +133,28 @@ read_quantisnp <- function(path_res) {
   res
 }
 
+cat("Processing QuantiSNP results ...\n")
 dat_stats_quantisnp <- read_quantisnp(path_res = path_quantisnp)
 
 write.table(dat_stats_quantisnp, 
             file = file.path(path_output, "quantisnp.stats.txt"),
             quote = F, row.names = F, sep = "\t")
-
+cat("Done.")
 
 
 # IPQ ---------------------------------------------------------------------
+
+cat("Combine summary statistics from different methods ...\n")
+## iPattern converts "-" in Sample_ID to "."
+## recover the original Sample_ID
+idx <- grep("-", dat_stats_penncnv$Sample_ID) 
+samples.raw <- dat_stats_penncnv$Sample_ID[ idx  ]
+samples.alt <- sub("-", ".", samples.raw)
+
+for (i in 1:length(samples.alt)) {
+	idx1 <- which(dat_stats_ipattern$Sample_ID == samples.alt[i])
+	dat_stats_ipattern$Sample_ID[ idx1 ] <- samples.raw[i]
+}
 
 res_IP <- merge(dat_stats_ipattern, dat_stats_penncnv)
 stopifnot( nrow(res_IP) == nrow(dat_stats_ipattern))
@@ -150,7 +165,7 @@ stopifnot( nrow(res_IPQ) == nrow(res_IP) )
 write.table(res_IPQ, 
             file = file.path(path_output, "IPQ.stats.txt"),
             quote = F, row.names = F, sep = "\t")
-
+cat("Done.\n")
 
 
 
