@@ -160,19 +160,25 @@ Here, create CNVR for both individual CNV calling method and ensembleCNV.
 
 First, CNV calling results (.rds format) from iPattern, PennCNV and QuantiSNP 
 ```sh
-step.1.data.R ( "path_output", "file_ipattern", "file_penncnv", "file_quantisnp" )
+Rscript step.1.CNV.data.R \
+/path/to/working_directory \   ## where output files are saved
+/path/to/iPattern_CNV_file \
+/path/to/PennCNV_CNV_file \
+/path/to/QuantiSNP_CNV_file \
+/path/to/Sample_Map.txt   ## generated along with final report from Genome Studio
 ```
 
 Second, 
-### create CNVR for individual CNV calling method
-individual method:
-```sh 
-./step.2.create.CNVR.IPQ.R --help for detail
-```
+
 ### Merge CNV calls from individual callers
 ensembleCNV from iPattern, PennCNV and QuantiSNP CNV calling results.
 ```sh
-./step.2.ensembleCNV.R --help for detail
+Rscript step.2.create.CNVR.R \
+--icnv /path/to/iPattern_CNV_call \   ## generated in step (1)
+--pcnv /path/to/PennCNV_CNV_call \
+--qcnv /path/to/QuantiSNP_CNV_call \
+--snp /path/to/SNP_position_file \   ## SNP.pfb for PennCNV analysis can serve for SNP position
+--centromere /path/to/chromosome_centromere_file   ## the information can be found in UCSC genome browser
 ```
 
 Third, generate matrix for individual CNV calling method:

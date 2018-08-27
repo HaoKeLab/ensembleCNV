@@ -1,8 +1,6 @@
 #!/usr/bin/env Rscript
 
-suppressPackageStartupMessages(require(optparse))
-
-## add snpName
+suppressPackageStartupMessages( require(optparse) )
 
 ## functions
 ##================================================================================
@@ -882,18 +880,18 @@ option_list <- list(
               help = "snp position file"),
   make_option(c("-c", "--centromere"), action = "store", default = NA, type = "character",
               help = "centromere information file"),
-  make_option(c("-o", "--outpath"), action = "store", default = NA, type = "character",
+  make_option(c("-o", "--output"), action = "store", default = NA, type = "character",
               help = "result output path.")
 )
 
 
 opt = parse_args(OptionParser(option_list = option_list))
 
-if(is.na(opt$icnv) | is.na(opt$pcnv) | is.na(opt$qcnv) | is.na(opt$snp) | is.na(opt$outpath) | is.na(opt$centromere)) {
-  stop("all arguments must be supplied. type --help for detail\n")
+if (is.na(opt$icnv) | is.na(opt$pcnv) | is.na(opt$qcnv) | is.na(opt$snp) | is.na(opt$centromere) | is.na(opt$output)) {
+  stop("All arguments must be supplied. Type --help for details.\n")
 }
 
-path_output <- opt$outpath ## output path
+path_output <- opt$output ## output path
 
 # read in centromere (.rds format)
 centromere <- readRDS(file = opt$centromere)
@@ -903,32 +901,32 @@ snp <- read.table(file = opt$snp, sep = "\t", comment.char = "",
                   header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
 
 col_sel <- c("chr", "posStart", "posEnd", "CN", "Sample_ID", "conf", 
-             "numSNP", "avgConf", "length", "CNV_type", "method") ## add method
+             "numSNP", "avgConf", "length", "CNV_type", "method")
 
 # read from .rds ----------------------------------------------------------
-icnv <- readRDS(file = opt$icnv)
+icnv <- read.delim(file = opt$icnv, as.is = TRUE)
 icnv <- icnv[, col_sel]
 
-pcnv <- readRDS(file = opt$pcnv)
+pcnv <- read.delim(file = opt$pcnv, as.is = TRUE)
 pcnv <- pcnv[, col_sel]
-qcnv <- readRDS(file = opt$qcnv)
+
+qcnv <- read.delim(file = opt$qcnv, as.is = TRUE)
 qcnv <- qcnv[, col_sel]
 
-
-cat("number of icnv:", nrow(icnv), "\n")
-cat("number of pcnv:", nrow(pcnv), "\n")
-cat("number of qcnv:", nrow(qcnv), "\n") ## can be deleted
+cat("Total number of iPattern CNV calls:", nrow(icnv), "\n")
+cat("Total number of PennCNV CNV calls:", nrow(pcnv), "\n")
+cat("Total number of QuantiSNP CNV calls:", nrow(qcnv), "\n")
 
 ecnv <- rbind(icnv, pcnv, qcnv)
 
-cat("CNV preprocessing.\n")
+cat("CNV preprocessing ...\n")
 cnv <- preprocess.CNV(cnv = ecnv,
                       snp = snp,
                       centromere = centromere,
                       min.numSNP = 5) ## nim.numSNP = 3
 
 ## create CNVR
-cat("Create CNVR.\n")
+cat("Create CNVR ...\n")
 output <- create.cnvr(cnv = cnv,
                       centromere = centromere,
                       prop.cutoff = 0.3)
@@ -936,20 +934,26 @@ output <- create.cnvr(cnv = cnv,
 cnv.create <- output$cnv
 cnvr.create <- output$cnvr
 
-saveRDS(cnv.create, file = file.path(path_output, "cnvs_step1_create.rds"))
-saveRDS(cnvr.create, file = file.path(path_output, "cnvrs_step1_create.rds"))
+write.table(cnv.create, 
+            file = file.path(path_output, "cnv_step1_create.txt"),
+            quote = F, row.names = F, sep = "\t")
+write.table(cnvr.create, 
+            file = file.path(path_output, "cnvr_step1_create.txt"),
+            quote = F, row.names = F, sep = "\t")
 
-# boundary CNVR
-cat("start boundary CNVR.\n")
+## CNVR boundary 
+cat("Calculate CNVR boundary ...\n")
 cnvr.boundary <- create.CNVR.boundary(cnv = cnv.create, cnvr = cnvr.create, snp = snp, freq.cutoff = 0.5)
 
-peak <- table(cnvr.boundary$nPeak) ## all 1!!
+peak <- table(cnvr.boundary$nPeak)
 print(peak)
 
-saveRDS(cnvr.boundary, file = file.path(path_output, "cnvrs_step2_boundary.rds"))
+write.table(cnvr.boundary, 
+            file = file.path(path_output, "cnvr_step2_boundary.txt"),
+            quote = F, row.names = F, sep = "\t")
 
-## clean poolingCNV 
-cat("start assign CNV method type(clean CNV).\n")
+## Assign CNV calls from individual methods for each CNVR
+cat("Assing CNV calls from individual methods to each CNVR ...\n")
 
 cleanCNV <- merge_IPQ(cnv = cnv.create, cnvr = cnvr.boundary)
 
@@ -959,5 +963,9 @@ cnvr.cleanCNV <- cleanCNV$cnvr
 cat("CNV number:", nrow(cnv.create), nrow(cnv.cleanCNV), "\n")
 cat("CNVR number:", nrow(cnvr.boundary), nrow(cnvr.cleanCNV), "\n")
 
-saveRDS(cnv.cleanCNV, file = file.path(path_output, "cnvs_step3_clean.rds"))
-saveRDS(cnvr.cleanCNV, file = file.path(path_output, "cnvrs_step3_clean.rds"))
+write.table(cnv.cleanCNV, 
+            file = file.path(path_output, "cnv_step3_clean.txt"),
+            quote = F, row.names = F, sep = "\t")
+write.table(cnvr.cleanCNV, 
+            file = file.path(path_output, "cnvr_step3_clean.txt"),
+            quote = F, row.names = F, sep = "\t")
