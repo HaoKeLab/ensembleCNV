@@ -812,61 +812,7 @@ merge_IPQ <- function(cnv, cnvr)
   return( list(cnv = cnv.new, cnvr = cnvr.new) )
 }
 
-# nms <- c("chr", "posStart", "posEnd", "CN", "Sample_ID", "conf", "numSNP", "avgConf", "length", "CNV_type")
-## add funtions to readraw cnvs data
-read_icnv <- function(file_icnv, col_sel) {
-  
-  cat("Read in CNV from iPattern.\n")
-  dat <- read.table(file = file_icnv, sep = "\t",
-                    header = FALSE, comment.char = "#", stringsAsFactors = FALSE) # check if snpnames have "#"
-  names(dat) <- c("CNV_type", "chr", "posStart", "posEnd",
-                  "numSNP", "on_probe.num", "clusterIdx",
-                  "gain_loss_score", "cluster_score", "gain_loss_sample.num",
-                  "conf", "Sample_ID", "CNV_event_ID", "CNVR_ID")
-  dat$length <- dat$posEnd - dat$posStart + 1
-  dat$avgConf <- dat$conf/dat$numSNP
-  
-  # filter chr, CNV_type
-  dat <- subset(dat, chr %in% c(1:22) & CNV_type %in% c("Gain", "Loss"))
-  dat$Sample_ID <- gsub(pattern = "X", replacement = "", dat$Sample_ID, fixed = TRUE)  ## check
-  dat$CN <- ifelse(dat$CNV_type == "Gain", 3, 1) ##
-  dat$chr <- as.integer(dat$chr)
-  dat$method <- "iPattern"
-  
-  dat[, col_sel]  ## select columns
-}
 
-
-read_pcnv <- function(file_pcnv, col_sel) {
-  
-  cat("Read in CNV from PennCNV.\n")
-  dat <- read.table(file = file_pcnv, sep = "\t", header = FALSE, stringsAsFactors = FALSE)
-  names(dat) <- c("chr", "posStart", "posEnd", "CN", "Sample_ID", "snpStart", "snpEnd", "conf", "numSNP")
-  dat$Sample_ID <- gsub(".txt", "", dat$Sample_ID)
-  dat$length <- dat$posEnd - dat$posStart + 1
-  dat$avgConf <- dat$conf/dat$numSNP
-  dat$CNV_type <- ifelse(dat$CN > 2, "Gain", "Loss")
-  dat$method <- "PennCNV"
-  dat$CN[which(dat$CN >= 3)] <- 3 # set CN >= 3 all = 3
-  
-  dat[, col_sel]
-}
-
-read_qcnv <- function(file_qcnv, col_sel) {
-  
-  cat("Read in CNV from QuantiSNP.\n")
-  dat <- read.table(file = file_qcnv, sep = "\t", header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
-  names(dat) <- c("Sample_ID", "chr", "posStart", "posEnd", "snpStart", "snpEnd", "length", "numSNP", 
-                  "CN", "conf", "Log_BF.State.0", "Log_BF.State.1", "Log_BF.State.2", "Log_BF.State.3",
-                  "Log_BF.State.4", "Log_BF.State.5", "Log_BF.State.6")
-  dat <- subset(dat, chr %in% c(1:22))
-  dat$CNV_type <- ifelse(dat$CN > 2, "Gain", "Loss")
-  dat$avgConf <- dat$conf/dat$numSNP
-  dat$method <- "QuantiSNP"
-  dat$CN[which(dat$CN >= 3)] <- 3  # set CN >= 3 all = 3
-  
-  dat[, col_sel]
-}
 # optionparser ------------------------------------------------------------
 
 option_list <- list(
@@ -891,27 +837,35 @@ if (is.na(opt$icnv) | is.na(opt$pcnv) | is.na(opt$qcnv) | is.na(opt$snp) | is.na
   stop("All arguments must be supplied. Type --help for details.\n")
 }
 
+# opt <- list()
+# opt$icnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.ipattern.txt"
+# opt$pcnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.penncnv.txt"
+# opt$qcnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.quantisnp.txt"
+# opt$snp = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/01_initial_call/run_PennCNV/data_auxiliary/SNP.pfb"
+# opt$centromere = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/data/centromere_hg19.txt"
+# opt$output = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/"
+
 path_output <- opt$output ## output path
 
 # read in centromere (.rds format)
-centromere <- readRDS(file = opt$centromere)
+centromere <- read.delim(file = opt$centromere, as.is = TRUE)
 
 # read in snp (use the raw name from PennCNV)
 snp <- read.table(file = opt$snp, sep = "\t", comment.char = "",
                   header = TRUE, check.names = FALSE, stringsAsFactors = FALSE)
 
-col_sel <- c("chr", "posStart", "posEnd", "CN", "Sample_ID", "conf", 
-             "numSNP", "avgConf", "length", "CNV_type", "method")
+# col_sel <- c("chr", "posStart", "posEnd", "CN", "Sample_ID", "conf", 
+             # "numSNP", "avgConf", "length", "CNV_type", "method")
 
 # read from .rds ----------------------------------------------------------
 icnv <- read.delim(file = opt$icnv, as.is = TRUE)
-icnv <- icnv[, col_sel]
+#icnv <- icnv[, col_sel]
 
 pcnv <- read.delim(file = opt$pcnv, as.is = TRUE)
-pcnv <- pcnv[, col_sel]
+#pcnv <- pcnv[, col_sel]
 
 qcnv <- read.delim(file = opt$qcnv, as.is = TRUE)
-qcnv <- qcnv[, col_sel]
+#qcnv <- qcnv[, col_sel]
 
 cat("Total number of iPattern CNV calls:", nrow(icnv), "\n")
 cat("Total number of PennCNV CNV calls:", nrow(pcnv), "\n")
@@ -954,7 +908,6 @@ write.table(cnvr.boundary,
 
 ## Assign CNV calls from individual methods for each CNVR
 cat("Assing CNV calls from individual methods to each CNVR ...\n")
-
 cleanCNV <- merge_IPQ(cnv = cnv.create, cnvr = cnvr.boundary)
 
 cnv.cleanCNV <- cleanCNV$cnv
