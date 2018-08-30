@@ -1,0 +1,3 @@
+data <- readRDS("~/Documents/ensembleCNV/data_from_Haoxiang/data_test_StarNet/chr.centromere_hg19.rds")
+dim(data)
+data
