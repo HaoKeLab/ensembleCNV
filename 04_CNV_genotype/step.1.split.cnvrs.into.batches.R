@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript --vanilla
 
-## split CNVR in each chr into batches for submiting jobs 
+## Split the list of created CNVRs in each chromosome into batches, such that
+## the CNVRs can be processed in parallel. 
 
 suppressMessages(require(optparse))
 
@@ -11,8 +12,8 @@ option_list = list(
               help = "CNVR dataset output"),
   make_option(c("-c", "--cnv"), action = "store", type = "character", default = NA,
               help = "CNV after cleaning dataset"),
-  make_option(c("-n", "--num"), action = "store", type = "integer", default = NA,
-              help = "number for each batch in each chromosome")
+  make_option(c("-n", "--num"), action = "store", type = "integer", default = 200,
+              help = "number of CNVRs in each batch")
 )
 
 opt = parse_args( OptionParser(option_list = option_list) )
@@ -25,7 +26,7 @@ if ( any(is.na(pars)) ) {
 
 # main  -------------------------------------------------------------------
 
-dt_cnvr = readRDS( file = opt$input )
+dt_cnvr = read.delim( file = opt$input, as.is = TRUE )
 n_cnvr  = nrow(dt_cnvr)
 
 dt_cnvr = dt_cnvr[order(dt_cnvr$chr, dt_cnvr$posStart, dt_cnvr$posEnd), ]
@@ -34,15 +35,15 @@ cat('total cnvr number:', n_cnvr, "\n")
 
 number_each_batch = as.integer( opt$num )  ## 200 default
 
-# add raw Freq information 
-dt_cnv = readRDS(file = opt$cnv)
-nrow(dt_cnv)
-tbl <- table(dt_cnv$CNVR_ID)
-freqs <- as.vector(tbl)
-dt_freq <- data.frame(CNVR_ID = names(tbl), Freq = freqs, stringsAsFactors = FALSE)
+# add raw Freq information (This has been done in create CNVR step?)
+# dt_cnv = readRDS(file = opt$cnv)
+# nrow(dt_cnv)
+# tbl <- table(dt_cnv$CNVR_ID)
+# freqs <- as.vector(tbl)
+# dt_freq <- data.frame(CNVR_ID = names(tbl), Freq = freqs, stringsAsFactors = FALSE)
 
-dt_cnvr <- merge(dt_cnvr, dt_freq, by = "CNVR_ID")
-stopifnot( nrow(dt_cnvr) == n_cnvr)
+# dt_cnvr <- merge(dt_cnvr, dt_freq, by = "CNVR_ID")
+# stopifnot( nrow(dt_cnvr) == n_cnvr)
 
 # split batches in each chr
 chrs <- sort(unique(dt_cnvr$chr))
@@ -73,6 +74,8 @@ for (chr1 in chrs) {
   
 }
 
-saveRDS(dt_cnvr_new, file = opt$output)
+write.table(dt_cnvr_new, 
+            file = opt$output,
+            quote = F, row.names = F, sep = "\t")
 
 
