@@ -19,7 +19,7 @@ The detailed step-by-step instructions are listed as follows.
   - [PCA on raw LRR data](#pca-on-raw-lrr-data)
   - [PCA on summary statistics](#pca-on-summary-statistics)
 - [3 Create CNVR](#3-create-cnvr)
-- [4 genotype](#4-genotype)
+- [4 CNV genotyping for each CNVR](#4-cnv-genotyping-for-each-cnvr)
   - [split cnvrs into batches](#split-cnvr-into-batches)
   - [regenotype](#regenotype)
   - [combine prediction results](#combine-prediction-results)
