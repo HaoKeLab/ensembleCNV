@@ -19,8 +19,6 @@ The detailed step-by-step instructions are listed as follows.
   - [PCA on raw LRR data](#pca-on-raw-lrr-data)
   - [PCA on summary statistics](#pca-on-summary-statistics)
 - [3 Create CNVR](#3-create-cnvr)
-  - [create CNVR for individual CNV calling method](#create-cnvr-for-individual-cnv-calling-method)
-  - [ensembleCNV](#ensenmblecnv)
 - [4 genotype](#4-genotype)
   - [split cnvrs into batches](#split-cnvr-into-batches)
   - [regenotype](#regenotype)
@@ -156,9 +154,11 @@ When the analysis is finished, in the working directory, the PCs of all samples 
 
 ## 3 Create CNVR
 
-Here, create CNVR for both individual CNV calling method and ensembleCNV.
+We defined copy number variable region (CNVR) as the region in which CNVs called from different individuals by different callers substantially overlap with each other. We modeled the CNVR construction problem as identification of cliques (a sub-network in which every pair of nodes is connected) in a network context, where (i) CNVs detected for each individual from a method are considered as nodes; (ii) two nodes are connected when the reciprocal overlap between their corresponding CNV segments is greater than a pre-specified threshold (e.g. 30%); (iii) a clique corresponds to a CNVR in the sense that, for each CNV (node) belonging to the CNVR (clique), its average overlap with all the other CNVs of this CNVR is above a pre-specified threshold (e.g. 30%). The computational complexity for clique identification can be dramatically reduced in this special case, since the CNVs can be sorted by their genomic locations and the whole network can be partitioned by chromosome arms – CNVs from different arms never belong to the same CNVR. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-First, CNV calling results (.rds format) from iPattern, PennCNV and QuantiSNP 
+The algorithm is implemented in the following two steps.
+
+(1) Extract CNV information from individual calls made by iPattern, PennCNV and QuantiSNP, such as `Sample_ID`, `chr`, `posStart`, `posEnd`, `CNV_type`, etc. 
 ```sh
 Rscript step.1.CNV.data.R \
 /path/to/working_directory \   ## where output files are saved
