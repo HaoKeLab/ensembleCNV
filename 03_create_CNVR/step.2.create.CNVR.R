@@ -889,10 +889,10 @@ cnv.create <- output$cnv
 cnvr.create <- output$cnvr
 
 write.table(cnv.create, 
-            file = file.path(path_output, "cnv_step1_create.txt"),
+            file = file.path(path_output, "cnv_create.txt"),
             quote = F, row.names = F, sep = "\t")
 write.table(cnvr.create, 
-            file = file.path(path_output, "cnvr_step1_create.txt"),
+            file = file.path(path_output, "cnvr_create.txt"),
             quote = F, row.names = F, sep = "\t")
 
 ## CNVR boundary 
@@ -903,7 +903,7 @@ peak <- table(cnvr.boundary$nPeak)
 print(peak)
 
 write.table(cnvr.boundary, 
-            file = file.path(path_output, "cnvr_step2_boundary.txt"),
+            file = file.path(path_output, "cnvr_boundary.txt"),
             quote = F, row.names = F, sep = "\t")
 
 ## Assign CNV calls from individual methods for each CNVR
@@ -917,8 +917,8 @@ cat("CNV number:", nrow(cnv.create), nrow(cnv.cleanCNV), "\n")
 cat("CNVR number:", nrow(cnvr.boundary), nrow(cnvr.cleanCNV), "\n")
 
 write.table(cnv.cleanCNV, 
-            file = file.path(path_output, "cnv_step3_clean.txt"),
+            file = file.path(path_output, "cnv_clean.txt"),
             quote = F, row.names = F, sep = "\t")
 write.table(cnvr.cleanCNV, 
-            file = file.path(path_output, "cnvr_step3_clean.txt"),
+            file = file.path(path_output, "cnvr_clean.txt"),
             quote = F, row.names = F, sep = "\t")

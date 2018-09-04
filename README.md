@@ -158,7 +158,7 @@ We defined copy number variable region (CNVR) as the region in which CNVs called
 
 The algorithm is implemented in the following two steps.
 
-(1) Extract CNV information from individual calls made by iPattern, PennCNV and QuantiSNP, such as `Sample_ID`, `chr`, `posStart`, `posEnd`, `CNV_type`, etc. 
+(1) Extract CNV information from individual calls made by iPattern, PennCNV and QuantiSNP
 ```sh
 Rscript step.1.CNV.data.R \
 /path/to/working_directory \   ## where output files are saved
@@ -167,11 +167,9 @@ Rscript step.1.CNV.data.R \
 /path/to/QuantiSNP_CNV_file \
 /path/to/Sample_Map.txt   ## generated along with final report from Genome Studio
 ```
+After finishing this step, three tab-delimited tables for each respective method, `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, will be generated with such fields as `Sample_ID`, `chr`, `posStart`, `posEnd`, `CNV_type`, etc. These files will be used as input in the following step (2).
 
-Second, 
-
-### Merge CNV calls from individual callers
-ensembleCNV from iPattern, PennCNV and QuantiSNP CNV calling results.
+(2) Merge CNV calls from individual methods into CNVRs
 ```sh
 Rscript step.2.create.CNVR.R \
 --icnv /path/to/iPattern_CNV_call \   ## generated in step (1)
@@ -180,11 +178,8 @@ Rscript step.2.create.CNVR.R \
 --snp /path/to/SNP_position_file \   ## SNP.pfb for PennCNV analysis can serve for SNP position
 --centromere /path/to/chromosome_centromere_file   ## the information can be found in UCSC genome browser
 ```
+Two tab-delimited tables will be generated in this step: i) `cnvr_clean.txt` with the information for each constructed CNVR; ii) `cnv_clean.txt` with the information for each CNV calls from individual methods, including which CNVR each CNV belongs to.
 
-Third, generate matrix for individual CNV calling method:
-```sh
-./step.3.generate.matrix.R file_cnv cnvCaller path_output
-```
 
 ## 4 CNV genotyping for each CNVR
 
