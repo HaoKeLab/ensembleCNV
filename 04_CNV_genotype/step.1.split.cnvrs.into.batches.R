@@ -18,7 +18,7 @@ option_list = list(
 
 opt = parse_args( OptionParser(option_list = option_list) )
 
-pars = c(opt$input, opt$output, opt$num, opt$cnv)
+pars = c(opt$input, opt$output, opt$num) ##opt$cnv
 if ( any(is.na(pars)) ) {
   stop("All parameter must be supplied.(--help for detail)")
 }
