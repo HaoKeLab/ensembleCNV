@@ -1,0 +1,2 @@
+CNVR_ID	outer.start	outer.end	nCNV	chr	arm
+CNVR_1_r1_chr1_p	11259	11268	233	1	p
