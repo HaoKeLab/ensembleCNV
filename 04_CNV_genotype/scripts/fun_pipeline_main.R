@@ -16,11 +16,14 @@ trans_model <- function(model) {
 
 # main pipeline function
 pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
-                          plot_steps = TRUE, path_png, GQ_score = 0, n.sample) {
+                          plot_steps = TRUE, path_png, GQ_score = 0,
+                          n.sample, flag_png_plot) {
   
-  path_png_diag    <- create_path(path_main = path_png, str_subpath = "diag")
-  path_png_steps   <- create_path(path_main = path_png, str_subpath = "steps")
-  path_png_summary <- create_path(path_main = path_png, str_subpath = "summary")
+  if (flag_png_plot) {
+    path_png_diag    <- create_path(path_main = path_png, str_subpath = "diag")
+    path_png_steps   <- create_path(path_main = path_png, str_subpath = "steps")
+    path_png_summary <- create_path(path_main = path_png, str_subpath = "summary")
+  }
   
   cnvr_id <- unique(dt_cnvrs$CNVR_ID)
   numsnp <- unique(dt_cnvrs$numSNP) # numsnp 
@@ -69,11 +72,13 @@ pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
     cat(paras_all$lambdas, "\n")
     # save diagnosis png
     ## plot diagnosis 
-    file_diagnosis <- paste0("diag_", cnvr_id, ".png")
-    png(filename = file.path(path_png_diag, file_diagnosis), width = 12, height = 12, units = "in", res = 512)
-    plot_gmm_diagnosis(dt_cnvr = dt_cnvr_train, paras_model = paras_model)
-    dev.off()
-    
+    if ( flag_png_plot ) {
+      file_diagnosis <- paste0("diag_", cnvr_id, ".png")
+      png(filename = file.path(path_png_diag, file_diagnosis), width = 12, height = 12, units = "in", res = 512)
+      plot_gmm_diagnosis(dt_cnvr = dt_cnvr_train, paras_model = paras_model)
+      dev.off()
+    }
+
     # set CN = 0 
     mu0 <- -3
     # sigma0 <- sigma1*10  ## MUST BE CHANGED
@@ -147,7 +152,7 @@ pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
     
     
     ## save steps_1_ png
-    if (flag_BAF == 1) {
+    if (flag_BAF == 1 & flag_png_plot) {
       file_steps <- paste0("steps_1_", cnvr_id, ".png")
       png(filename = file.path(path_png_steps, file_steps), width = 12, height = 12, units = "in", res = 512)
       plot_steps(dt_cnvr_train = dt_cnvr_train, dup_pairs = dup_pairs, dt_cnvr_raw = dt_cnvr, 
@@ -235,7 +240,7 @@ pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
     }
     
     ## save steps_2 png
-    if (flag_BAF == 1) {
+    if (flag_BAF == 1 & flag_png_plot) {
       file_steps <- paste0("steps_2_", cnvr_id, ".png")
       png(filename = file.path(path_png_steps, file_steps), width = 12, height = 12, units = "in", res = 512)
       plot_steps(dt_cnvr_train = dt_cnvr_train, dup_pairs = dup_pairs, dt_cnvr_raw = dt_cnvr, 
@@ -243,28 +248,6 @@ pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
       dev.off()
     }
     
-    # plot for final
-    # for new input must ordered as follow
-    # dt_pfb <- dt_cnvrs[order(dt_cnvrs$Sample_ID, dt_cnvrs$Position), ]
-    dt_pfb <- dt_cnvrs[1:numsnp, ]
-    dt_pfb$MAF <- pmin(dt_pfb$PFB, 1 - dt_pfb$PFB) ##
-    dt_pfb <- dt_pfb[, c("Name", "MAF")]
-    
-    plot_MAF <- ggplot(data = dt_pfb, aes(Name, MAF)) + 
-      geom_col() + 
-      ggtitle(label = paste("snps MAF in Position order", "numSNP:", numsnp)) + 
-      labs(x = "SNP Name") + 
-      theme_bw(base_size = 9) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    
-    # final 
-    
-    cat("model_final_parameter:\n")
-    cat(model_final$mu, "\n")
-    cat(model_final$sigma, "\n")
-    cat(model_final$lambda, "\n")
-    plot_final <- plot_model_final(paras = model_final, dt_cnvr = dt_cnvr_train,
-                                   title = paste("final model for", cnvr_id, "numSNP:", numsnp))
     
     # add GQ_score cutoff here
     idxs_nocall <- which(res_gatk_pred_final$value_GQ <= GQ_score)
@@ -272,41 +255,67 @@ pipeline_main <- function(dt_cnvrs, paras_LRR, dup_pairs, samples_LRR,
     if (length(idxs_nocall) >= 1) {
       res_gatk_pred_final$CN_gatk_pred[idxs_nocall] <- 4
     }
-    
-    # scatter plot LRR_median
-    dt_pred <- res_gatk_pred_final[, c("Sample_ID", "CN_gatk_pred")]
-    dt_cnvr_scatter <- merge(dt_cnvr, dt_pred)
-    dt_cnvr_scatter <- dt_cnvr_scatter[order(dt_cnvr_scatter$CN), ]
-    dt_cnvr_scatter$idx <- 1:nrow(dt_cnvr_scatter)
-    myColors <- brewer.pal(4, "Set1")
-    plot_raw <- ggplot() + 
-      geom_point(data = subset(dt_cnvr_scatter, CN == 0), aes(idx, LRR_median), col = "black") +
-      geom_point(data = subset(dt_cnvr_scatter, CN == 1), aes(idx, LRR_median), col = "red") + 
-      geom_point(data = subset(dt_cnvr_scatter, CN == 2), aes(idx, LRR_median), col = "green") +
-      geom_point(data = subset(dt_cnvr_scatter, CN == 3), aes(idx, LRR_median), col = "blue") +
-      theme_bw(base_size = 10) + 
-      ggtitle(label = "CNV call from IPQ") 
-    
-    # plot_raw
-    # add gray color point here
-    plot_gatk <- ggplot() + 
-      geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 0), aes(idx, LRR_median), col = "black") +
-      geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 1), aes(idx, LRR_median), col = "red") + 
-      geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 2), aes(idx, LRR_median), col = "green") +
-      geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 3), aes(idx, LRR_median), col = "blue") +
-      geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 4), aes(idx, LRR_median), col = "gray") +
-      theme_bw(base_size = 10) +
-      ggtitle(label = "CNV call from gatk similary method",
-              subtitle = paste("GQ score:", GQ_score, "call rate:", round(call_rate, 3),
-                               "numsnp.raw:", numsnp.raw, "numsnp.used:", numsnp.used))
-    
-    # plot_gatk
-    
-    filefinal <- paste0("summary_", cnvr_id, ".png")
-    png(filename = file.path(path_png_summary, filefinal),
-        width = 12, height = 12, units = "in", res = 512)
-    grid.arrange(plot_MAF, plot_final, plot_raw, plot_gatk, nrow = 2)
-    dev.off()
+    if ( flag_png_plot ) {
+      
+      # plot for final
+      # for new input must ordered as follow
+      # dt_pfb <- dt_cnvrs[order(dt_cnvrs$Sample_ID, dt_cnvrs$Position), ]
+      dt_pfb <- dt_cnvrs[1:numsnp, ]
+      dt_pfb$MAF <- pmin(dt_pfb$PFB, 1 - dt_pfb$PFB) ##
+      dt_pfb <- dt_pfb[, c("Name", "MAF")]
+      
+      plot_MAF <- ggplot(data = dt_pfb, aes(Name, MAF)) + 
+        geom_col() + 
+        ggtitle(label = paste("snps MAF in Position order", "numSNP:", numsnp)) + 
+        labs(x = "SNP Name") + 
+        theme_bw(base_size = 9) +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      
+      # final 
+      
+      cat("model_final_parameter:\n")
+      cat(model_final$mu, "\n")
+      cat(model_final$sigma, "\n")
+      cat(model_final$lambda, "\n")
+      plot_final <- plot_model_final(paras = model_final, dt_cnvr = dt_cnvr_train,
+                                     title = paste("final model for", cnvr_id, "numSNP:", numsnp))
+      
+      
+      # scatter plot LRR_median
+      dt_pred <- res_gatk_pred_final[, c("Sample_ID", "CN_gatk_pred")]
+      dt_cnvr_scatter <- merge(dt_cnvr, dt_pred)
+      dt_cnvr_scatter <- dt_cnvr_scatter[order(dt_cnvr_scatter$CN), ]
+      dt_cnvr_scatter$idx <- 1:nrow(dt_cnvr_scatter)
+      myColors <- brewer.pal(4, "Set1")
+      plot_raw <- ggplot() + 
+        geom_point(data = subset(dt_cnvr_scatter, CN == 0), aes(idx, LRR_median), col = "black") +
+        geom_point(data = subset(dt_cnvr_scatter, CN == 1), aes(idx, LRR_median), col = "red") + 
+        geom_point(data = subset(dt_cnvr_scatter, CN == 2), aes(idx, LRR_median), col = "green") +
+        geom_point(data = subset(dt_cnvr_scatter, CN == 3), aes(idx, LRR_median), col = "blue") +
+        theme_bw(base_size = 10) + 
+        ggtitle(label = "CNV call from IPQ") 
+      
+      # plot_raw
+      # add gray color point here
+      plot_gatk <- ggplot() + 
+        geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 0), aes(idx, LRR_median), col = "black") +
+        geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 1), aes(idx, LRR_median), col = "red") + 
+        geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 2), aes(idx, LRR_median), col = "green") +
+        geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 3), aes(idx, LRR_median), col = "blue") +
+        geom_point(data = subset(dt_cnvr_scatter, CN_gatk_pred == 4), aes(idx, LRR_median), col = "gray") +
+        theme_bw(base_size = 10) +
+        ggtitle(label = "CNV call from gatk similary method",
+                subtitle = paste("GQ score:", GQ_score, "call rate:", round(call_rate, 3),
+                                 "numsnp.raw:", numsnp.raw, "numsnp.used:", numsnp.used))
+      
+      # plot_gatk
+      filefinal <- paste0("summary_", cnvr_id, ".png")
+      png(filename = file.path(path_png_summary, filefinal),
+          width = 12, height = 12, units = "in", res = 512)
+      grid.arrange(plot_MAF, plot_final, plot_raw, plot_gatk, nrow = 2)
+      dev.off()
+      
+    }
     
     res_pars <- trans_model(model = model_final)
     res_pars$CNVR_ID = cnvr_id

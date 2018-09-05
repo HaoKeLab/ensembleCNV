@@ -1,4 +1,5 @@
 
+
 # add dup pairs flag
 add_dup_pairs_flag <- function(dt, dup_pairs) {
   
@@ -75,12 +76,16 @@ plot_steps <- function(dt_cnvr_train, dup_pairs, paras, dt_cnvr_raw, dt_LRRBAF) 
   dt_cnvr_raw <- dt_cnvr_raw[order(dt_cnvr_raw$CN), ]
   dt_cnvr_raw$idx <- 1:nrow(dt_cnvr_raw)
   
-  # add flag for dup
-  dt_cnvr_train <- add_dup_pairs_flag(dt = dt_cnvr_train, dup_pairs = dup_pairs)
-  dt_dup <- subset(dt_cnvr_train, dup_flag != 0)
-  
-  dt_cnvr_raw <- add_dup_pairs_flag(dt = dt_cnvr_raw, dup_pairs = dup_pairs)
-  dt_dup_raw <- subset(dt_cnvr_raw, dup_flag != 0)
+  dt_dup     <- data.frame()
+  dt_dup_raw <- data.frame()
+  if (! is.null(dup_pairs) ) {
+    # add flag for dup
+    dt_cnvr_train <- add_dup_pairs_flag(dt = dt_cnvr_train, dup_pairs = dup_pairs)
+    dt_dup <- subset(dt_cnvr_train, dup_flag != 0)
+    
+    dt_cnvr_raw <- add_dup_pairs_flag(dt = dt_cnvr_raw, dup_pairs = dup_pairs)
+    dt_dup_raw <- subset(dt_cnvr_raw, dup_flag != 0)
+  }
   
   numsnp <- unique(dt_cnvr_raw$numSNP)
   

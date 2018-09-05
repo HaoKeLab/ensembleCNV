@@ -1,127 +1,86 @@
-#!/usr/bin/env Rscript --vanilla
+#!/usr/bin/env Rscript
 
-args <- commandArgs(trailingOnly = TRUE)
+suppressMessages(library(optparse))
 
-n <- as.integer( args[1] ) ## number of samples
-path_cnvr <- args[2]
-path_pred <- args[3]
-path_res  <- args[4]
+option_list = list(
+  make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
+              help = "path contain all running needed data"),
+  make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
+              help = "path save all results")
+)
 
-## all data save as vector to fast speed
-n.samples <- n
+opt = parse_args(OptionParser(option_list = option_list))
+pars = c(opt$datapath, opt$resultpath)
 
-# create folder name with clean CNVR data
-file_cnvr <- "cnvrs_annotated_batch.rds"  # with batch annotated
-dt_cnvr <- readRDS(file = file.path(path_cnvr, file_cnvr))
-
-tbl <- table(dt_cnvr$chr, dt_cnvr$batch)
-
-dat <- as.data.frame(tbl)
-names(dat) <- c("chr", "batch", "Freq") ##
-
-dat1 <- subset(dat, Freq != 0)
-cat("total number of folders:", nrow(dat1), "\n") #
-
-## cnvrs chr-batch-based results
-path_res_chr_batch <- path_pred
-path_output <- path_res
-
-dt_cnvr <- readRDS(file = file.path(path_cnvr, file_cnvr))
-
-tbl <- table(dt_cnvr$chr, dt_cnvr$batch)
-
-dat <- as.data.frame(tbl)
-names(dat) <- c("chr", "batch", "Freq") ##
-
-dat1 <- subset(dat, Freq != 0)
-cat("total number of folders:", nrow(dat1), "\n") #
-
-fun_combine <- function(path_res, n_sample, path_cnvr, file_cnvr) {
-  
-  dt_cnvr <- readRDS(file = file.path(path_cnvr, file_cnvr))
-  tbl <- table(dt_cnvr$chr, dt_cnvr$batch)
-  
-  n_cnvr <- sum(tbl)
-  dat <- as.data.frame(tbl)
-  names(dat) <- c("chr", "batch", "Freq")
-  
-  dat <- subset(dat, Freq != 0)
-  
-  cnvrs <- character(length = n_cnvr)
-  samples <- character(length = n_sample)
-  flag.samples <- FALSE
-  copy_numbers <- integer(length = (n_cnvr*n_sample))
-  GQs <- numeric(length = (n_cnvr*n_sample))
-  idxs_del <- rep(0, n_cnvr)  # del CNVR raw(all CN = 2)
-  
-  nth_cnvr <- 1
-  for (i in 1:nrow(dat)) {
-    
-    chr1 <- dat$chr[i]
-    batch1 <- dat$batch[i]
-    
-    foldername1 <- paste0("chr_", chr1, "_batch_", batch1)
-    path1 <- file.path(path_res, foldername1) # sub path
-    
-    cat("combine CNVR in the folder:", foldername1, "\n")
-    
-    files <- list.files(path = path1)
-    for (k in 1:length(files)) {
-      
-      file1 <- files[k]
-      dat_cnvr1 <- readRDS(file = file.path(path1, file1))
-      dat_cnvr1 <- dat_cnvr1[order(dat_cnvr1$Sample_ID), ]
-      
-      cnvr1 <- unique(dat_cnvr1$CNVR_ID)
-      
-      idx <- ((nth_cnvr-1)*n_sample+1):(nth_cnvr*n_sample)
-      copy_numbers[idx] <- dat_cnvr1$CN_gatk_pred ## output
-      GQs[idx] <- dat_cnvr1$value_GQ  ##
-      
-      cnvrs[nth_cnvr] <- cnvr1
-      # samples <- dat_cnvr1$Sample_ID
-      if ( !flag.samples ) {
-        samples <- dat_cnvr1$Sample_ID
-      } 
-      stopifnot( all(samples == dat_cnvr1$Sample_ID))
-      
-      if(all(copy_numbers == 2)) {
-        idxs_del[nth_cnvr] <- 1
-      }
-      
-      nth_cnvr <- nth_cnvr + 1
-    }
-    
-  }
-  
-  mat_CN <- matrix(copy_numbers, nrow = length(cnvrs),
-                   ncol = length(samples), dimnames = list(cnvrs, samples))
-  mat_GQ <- matrix(GQs, nrow = length(cnvrs),
-                   ncol = length(samples), dimnames = list(cnvrs, samples))
-  
-  mat_CN_clean <- mat_CN[!idxs_del == 1, ]
-  mat_GQ_clean <- mat_GQ[!idxs_del == 1, ]
-  
-  cnvrs_clean  <- cnvrs[!idxs_del == 1]
-  
-  return(list(CNVR_ID = cnvrs,
-              Sample_ID = samples,
-              mat_CN = mat_CN_clean,
-              mat_GQ = mat_GQ_clean))
-  
+if ( any(is.na(pars)) ) {
+  stop("All parameters must be supplied. (--help for detail)")
 }
 
+path_data   <- opt$datapath
+path_result <- opt$resultpath
 
-list_res <- fun_combine(path_res = path_res_chr_batch,
-                        path_cnvr = path_cnvr, 
-                        n_sample = n.samples,  ## 
-                        file_cnvr = file_cnvr)
+path_pred <- file.path(path_result, "pred")
 
-saveRDS(list_res$CNVR_ID, file = file.path(path_output, "CNVR_ID.rds"))
-saveRDS(list_res$Sample_ID, file = file.path(path_output, "Sample_ID.rds"))
-saveRDS(list_res$mat_CN, file = file.path(path_output, "mat_CN.rds"))
-saveRDS(list_res$mat_GQ, file = file.path(path_output, "mat_GQ.rds"))
+# number of samples
+dat_samples <- read.delim(file = file.path(path_data, "samples_QC.txt"), as.is = TRUE)
+n_samples <- nrow(dat_samples)
 
+file_cnvr <- "cnvr_batch.txt"  ## with batch information
+dt_cnvr_raw <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
+tbl_raw <- table(dt_cnvr_raw$chr, dt_cnvr_raw$batch)
+dt_freq_raw <- as.data.frame(tbl_raw)
+names(dt_freq_raw) <- c("chr", "batch", "Freq")
 
+dt_freq_raw <- subset(dt_freq_raw, Freq != 0)
 
+res_CN  <- data.frame()
+res_GQ  <- data.frame()
+cnvrs   <- c()
+samples <- c()
+flag_samples <- TRUE
+
+# rowname = "CNVR_ID"; colname = "sample_ID"
+for ( i in 1:nrow(dt_cnvr_raw) ) {
+  
+  chr1   <- dt_cnvr_raw$chr[i]
+  batch1 <- dt_cnvr_raw$batch[i]
+
+  preds1 <- list.files(path = file.path(path_pred, paste0("chr_", chr1, "_batch_", batch1)),
+                       pattern = ".rds")
+  cnvrs1 <- gsub("_pred.rds$", "", preds1, perl = T)
+  
+  cnvrs <- c(cnvrs, cnvrs1)
+  res1_GQ <- matrix(nrow = length(cnvrs), ncol = n_samples)
+  res1_CN <- matrix(nrow = length(cnvrs), ncol = n_samples)
+  for (k in 1:length(preds1)) {
+    pred1 <- preds1[k]
+    cnvr1 <- cnvrs1[k]
+    dat1 <- readRDS(file = file.path(path_pred, paste0("chr_", chr1, "_batch_", batch1), pred1))
+    
+    if ( flag_samples) samples <- dat1$Sample_ID
+    
+    dat1 <- dat1[match(samples, dat1$Sample_ID), ]
+    stopifnot( all(dat1$Sample_ID == samples) )
+    
+    res1_GQ[k, ] <- dat1$value_GQ
+    res1_CN[k, ] <- dat1$CN_gatk_pred
+  }
+  
+  res_GQ <- rbind(res_GQ, res1_GQ)
+  res_CN <- rbind(res_CN, res1_CN)
+}
+
+mat_GQ <- as.matrix(res_GQ)
+mat_CN <- as.matrix(res_CN)
+
+rownames(mat_GQ) <- cnvrs
+rownames(mat_CN) <- cnvrs
+
+colnames(mat_GQ) <- samples
+colnames(mat_CN) <- cnvrs
+
+saveRDS(cnvrs, file = file.path(path_result, "cnvrs_all_predict.rds"))
+saveRDS(samples, file = file.path(path_result, "samples_all_predict.rds"))
+saveRDS(mat_GQ, file = file.path(path_result, "matrix_GQ.rds"))
+saveRDS(mat_CN, file = file.path(path_result, "matrix_CN.rds"))
 

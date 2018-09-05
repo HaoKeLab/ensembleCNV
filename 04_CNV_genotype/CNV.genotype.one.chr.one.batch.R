@@ -17,19 +17,23 @@ suppressMessages({
 
 option_list = list(
   make_option(c("-c", "--chr"), action = "store", type = "character", default = NA,
-              help = "which chromosome."),
+              help = "Specify the chromosome on which the list of CNVRs to be genotyped is located."),
   make_option(c("-b", "--batch"), action = "store", type = "character", default = NA,
-              help = "which batch."),
+              help = "Specify the batch to which the list of CNVRs to be genotyped belongs."),
   make_option(c("-t", "--type"), action = "store", type = "character", default = NA,
               help = "Job submission type (0 - initial submission, 1 - resubmission of failed jobs)"),
   make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
-              help = "path contain all running needed data"),
+              help = "Path to the directory containing necessary input data."),
   make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
-              help = "path save all results"),
+              help = "Path to the directory for saving results."),
   make_option(c("-m", "--matrixpath"), action = "store", type = "character", default = NA,
-              help = "path save all LRR and BAF chromosome based data"),
+              help = "Path to chromosome-wise LRR and BAF matrices."),
   make_option(c("-s", "--sourcefile"), action = "store", type = "character", default = NA,
-              help = "path contain all scripts need to be soucred")
+              help = "Path to the scripts directory containing R scripts to be loaded into R."),
+  make_option(c("-d", "--duplicates"), action = "store_true", default = FALSE,
+              help = "[optional] Whether duplicate pairs information will be annotated in diagnosis plots."),
+  make_option(c("-n", "--plot"), action = "store_true", default = FALSE,
+              help = "[optional] Whether to generate diagnosis plots.")
 )
 
 opt = parse_args(OptionParser(option_list = option_list))
@@ -39,15 +43,6 @@ if ( any(is.na(pars)) ) {
   stop("All three parameters must be supplied. (--help for detail)")
 }
 
-# opt <- list()
-# opt$chr <- "1"
-# opt$batch <- "1"
-# opt$type <- "0"
-# opt$datapath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/04_CNV_genotype/data/"
-# opt$resultpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/04_CNV_genotype/mid_res/"
-# opt$matrixpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/"
-# opt$sourcefile <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/code/04_CNV_genotype/scripts/"
-
 chr1   <- as.integer( opt$chr )
 batch1 <- as.integer( opt$batch )
 type1  <- as.integer( opt$type )
@@ -56,6 +51,8 @@ path_data   <- opt$datapath
 path_result <- opt$resultpath
 path_matrix <- opt$matrixpath
 path_sourcefile <- opt$sourcefile
+flag_png_plot <- opt$png 
+flag_duplicates <- opt$duplicates
 
 if ( type1 != 1 & type1 != 0) {
   stop("Job submission type must be 0 or 1. (--help for detail)")
@@ -79,16 +76,21 @@ samples_LRR <- read.delim(file = file.path(path_data, "samples_QC.txt"), as.is =
 samples_LRR$Sample_ID <- sub("\\.txt$", "", samples_LRR$File)
 
 ## dup pairs with column_name ( sample1.name sample2.name )
-dup_pairs <- read.delim(file = file.path(path_data, "duplicate_pairs.txt"), as.is = TRUE)
+dup_pairs <- NULL # init 
+if ( flag_duplicates ) {
+  dup_pairs <- read.delim(file = file.path(path_data, "duplicate_pairs.txt"), as.is = TRUE)
+}
 
 ## paras_LRR ------------------------------------------------------
 paras_LRR <- list(LRR_mean = list(CN_1 = -0.4156184, CN_3 = 0.1734862),
                   LRR_sd   = list(CN_1 = 0.2502591, CN_3 = 0.2249798))  ## sd for one SNP
+## These parameters can be updated after the intial round of CNVgenotyping
+## by selecting the CNVRs with well fitted GMM.
 
 # main part for runing on cluster -----------------------------------------
 
 cat("read in CNV ...\n")  
-dt_cnvs <- read.delim(file = file.path(path_data, "cnv_step3_clean.txt"), as.is = TRUE)
+dt_cnvs <- read.delim(file = file.path(path_data, "cnv_clean.txt"), as.is = TRUE)
 
 # PennCNV PFB information
 cat("read in PFB ...\n")
@@ -114,26 +116,6 @@ n_snps    <- length(snps)
 n_samples <- length(samples)
 
 # read in cnvrs dat -------------------------------------------------
-
-dt_cnvrs1 <- data.frame()
-cnvrs <- NULL  
-if (type1 == 0) {
-  
-  file_cnvr <- "cnvr_batch.txt"  ## with batch information
-  dt_cnvrs  <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
-  dt_cnvrs1 <- subset(dt_cnvrs, chr == chr1 & batch == batch1)
-  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
-  
-} else if (type1 == 1) {
-  
-  ## this path can be specified by users
-  file_cnvr <- paste0("cnvrs_chr_", chr1, "_batch_", batch1, "_failed.rds")
-  
-  dt_cnvrs1 <- readRDS(file = file.path(path_data, file_cnvr))
-  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
-}
-
-
 create_path <- function(path_main, str_subpath) {
   
   path_sub = file.path(path_main, str_subpath) 
@@ -148,10 +130,17 @@ create_path <- function(path_main, str_subpath) {
 # output pathsub_folder: summary/steps/diag/heatmap
 path_main <- path_result
 path_log     <- create_path(path_main = path_main, str_subpath = "log")
-path_png     <- create_path(path_main = path_main, str_subpath = "png")
+# path_png     <- create_path(path_main = path_main, str_subpath = "png")
 path_pred    <- create_path(path_main = path_main, str_subpath = "pred")
 path_pars    <- create_path(path_main = path_main, str_subpath = "pars")
-path_heatmap <- create_path(path_main = path_png, str_subpath = "heatmap")
+# path_heatmap <- create_path(path_main = path_png, str_subpath = "heatmap")
+
+if ( flag_png_plot ) {
+  path_png     <- create_path(path_main = path_main, str_subpath = "png")
+  path_heatmap <- create_path(path_main = path_png, str_subpath = "heatmap")
+}
+
+path_cnvrs_error <- create_path(path_main = path_main, str_subpath = "cnvrs_error")
 
 # add subfolders for each chr and each batch 
 folder.name <- paste0("chr_", chr1, "_batch_", batch1)
@@ -162,12 +151,34 @@ if ( !dir.exists(path_pred) ) {
   dir.create(path = path_pred, showWarnings = FALSE, recursive = TRUE)
 }
 
+dt_cnvrs1 <- data.frame()
+cnvrs <- NULL  
+if (type1 == 0) {
+  
+  file_cnvr <- "cnvr_batch.txt"  ## with batch information
+  dt_cnvrs  <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
+  dt_cnvrs1 <- subset(dt_cnvrs, chr == chr1 & batch == batch1)
+  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
+  
+} else if (type1 == 1) {
+  
+  ## this path can be specified by users
+  file_cnvr <- "cnvr_batch.txt"  ## with batch information
+  dt_cnvrs  <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
+  
+  cnvrs_error <- read.table(file = file.path(path_cnvrs_error, paste0("cnvrs_error_chr_", chr1, "_batch_", batch1, ".txt")),
+                            sep = "\t", header = T, check.names = F, stringsAsFactors = F)
+  
+  dt_cnvrs1 <- subset(dt_cnvrs,  CNVR_ID %in% cnvrs_error$CNVR_ID)
+  cnvrs <- unique( dt_cnvrs1$CNVR_ID ) 
+}
+
 ## must be changed here to save each CNVRID data
 path_cnvr_stat <- file.path(path_result, "stats")
 dir.create(path = path_cnvr_stat, showWarnings = FALSE)
 
-
 res_pars_all <- data.frame() 
+cnvrs_error  <- c()
 # --------------------------------------------------------------------
 for (i in 1:nrow(dt_cnvrs1)) {
 
@@ -211,11 +222,13 @@ for (i in 1:nrow(dt_cnvrs1)) {
                              snp_flag = snps_flag,
                              stringsAsFactors = FALSE)
 
-  filename_heatmap <- paste0("heatmap_", cnvr1, ".png")
-  png(filename = file.path(file.path(path_png, "heatmap"), filename_heatmap),
-      width = 12, height = 12, units = "in", res = 512)
-  plot_heatmap(dt_lrr_heatmap = dt_lrr_heatmap, dt_snps_flag = dt_snps_flag)
-  dev.off()
+  if ( flag_png_plot ) {
+    filename_heatmap <- paste0("heatmap_", cnvr1, ".png")
+    png(filename = file.path(file.path(path_png, "heatmap"), filename_heatmap),
+        width = 12, height = 12, units = "in", res = 512)
+    plot_heatmap(dt_lrr_heatmap = dt_lrr_heatmap, dt_snps_flag = dt_snps_flag)
+    dev.off()
+  }
   
   # -------------------------------------------------------------------
   dt_baf = dt_matrix_BAF[, idx_start:idx_end]
@@ -250,12 +263,25 @@ for (i in 1:nrow(dt_cnvrs1)) {
   ## save CNVR-stat data
   saveRDS(dt_cnvr_stat, file = file.path(path_cnvr_stat, paste0(cnvr1, "_stat.rds")))
   
-  res_pipeline_cnvr1 <- pipeline_main(dt_cnvrs = dt_cnvr_stat, 
-                                      paras_LRR = paras_LRR, 
-                                      dup_pairs = dup_pairs,
-                                      samples_LRR = samples_LRR, 
-                                      path_png = path_png,
-                                      n.sample = n_samples)
+  # catch error and warning when calling CNVR
+  res_pipeline_cnvr1 <- tryCatch({
+    pipeline_main(dt_cnvrs = dt_cnvr_stat, 
+                  paras_LRR = paras_LRR, 
+                  dup_pairs = dup_pairs,
+                  samples_LRR = samples_LRR, 
+                  path_png = path_png,
+                  n.sample = n_samples,
+                  flag_png_plot = flag_png_plot)
+  }, error = function(e) {
+    NULL
+  }, warning = function(w) {
+    NULL
+  })
+  
+  if ( is.null(res_pipeline_cnvr1) ) {
+    cnvrs_error <- c(cnvrs_error, cnvr1)
+    next
+  }
 
   res_gatk_pred_final <- res_pipeline_cnvr1$res_gatk_pred_final
   res_pars <- res_pipeline_cnvr1$res_pars
@@ -268,13 +294,16 @@ for (i in 1:nrow(dt_cnvrs1)) {
   saveRDS(res_gatk_pred_final, file = file.path(path_pred, filename_cnvr1))
 
   res_pars_all <- rbind(res_pars_all, res_pars)
-
 }
 
 filename_pars <- paste0("CNVR_pars_chr_", chr1, "_batch_", batch1, ".rds")
 saveRDS(res_pars_all, file = file.path(path_pars, filename_pars)) # pars file
 
-
+if ( length(cnvrs_error) >= 1) {
+  write.table(data.frame(CNVR_ID = cnvrs_error, stringsAsFactors = F),
+              file = file.path(path_cnvrs_error, paste0("cnvrs_error_chr_", chr1, "_batch_", batch1, ".txt")),
+              col.names = T, row.names = F, quote = F)
+}
 
 
 
