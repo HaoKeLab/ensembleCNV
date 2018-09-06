@@ -20,7 +20,7 @@ option_list = list(
   make_option(c("-r", "--script"), action = "store", type = "character", default = NA,
               help = "Path to the main script CNV.genotype.one.chr.one.batch.R."),
   make_option(c("-l", "--joblog"), action = "store", type = "character", default = NA,
-              help = "path save all jobs log.")
+              help = "Path to the directory saving job logs.")
 )
 
 opt = parse_args(OptionParser(option_list = option_list))
@@ -40,7 +40,7 @@ cmd    <- paste("Rscript", script,
                 "--sourcefile", opt$sourcefile)
 
 if ( opt$duplicates ) cmd <- paste(cmd, "--duplicates")
-if ( opt$png ) cmd <- paste(cmd, "--plot")
+if ( opt$plot ) cmd <- paste(cmd, "--plot")
 
 path_joblog <- opt$joblog
 if (!dir.exists(paths = path_joblog)) dir.create(path = path_joblog, showWarnings = F, recursive = T)
@@ -52,7 +52,7 @@ path_job_out   <- file.path(path_joblog, "job", "OUT")
 
 file_cnvr <- "cnvr_batch.txt"  ## with batch information
 dat_cnvr  <- read.delim(file = file.path(opt$datapath, file_cnvr), as.is = TRUE)
-chrs = sort( unique(dat_cnvr$chr) )
+chrs <- sort( unique(dat_cnvr$chr) )
 
 for ( chr1 in chrs ) {
   

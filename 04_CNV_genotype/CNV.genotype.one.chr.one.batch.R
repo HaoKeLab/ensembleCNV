@@ -51,7 +51,7 @@ path_data   <- opt$datapath
 path_result <- opt$resultpath
 path_matrix <- opt$matrixpath
 path_sourcefile <- opt$sourcefile
-flag_png_plot <- opt$png 
+flag_png_plot <- opt$plot
 flag_duplicates <- opt$duplicates
 
 if ( type1 != 1 & type1 != 0) {
@@ -130,10 +130,8 @@ create_path <- function(path_main, str_subpath) {
 # output pathsub_folder: summary/steps/diag/heatmap
 path_main <- path_result
 path_log     <- create_path(path_main = path_main, str_subpath = "log")
-# path_png     <- create_path(path_main = path_main, str_subpath = "png")
 path_pred    <- create_path(path_main = path_main, str_subpath = "pred")
 path_pars    <- create_path(path_main = path_main, str_subpath = "pars")
-# path_heatmap <- create_path(path_main = path_png, str_subpath = "heatmap")
 
 if ( flag_png_plot ) {
   path_png     <- create_path(path_main = path_main, str_subpath = "png")

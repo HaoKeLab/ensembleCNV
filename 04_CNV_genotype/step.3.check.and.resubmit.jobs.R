@@ -4,26 +4,24 @@ suppressMessages(require(optparse))
 
 option_list = list(
   make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
-              help = "path contain all running needed data"),
+              help = "Path to the directory containing necessary input data."),
   make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
-              help = "path save all results"),
+              help = "Path to the directory for saving results."),
   make_option(c("-m", "--matrixpath"), action = "store", type = "character", default = NA,
-              help = "path save all LRR and BAF chromosome based data"),
+              help = "Path to chromosome-wise LRR and BAF matrices."),
   make_option(c("-s", "--sourcefile"), action = "store", type = "character", default = NA,
-              help = "path contain all scripts need to be soucred"),
+              help = "Path to the scripts directory containing R scripts to be loaded into R."),
   make_option(c("-d", "--duplicates"), action = "store_true", default = FALSE,
-              help = "file of duplicate pairs."),
+              help = "[optional] Whether duplicate pairs information will be annotated in diagnosis plots."),
   make_option(c("-n", "--plot"), action = "store_true", default = FALSE,
-              help = "plot png or not"),
+              help = "[optional] Whether to generate diagnosis plots."),
   make_option(c("-r", "--script"), action = "store", type = "character", default = NA,
-              help = "script path named as CNV.genotype.one.chr.one.batch.HC.R."),
+              help = "Path to the main script CNV.genotype.one.chr.one.batch.R."),
   make_option(c("-l", "--joblog"), action = "store", type = "character", default = NA,
-              help = "path save all jobs log."),
+              help = "Path to the directory saving job logs."),
   make_option(c("-f", "--flag"), action = "store", type = "integer", default = NA,
-              help = "0 for only print CNVR runing state/1 for doing resubmit jobs for unfinished CNVR ")
+              help = "0: only print the running status of CNV genotyping; 1: resubmit jobs for unfinished CNV genotyping")
 )
-
-
 
 opt = parse_args(OptionParser(option_list = option_list))
 pars = c(opt$type, opt$datapath, opt$resultpath, opt$joblog,
@@ -33,32 +31,27 @@ if ( any(is.na(pars)) ) {
   stop("All parameters must be supplied. (--help for detail)")
 }
 
-flag = as.integer( opt$flag )  ## for 0 or 1
+flag <- as.integer( opt$flag )  ## 0 or 1
 
-# resubmit jobs but exclude already finished CNVR
+# resubmit unfinished jobs
 file_cnvr <- "cnvr_batch.txt"  ## with batch information
 dt_cnvr_raw <- read.delim(file = file.path(opt$datapath, file_cnvr), as.is = TRUE)
-# dt_cnvr_raw <- readRDS(file = file.path(path_cnvr, file_cnvr)) #
 dt_cnvr_raw <- dt_cnvr_raw[order(dt_cnvr_raw$chr, dt_cnvr_raw$batch), ]
-# add fname columns
+# add fname column
 dt_cnvr_raw$fname <- paste0(dt_cnvr_raw$CNVR_ID, "_pred.rds") 
 
 tbl_raw <- table(dt_cnvr_raw$chr, dt_cnvr_raw$batch)
 dt_freq_raw <- as.data.frame(tbl_raw)
 names(dt_freq_raw) <- c("chr", "batch", "Freq")
 
-dt_freq_raw <- subset(dt_freq_raw, Freq != 0)  ## subset no 0 freq part
+dt_freq_raw <- subset(dt_freq_raw, Freq != 0)  ## subset non-null batch
 dt_freq_raw <- dt_freq_raw[order(dt_freq_raw$chr, dt_freq_raw$batch), ]
-
-## main predict path
-# path_main_pred <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/FA_1000/res/pred"
-# path_main_failed <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/FA_1000/res/cnvrs_failed"
 
 path_main_pred <- file.path(opt$resultpath, "pred")
 path_main_failed <- file.path(opt$resultpath, "cnvrs_error")
 
 # create script
-script <- file.path(opt$script, "CNV.genotype.one.chr.one.batch.HC.R")
+script <- file.path(opt$script, "CNV.genotype.one.chr.one.batch.R")
 cmd    <- paste("Rscript", script, 
                 "--datapath", opt$datapath,
                 "--resultpath", opt$resultpath,
@@ -66,31 +59,15 @@ cmd    <- paste("Rscript", script,
                 "--sourcefile", opt$sourcefile)
 
 if ( opt$duplicates ) cmd <- paste(cmd, "--duplicates")
-if ( opt$png ) cmd <- paste(cmd, "--png")
+if ( opt$plot ) cmd <- paste(cmd, "--plot")
+path_joblog <- opt$joblog
 
-# function ----------------------------------------------------------
-# submit jobs
-# submit_jobs <- function(chr1, batch1, type1) {
-#   
-#   path_code <- "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_test/code/regenotype"
-#   name_script <- "step.2.runme.minerva.each.chr.each.batch.R"
-#   
-#   script <- file.path(path_code, name_script)
-#   
-#   cmd1 = paste(script, "-c", chr1, "-b", batch1, "-t", 0)
-#   bsub.cmd <- paste("bsub -n 2 -W 05:00 -R 'rusage[mem=10000]' -P acc_haok01a",
-#                     "-q premium", shQuote(cmd1))
-#   
-#   cat(cmd1, "\n")  ## print out
-#   system(bsub.cmd)
-#   Sys.sleep(0.1)
-# }
-
-# check if all CNVR finished --------------------------------------------------------------
+# check if CNV genotyping for all CNVRs is finished ----------------------------------
 check_jobs <- function(path_main, dt_cnvr_raw, flag, path_main_failed, path_joblog) {
   
   path_job_error <- file.path(path_joblog, "job", "ERROR")
   path_job_out   <- file.path(path_joblog, "job", "OUT")
+  
   # remove all previous results
   system( paste("rm -rf", path_main_failed) )
   
@@ -105,13 +82,14 @@ check_jobs <- function(path_main, dt_cnvr_raw, flag, path_main_failed, path_jobl
     
     chr1 <- dt_freq_raw$chr[i]
     batch1 <- dt_freq_raw$batch[i]
-    freq1 <- dt_freq_raw$Freq[i]  # total freq 
+    freq1 <- dt_freq_raw$Freq[i]
     
     foldername1 <- paste0("chr_", chr1, "_batch_", batch1)
-    path1 <- file.path(path_main, foldername1)  # folder name
+    path1 <- file.path(path_main, foldername1)
     
     if ( !dir.exists(paths = path1) ) { 
-      cat("CHR:", chr1, "BATCH:", batch1, "Failed jobs must be resubmit.\n")
+      cat("CHR:", chr1, "BATCH:", batch1, "The whole batch failed and jobs will be resubmitted.\n")
+      
       # submit jobs
       if (flag == 1) {
         
@@ -122,27 +100,24 @@ check_jobs <- function(path_main, dt_cnvr_raw, flag, path_main_failed, path_jobl
                          "-q premium", shQuote(cmd1))
         cat(bsub.cmd, "\n")
         system(bsub.cmd)
-        
       }
       
     } else {
-      
+      ## the results folder for the current batch exists
       files <- list.files(path = path1)
       dt1   <- subset(dt_cnvr_raw, chr == chr1 & batch == batch1)
       dt1.failed <- subset(dt1, !fname %in% files)
       
       if (nrow(dt1.failed) == 0) {
-        cat("CHR:", chr1, "BATCH:", batch1, "TOTAL:", freq1, "SUCCESSED!!!!!!!\n")
-      } else {
-        
+        cat("CHR:", chr1, "BATCH:", batch1, "TOTAL:", freq1, "SUCCEED!\n")
+      
+      } else {  
         cat("CHR:", chr1, "BATCH:", batch1, "TOTAL:", freq1, "FAILED:", nrow(dt1.failed), "\n")
         
         if ( !dir.exists(paths = path_main_failed) ) {
           dir.create(path = path_main_failed, showWarnings = F, recursive = T)
         }
         
-        # fname.failed <- paste0("cnvrs_chr_", chr1, "_batch_", batch1, "_failed.rds")
-        # saveRDS(dt1.failed, file = file.path(path_main_failed, fname.failed))
         fname.failed <- paste0("cnvrs_error_chr_", chr1, "_batch_", batch1, ".txt")
         write.table(data.frame(CNVR_ID = dt1.failed$CNVR_ID, stringsAsFactors = F),
                     file = file.path(path_main_failed, paste0("cnvrs_error_chr_", chr1, "_batch_", batch1, ".txt")),
@@ -163,8 +138,10 @@ check_jobs <- function(path_main, dt_cnvr_raw, flag, path_main_failed, path_jobl
 }
 
 # main runing function --------------------------------------------
-check_jobs(path_main = path_main_pred, dt_cnvr_raw = dt_cnvr_raw, 
-           flag = flag, path_main_failed = path_main_failed,
+check_jobs(path_main = path_main_pred, 
+           dt_cnvr_raw = dt_cnvr_raw, 
+           flag = flag, 
+           path_main_failed = path_main_failed,
            path_joblog = path_joblog)
 
 
