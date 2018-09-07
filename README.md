@@ -184,6 +184,12 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 ## 4 CNV genotyping for each CNVR
 
+The initial CNV calls within a CNVR may be mixed with false positives and false negatives from the initial call set. Moreover, the baseline LRR value corresponding to normal CN status may substantially deviate from 0, violating the essential model assumptions for individual-wise CNV callers (e.g., PennCNV and QuantiSNP). To address these issues, we re-genotyped CN status per individual at each CNVR by a locally fitted likelihood model, with information from other CNVRs borrowed for the initialization of model parameters. Both the LRR and BAF signals from SNP probes and the LRR signal from CNV probes within a particular CNVR were used for model fitting. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
+
+In current implementation, CNVRs within different chromosomes are processed in parallel, and CNVRs within the sample chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype).
+
+The main script 
+
 genotyping for all CNVRs containing two main steps:
 
 split all cnvrs generated from ensembleCNV step into chromosome based batches.
