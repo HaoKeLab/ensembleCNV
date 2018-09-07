@@ -188,7 +188,7 @@ The initial CNV calls within a CNVR may be mixed with false positives and false 
 
 In current implementation, CNVRs within different chromosomes are processed in parallel, and CNVRs within the sample chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype).
 
-The main script `CNV.genotype.one.chr.one.batch.R` does CNV genotyping on one batch of CNVRs with one chromosome at a time. It loads the R functions in the subdirectory (scripts)[https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts] when being run in an R seesion.
+The main script `CNV.genotype.one.chr.one.batch.R` does CNV genotyping on one batch of CNVRs with one chromosome at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts) when being run in an R seesion.
 
 genotyping for all CNVRs containing two main steps:
 
