@@ -186,16 +186,8 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 The initial CNV calls within a CNVR may be mixed with false positives and false negatives from the initial call set. Moreover, the baseline LRR value corresponding to normal CN status may substantially deviate from 0, violating the essential model assumptions for individual-wise CNV callers (e.g., PennCNV and QuantiSNP). To address these issues, we re-genotyped CN status per individual at each CNVR by a locally fitted likelihood model, with information from other CNVRs borrowed for the initialization of model parameters. Both the LRR and BAF signals from SNP probes and the LRR signal from CNV probes within a particular CNVR were used for model fitting. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-In current implementation, CNVRs within different chromosomes are processed in parallel, and CNVRs within the sample chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype).
+In current implementation, CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). The main script `CNV.genotype.one.chr.one.batch.R` does CNV genotyping on one batch of CNVRs with one chromosome at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts) when being run in an R seesion.
 
-The main script `CNV.genotype.one.chr.one.batch.R` does CNV genotyping on one batch of CNVRs with one chromosome at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts) when being run in an R seesion.
-
-genotyping for all CNVRs containing two main steps:
-
-split all cnvrs generated from ensembleCNV step into chromosome based batches.
-```sh
-./step.1.split.cnvrs.into.batches.R --help for detail
-```
 
 regenotype CNVRs in one batch:
 (1) path_data contains:
@@ -207,6 +199,16 @@ cnvrs_batch_annotated.rds (cnvrs adding columns: batch)
 (2) path_matrix (LRR and BAF folder to save matrix data)
 (3) path_sourcefile (all scripts need to be source )
 (4) path_result (save all regenotype results)
+
+
+genotyping for all CNVRs containing two main steps:
+
+split all cnvrs generated from ensembleCNV step into chromosome based batches.
+```sh
+./step.1.split.cnvrs.into.batches.R --help for detail
+```
+
+
 
 ```sh
 sample code:
