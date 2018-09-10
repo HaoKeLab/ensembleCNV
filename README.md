@@ -180,7 +180,7 @@ Rscript step.2.create.CNVR.R \
 ```
 Two tab-delimited tables will be generated in this step: i) `cnvr_clean.txt` with the information for each constructed CNVR; ii) `cnv_clean.txt` with the information for each CNV calls from individual methods, including which CNVR each CNV belongs to.
 
-We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR) of input and output files corresponding to one sample CNVR.
+We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR) of input and output files for this step corresponding to one sample CNVR.
 
 ## 4 CNV genotyping for each CNVR
 
@@ -252,9 +252,12 @@ Rscript step.4.prediction.results.R \
 When this step is finished, four files are expected to be generated in the result folder:
   - `matrix_CN.rds` (matrix of predicted copy number (CN), each row corresponds to a CNVR and each column a sample)
   - `matrix_GQ.rds` (matrix of GQ scaore, each row corresponds to a CNVR and each column a sample)
-  - `cnvr_genotype.txt` (An additional column `genotype` is appended to `cnvr_batch.txt`, indicating whether CNV genotyping is successfully completed for each CNVR)
-Sample_ID.rds( columns of matrix).
+  - `cnvr_genotype.txt` (an additional column `genotype` is appended to `cnvr_batch.txt`, indicating whether CNV genotyping is successfully completed for each CNVR)
+  - `sample_genotype.txt` (list of sample IDs with CN genotype).
 
+Users can decide a threshold of GQ score afterwards. A CN genotype with GQ score below the threshold can be set as missing.
+
+We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype) of input and output files for this step corresponding to one sample CNVR.
 
 ## 5 Boundary refinement
 
