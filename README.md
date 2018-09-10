@@ -249,12 +249,10 @@ Rscript step.4.prediction.results.R \
 --datapath /path/to/data/ \  ## the above input files are all placed in this folder
 --resultpath /path/to/results/  ## directory to save results
 ```
-
-
-combine all sample-based regenotype results.
-and, generate mat_CN.rds (matrix of regenotype copy number),
-matrix_GQ.rds (matrix of regenotype gq score), 
-CNVR_ID.rds (rownames of matrix),
+When this step is finished, four files are expected to be generated in the result folder:
+  - `matrix_CN.rds` (matrix of predicted copy number (CN), each row corresponds to a CNVR and each column a sample)
+  - `matrix_GQ.rds` (matrix of GQ scaore, each row corresponds to a CNVR and each column a sample)
+  - `cnvr_genotype.txt` (An additional column `genotype` is appended to `cnvr_batch.txt`, indicating whether CNV genotyping is successfully completed for each CNVR)
 Sample_ID.rds( columns of matrix).
 
 
