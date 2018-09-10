@@ -202,7 +202,12 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
 
 Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located and renamed exactly as follows:
-(a)  
+
+(a) SNP.pfb (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele));
+
+(b) cnv_clean.txt (generated in "create CNVR" step);
+
+(c)
 
 regenotype CNVRs in one batch:
 (1) path_data contains:
