@@ -208,6 +208,7 @@ Before running the script below, the following files prepared in previous steps 
   - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, which is generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
+```sh
 Rscript step.2.submit.jobs.R \
 --type 0 \ ## "0" indicates initial submission
 --datapath /path/to/data/ \  ## the above input files are all placed in this folder
@@ -218,7 +219,7 @@ Rscript step.2.submit.jobs.R \
 --plot \  ## (optional) indicates whether diagnosis plots to be generated
 --script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
 --joblog /path/to/log directory/ ## where jobs log files to be placed
-
+```
 
 
 
