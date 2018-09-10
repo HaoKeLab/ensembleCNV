@@ -190,7 +190,7 @@ In current implementation, CNVRs within different chromosomes are processed in p
 
 Running CNV genotyping in parallel is implemented in the following four steps.
 
-(1) Assign CNVRs into different batches in each chromosome.
+(1) Split CNVRs into different batches in each chromosome.
 ```sh
 Rscript step.1.split.cnvrs.into.batches.R \
 -i /path/to/cnvr_clean.txt \  ## generated in "create CNVR" step
@@ -199,8 +199,10 @@ Rscript step.1.split.cnvrs.into.batches.R \
 ```
 The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The script goes over the table of CNVRs in `cnvr_clean.txt` generated in the previous "create CNVR" step, appends to the table an additional column indicating the batches each CNVR belongs to, and writes the updated table to tab-delimited file `cnvr_batch.txt`.
 
-(2) Submit parallelized jobs for CNV genotyping.
+(2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
 
+Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located and renamed exactly as follows:
+(a)  
 
 regenotype CNVRs in one batch:
 (1) path_data contains:
@@ -213,13 +215,6 @@ cnvrs_batch_annotated.rds (cnvrs adding columns: batch)
 (3) path_sourcefile (all scripts need to be source )
 (4) path_result (save all regenotype results)
 
-
-genotyping for all CNVRs containing two main steps:
-
-split all cnvrs generated from ensembleCNV step into chromosome based batches.
-```sh
-./step.1.split.cnvrs.into.batches.R --help for detail
-```
 
 
 
