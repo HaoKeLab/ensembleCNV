@@ -201,24 +201,23 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
 
-Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located and renamed exactly as follows:
+Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
 
-  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step);
-  - `cnv_clean.txt` (generated in "create CNVR" step);
-  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt` generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step);
-  - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column);
+  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
+  - `cnv_clean.txt` (generated in "create CNVR" step)
+  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, which is generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
+  - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
-
-regenotype CNVRs in one batch:
-(1) path_data contains:
-samples_QC.rds (from PennCNV with columns: LRR_mean and LRR_sd )
-duplicate.pairs.rds (two columns: sample1.name sample2.name )
-SNP.pfb (from PennCNV)
-cnvs_step3_clean.rds (from ensembleCNV step)
-cnvrs_batch_annotated.rds (cnvrs adding columns: batch)
-(2) path_matrix (LRR and BAF folder to save matrix data)
-(3) path_sourcefile (all scripts need to be source )
-(4) path_result (save all regenotype results)
+Rscript step.2.submit.jobs.R \
+--type 0 \ ## "0" indicates initial submission
+--datapath /path/to/data/ \  ## the above input files are all placed in this folder
+--resultpath /path/to/results/ \  ## directory to save results
+--matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
+--sourcefile /path/to/scripts/ \  ## where relavent R functions are placed (see above)
+--duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
+--plot \  ## (optional) indicates whether diagnosis plots to be generated
+--script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
+--joblog /path/to/log directory/ ## where jobs log files to be placed
 
 
 
