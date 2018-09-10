@@ -188,6 +188,19 @@ The initial CNV calls within a CNVR may be mixed with false positives and false 
 
 In current implementation, CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). The main script `CNV.genotype.one.chr.one.batch.R` does CNV genotyping on one batch of CNVRs within one chromosome at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts) when being run in an R seesion.
 
+Running CNV genotyping in parallel is implemented in the following four steps.
+
+(1) Assign CNVRs into different batches in each chromosome.
+```sh
+Rscript step.1.split.cnvrs.into.batches.R \
+-i /path/to/cnvr_clean.txt \  ## generated in "create CNVR" step
+-o /path/to/data/cnvr_batch.txt \
+-n 200
+```
+The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The script goes over the table of CNVRs in `cnvr_clean.txt` generated in the previous "create CNVR" step, appends to the table an additional column indicating the batches each CNVR belongs to, and writes the updated table to tab-delimited file `cnvr_batch.txt`.
+
+(2) Submit parallelized jobs for CNV genotyping.
+
 
 regenotype CNVRs in one batch:
 (1) path_data contains:
