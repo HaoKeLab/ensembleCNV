@@ -226,16 +226,25 @@ When this step is finished, several subdirectories are expected to be generated:
   - `pars` (parameters of local model at each CNVR)
   - `stats` (data used to fit local model for each CNVR)
   - `png` (diagnosis plots generated in "png" format)
-  - 
+  - `job` (log files for submitted jobs)
+  - `cnvrs_error` (list of CNVRs encourtering errors when fitting local model)
+
+(3) Check submitted jobs and resubmit failed jobs.
 
 ```sh
-sample code:
-./step.2.regenotype.each.chr.each.batch.R \
--c 1 -b 1 -t 0 -p path_data -o path_result -m path_matrix -s path_sourcefile
-
-./step.2.regenotype.each.chr.each.batch.R --help for detail
-
+Rscript step.3.check.and.resubmit.jobs.R \
+--datapath /path/to/data/ \  ## the above input files are all placed in this folder
+--resultpath /path/to/results/ \  ## directory to save results
+--matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
+--sourcefile /path/to/scripts/ \  ## where relavent R functions are placed (see above)
+--duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
+--plot \  ## (optional) indicates whether diagnosis plots to be generated
+--script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
+--joblog /path/to/log directory/ \  ## where jobs log files to be placed
+--flag 1 ##0: only print the status of submitted jobs; 1: resubmit jobs for failed jobs
 ```
+
+(4)
 
 combine all sample-based regenotype results.
 and, generate mat_CN.rds (matrix of regenotype copy number),
