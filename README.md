@@ -230,7 +230,6 @@ When this step is finished, several subdirectories are expected to be generated:
   - `cnvrs_error` (list of CNVRs encourtering errors when fitting local model)
 
 (3) Check submitted jobs and resubmit failed jobs.
-
 ```sh
 Rscript step.3.check.and.resubmit.jobs.R \
 --datapath /path/to/data/ \  ## the above input files are all placed in this folder
@@ -244,7 +243,13 @@ Rscript step.3.check.and.resubmit.jobs.R \
 --flag 1 ##0: only print the status of submitted jobs; 1: resubmit jobs for failed jobs
 ```
 
-(4)
+(4) Combine results from parallelized jobs
+```sh
+Rscript step.4.prediction.results.R \
+--datapath /path/to/data/ \  ## the above input files are all placed in this folder
+--resultpath /path/to/results/  ## directory to save results
+```
+
 
 combine all sample-based regenotype results.
 and, generate mat_CN.rds (matrix of regenotype copy number),
@@ -252,13 +257,6 @@ matrix_GQ.rds (matrix of regenotype gq score),
 CNVR_ID.rds (rownames of matrix),
 Sample_ID.rds( columns of matrix).
 
-explation:
-path_cnvr (with cnvrs_annotated_batch.rds)
-path_pred (with chr-batch-based regenotype results)
-path_res (save results: matrix_CN.rds matrix_GQ.rds)
-```sh
-./step.5.prediction.results.R n.samples path_cnvr path_pred pred_res
-```
 
 ## 5 Boundary refinement
 
