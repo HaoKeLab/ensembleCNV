@@ -203,7 +203,7 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 
 Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
 
-  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
+   - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
   - `cnv_clean.txt` (generated in "create CNVR" step)
   - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, which is generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
@@ -220,6 +220,8 @@ Rscript step.2.submit.jobs.R \
 --script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
 --joblog /path/to/log directory/ ## where jobs log files to be placed
 ```
+
+When this step is finished, several subdirectories are expected to be generated:
 
 
 
