@@ -203,8 +203,8 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 
 Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
 
-    - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
-    - `cnv_clean.txt` (generated in "create CNVR" step)
+  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
+  - `cnv_clean.txt` (generated in "create CNVR" step)
   - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, which is generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
@@ -222,8 +222,11 @@ Rscript step.2.submit.jobs.R \
 ```
 
 When this step is finished, several subdirectories are expected to be generated:
-
-
+  - `pred` (predicted copy number (CN) and associated GQ score for each individual at each CNVR)
+  - `pars` (parameters of local model at each CNVR)
+  - `stats` (data used to fit local model for each CNVR)
+  - `png` (diagnosis plots generated in "png" format)
+  - 
 
 ```sh
 sample code:
