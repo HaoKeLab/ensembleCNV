@@ -201,8 +201,10 @@ for (i in 1:nrow(dt_cnvrs1)) {
   snps_name <- snps[idx_start:idx_end] # all snps in cnvr1
 
   # plot heatmap add 20 snps on the both side ----------------------------
-  idx_outer_start <- dt_cnvrs1$outer.start[i]
-  idx_outer_end   <- dt_cnvrs1$outer.end[i]
+  # idx_outer_start <- dt_cnvrs1$outer.start[i]
+  # idx_outer_end   <- dt_cnvrs1$outer.end[i]
+  idx_outer_start <- idx_start
+  idx_outer_end   <- idx_end
   idx_start_new <- ifelse((idx_outer_start - 20) <= 0, 1, idx_outer_start - 20)  # new start and end for plot heatmap
   idx_end_new <- ifelse((idx_outer_end + 20) > n_snps, n_snps, idx_outer_end + 20)
 
