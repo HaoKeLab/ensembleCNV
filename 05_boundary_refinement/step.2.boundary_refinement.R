@@ -1,6 +1,4 @@
-#!/usr/bin/env Rscipt --vanilla
-
-# args = commandArgs(trailingOnly = TRUE) ## the only input argument Chr
+#!/usr/bin/env Rscript
 
 suppressMessages({
   library(pheatmap)
@@ -9,167 +7,154 @@ suppressMessages({
 })
 
 option_list <- list(
-  make_option(c("-c", "--chr"), default = NA, action = "store", type = "integer", 
-              help = "subset cnvrs in chr to do refinement."),
-  make_option(c("-r", "--cnvr"), default = NA, action = "store", type = "character", 
-              help = "boundary refine cnvrs."),
-  make_option(c("-l", "--lrr"), default = NA, action = "store", type = "character",
-              help = "chr-based LRR matrix saving path."),
-  make_option(c("-p", "--pfb"), default = NA, action = "store", type = "character",
-              help = "SNP.pfb file which including hg19 position snps."),
-  make_option(c("-m", "--centromere"), default = NA, action = "store", type = "character",
-              help = "chromosome centromere (hg19) .rds file"),
-  make_option(c("-g", "--png"), default = NA, action = "store", type = "character",
-              help = "path to save png file."),
-  make_option(c("-o", "--res"), default = NA, action = "store", type = "character",
-              help = "path to save detail result."),
-  make_option(c("-s", "--rcpp"), default = NA, action = "store", type = "character",
-              help = "rcpp file need to source")
+  make_option(c("-c", "--chr"), action = "store", type = "integer", default = NA,
+              help = "subset cnvrs using CHR to do refinement."),
+  make_option(c("-m", "--matrixpath"), action = "store", type = "character", default = NA, 
+              help = "path save all LRR and BAF chromosome based data"),
+  make_option(c("-n", "--plot"), action = "store_true", default = FALSE,
+              help = "plot png or not"),
+  make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
+              help = "path contain all running needed data"),
+  make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
+              help = "path save all results (cnvr_refinement from step.1)"),
+  make_option(c("-s", "--rcppfile"), action = "store", type = "character", default = NA,
+              help = "rcpp script need to be soucred"),
+  make_option(c("-r", "--centromere"), action = "store", type = "character", default = NA,
+              help = "centromere position of each chromosome.")
 )
 
-
 opt <- parse_args(OptionParser(option_list = option_list))
+pars = c(opt$chr, opt$datapath, opt$resultpath, opt$matrixpath, opt$rcppfile, opt$centromere)
 
-if (any(is.na(c(opt$chr, opt$cnvr, opt$lrr, opt$ptb, opt$centromere, opt$png, opt$res, opt$rcpp)))) {
+if ( any(is.na(pars)) ) {
   stop("All parameters must be supplied. (--help for detail)")
 }
 
-chr1                 <- opt$chr
-file_CNVR            <- opt$cnvr ## file of CNVR can be subset from raw create CNVR step 
-path_LRR_matrix      <- opt$lrr
-file_pfb             <- opt$pfb  ## from penncnv
-file_centromere_hg19 <- opt$centromere
-file_rcpp            <- opt$rcpp
-path_png             <- opt$png
-path_res             <- opt$res
+chr1 <- opt$chr
+path_data <- opt$datapath
+path_matrix <- opt$matrixpath
+path_result <- opt$resultpath # cnvr_refinement
+file_rcpp   <- opt$rcppfile
+flag_plot   <- opt$plot
 
+# cnvrs refinement
+dat_cnvrs_refine <- readRDS( file = file.path(path_result, "dat_cnvrs_refine.rds") ) 
+dat_cnvrs_refine_chr1 <- subset(dat_cnvrs_refine, chr == chr1)
 
-# file_CNVR = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_2790/code_batch/boundary_refinement/dat/CNVR_refine.rds"
-dat_CNVR = readRDS( file = file_CNVR) # readin all selected CNVR
-nrow(dat_CNVR)
-dat_CNVR = dat_CNVR[order(dat_CNVR$chr), ]
-dat_CNVR1 = subset(dat_CNVR, chr == chr1)
+# LRR matrix
+file_LRR <- paste0("matrix_chr_", chr1, "_LRR.rds")
+dt_matrix_LRR <- readRDS(file = file.path( path_matrix, "LRR", file_LRR))
+mat_LRR <- as.matrix(dt_matrix_LRR)
 
-# path_LRR_matrix = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_2790/matrix_chr_batch/rds_5batch_hg19/LRR"
-file_LRR = paste0("matrix_chr_", chr1, "_LRR.rds") 
-dat_LRR = readRDS(file = file.path(path_LRR_matrix, file_LRR))
-mat_LRR = as.matrix(dat_LRR)
-dim(mat_LRR)
-sampleID_LRR = rownames(mat_LRR)
-snp_LRR = colnames(mat_LRR)
-n_snp = ncol(mat_LRR)
+samples_LRR <- rownames( mat_LRR )
+snps_LRR <- colnames( mat_LRR )
+n_snp <- ncol(mat_LRR)
 
-## fill mat_LRR NA value
-snp_mean = colMeans(mat_LRR, na.rm = TRUE)
-for ( i in 1:nrow(mat_LRR) ){
-  v1 = mat_LRR[i, ]
-  idx1 = which(is.na(v1))
+# fill NA values in mat_LRR
+snps_mean <- colMeans( mat_LRR, na.rm = T)
+for ( i in 1:nrow(mat_LRR) ) {
+  v1   <- mat_LRR[i, ]
+  idx1 <- which(is.na(v1))
   if (length(idx1) >= 1) {
-    mat_LRR[i, idx1] = snp_mean[idx1]
+    mat_LRR[i, idx1] <- snps_mean[idx1]
   }
 }
 
-# file_snp = "/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_2790/pipeline.callCNV/PennCNV/SNP.pfb"
-snp_hg19 <- read.table(file = file_snp, comment.char = "", header = TRUE, sep = "\t", as.is = TRUE)
-snp_chr1 = subset(snp_hg19, Chr == chr1)
-snp_chr1 = subset(snp_hg19, Name %in% snp_LRR) ## subset all snp_19 snps
-snp_chr1 = snp_chr1[order(snp_chr1$Position, snp_chr1$Name), ]
+# centromere position (hg19)
+centromere <- read.delim(file = opt$centromere, as.is = TRUE)
+pos_centromere_chr1 <- centromere$position[centromere$chr == chr1]
 
-# file_centromere_hg19 = "/sc/orga/projects/haok01a/chengh04/FMD.GWAS/callCNV/Kovacic_128samples_042717/chr_centromere_hg19.rds"
-centromere_hg19 = readRDS(file = file_centromere_hg19) ## chr position
-pos_centromere_chr1 = centromere_hg19$position[which(centromere_hg19$chr == chr1)]
+# position
+dat_pfb <- read.table(file = file.path(path_data, "SNP.pfb"), sep = "\t",
+                     header = TRUE, as.is = TRUE, check.names = FALSE,
+                     comment.char = "")
+dat_pfb_chr1 <- subset(dat_pfb, Chr == chr1)
+snp_chr1 <- dat_pfb_chr1
 
-index_match = match(snp_LRR, snp_chr1$Name)
-index_match_sort = sort(index_match)
-stopifnot( all(index_match_sort == index_match) )
+snps_chr1_p <- subset(dat_pfb_chr1, Position <= pos_centromere_chr1)
+snps_chr1_q <- subset(dat_pfb_chr1, Position > pos_centromere_chr1)
 
-snp_chr1_p = subset(snp_chr1, Position <= pos_centromere_chr1)
-snp_chr1_p = snp_chr1_p[order(snp_chr1_p$Position, snp_chr1_p$Name), ]
-snp_chr1_q = subset(snp_chr1, Position > pos_centromere_chr1)
-snp_chr1_q = snp_chr1_q[order(snp_chr1_q$Position, snp_chr1_q$Name), ]
+snps_chr1_p <- snps_chr1_p[order(snps_chr1_p$Position, snps_chr1_p$Name), ]
+snps_chr1_q <- snps_chr1_q[order(snps_chr1_q$Position, snps_chr1_q$Name), ]
 
-mat_LRR_p = mat_LRR[, snp_chr1_p$Name]
-mat_LRR_q = mat_LRR[, snp_chr1_q$Name]
+mat_LRR_p <- mat_LRR[, snps_chr1_p$Name]
+mat_LRR_q <- mat_LRR[, snps_chr1_q$Name]
 
-snp_LRR_p = colnames(mat_LRR_p)
-snp_LRR_q = colnames(mat_LRR_q)
+snps_LRR_p <- colnames( mat_LRR_p )
+snps_LRR_q <- colnames( mat_LRR_q )
 
-snp_pos_p = snp_chr1_p$Position
-snp_pos_q = snp_chr1_q$Position
-  
-n_snp_p = length(snp_LRR_p)
-n_snp_q = length(snp_LRR_q)
+n_snps_p <- length( snps_LRR_p )
+n_snps_q <- length( snps_LRR_q )
 
-# create CNVR -------------------------------------------------------------
-
-# sourceCpp("/sc/orga/projects/haok01a/chengh04/Food_Allergy/FA_2790/code_batch/boundary_refinement/cpp_version/refine_step1.cpp")
+# rcpp create CNVR --------------------------------------------------------
 sourceCpp(file = file_rcpp)
 
 # main --------------------------------------------------------------------
+path_refine <- file.path(path_result, "res_refine")
+if (!dir.exists(paths = path_refine)) dir.create(path = path_refine, showWarnings = F, recursive = T)
 
-folder_chr1 = paste0("chr", chr1)
-path_png = file.path(path_png, folder_chr1)
-path_res = file.path(path_res, folder_chr1)
+folder_chr1 <- paste0("chr", chr1)
+path_png <- file.path(path_refine, folder_chr1, "png")
+path_res <- file.path(path_refine, folder_chr1, "data")
 
-dir.create(path = path_png, showWarnings = FALSE, recursive = TRUE)
-dir.create(path = path_res, showWarnings = FALSE, recursive = TRUE)
+dir.create(path = path_png, showWarnings = F, recursive = T)
+dir.create(path = path_res, showWarnings = F, recursive = T)
 
-res = data.frame()
-n_cnvr1 = nrow(dat_CNVR1)
-cat("number:", nrow(dat_CNVR1), "\n")
+res <- data.frame()
+n_cnvrs_chr1 <- nrow(dat_cnvrs_refine_chr1)
+cat("number of CNVR refine:", n_cnvrs_chr1, "\n")
 
-for (i in 1:nrow(dat_CNVR1)) {
+for ( i in 1:n_cnvrs_chr1 ) {
   
-  cnvr1 = dat_CNVR1$CNVR_ID[i]
-  chr1  = dat_CNVR1$chr[i]
-  snp_start = dat_CNVR1$start_snp[i]
-  snp_end = dat_CNVR1$end_snp[i]
-  freq1 = dat_CNVR1$Freq[i]
+  cnvr1 <- dat_cnvrs_refine_chr1$CNVR_ID[i]
+  chr1  <- dat_cnvrs_refine_chr1$chr[i]
+  snp_start <- dat_cnvrs_refine_chr1$start_snp[i]
+  snp_end   <- dat_cnvrs_refine_chr1$end_snp[i]
+  freq1 <- dat_cnvrs_refine_chr1$Freq[i]
   
-  cat(i, "in", n_cnvr1, "CNVR_ID:", cnvr1, "\n")
+  cat(i, "in", n_cnvrs_chr1, "CNVR_ID:", cnvr1, "\n")
   # p or q arm
-  strs = unlist(strsplit(cnvr1, split = "_", fixed = TRUE))
-  arm_cnvr1 = strs[length(strs)]
+  strs <- unlist( strsplit(cnvr1, split = "_", fixed = TRUE))
+  arm_cnvr1 <- strs[ length(strs) ]
   
-  mat_LRR_cnvr1 = NULL
-  snp_LRR_cnvr1 = NULL
-  n_snp_cnvr1 = NULL
-  if (arm_cnvr1 == "p") {
-    mat_LRR_cnvr1 = mat_LRR_p
-    snp_LRR_cnvr1 = snp_LRR_p
-    n_snp_cnvr1 = n_snp_p
-  } else if (arm_cnvr1 == "q") {
-    mat_LRR_cnvr1 = mat_LRR_q
-    snp_LRR_cnvr1 = snp_LRR_q
-    n_snp_cnvr1 = n_snp_q
+  mat_LRR_cnvr1 <- NULL
+  snp_LRR_cnvr1 <- NULL
+  n_snps_cnvr1  <- NULL
+  if ( arm_cnvr1 == "p" ) {
+    mat_LRR_cnvr1 <- mat_LRR_p
+    snp_LRR_cnvr1 <- snps_LRR_p
+    n_snps_cnvr1  <- n_snps_p
+  } else if ( arm_cnvr1 == "q" ) {
+    mat_LRR_cnvr1 <- mat_LRR_q
+    snp_LRR_cnvr1 <- snps_LRR_q
+    n_snps_cnvr1  <- n_snps_q
   } else {
     stop(paste(cnvr1, 'must be in the p or q arm.'))
   }
-  ## raw CNVR information
+  # raw CNVR information
   idx_start = which(snp_LRR_cnvr1 == snp_start)
   idx_end = which(snp_LRR_cnvr1 == snp_end)
   stopifnot( idx_end > idx_start )
   n_snp_chr1 = idx_end - idx_start + 1
   
-  ## check number of SNPs in the cnvr1
-  ## set cutoff 100
-  if ( n_snp_chr1 >= 100) {
- 
+  # check number of SNPs in the cnvr1
+  # set cutoff n.snps <= 100
+  if ( n_snp_chr1 >= 100 ) {
     
-    snp.pos.start = snp_chr1$Position[which(snp_chr1$Name == snp_start)]
-    snp.pos.end = snp_chr1$Position[which(snp_chr1$Name == snp_end)] 
+    snp.pos.start = dat_pfb_chr1$Position[which(dat_pfb_chr1$Name == snp_start)]
+    snp.pos.end = dat_pfb_chr1$Position[which(dat_pfb_chr1$Name == snp_end)] 
     
     # plot pheatmap
     idx11 = which(snp_LRR_cnvr1 == snp_start)
     idx22 = which(snp_LRR_cnvr1 == snp_end)
     
     idx11.new = ifelse((idx11 - 10) <= 0, 1, idx11 - 10)
-    idx22.new = ifelse((idx22+10) >= n_snp_cnvr1, n_snp_cnvr1, idx22+10)
+    idx22.new = ifelse((idx22+10) >= n_snps_cnvr1, n_snps_cnvr1, idx22+10)
     
     mat_cnvr1_raw = mat_LRR_cnvr1[, idx11.new:idx22.new]
     
     len1 = ifelse((idx11-10) <= 0, idx11-1, 10)
-    len2 = ifelse((idx22+10) >= n_snp_cnvr1, n_snp_cnvr1 - idx22, 10)
+    len2 = ifelse((idx22+10) >= n_snps_cnvr1, n_snps_cnvr1 - idx22, 10)
     
     snps_flag_raw = c(rep("out", len1), rep("in", n_snp_chr1), rep("out", len2))
     
@@ -180,17 +165,19 @@ for (i in 1:nrow(dat_CNVR1)) {
     mcorr_raw = cor(mat_cnvr1_raw)
     rownames(annotate_col1) = colnames(mat_cnvr1_raw)
     
-    filename_png = paste0(cnvr1, "_boundary_refinement.png")
-    png(filename = file.path(path_png, filename_png), width = 12, height = 12, res = 512, units = "in")
-    par(mar = c(4, 4, 4, 4))
-    pheatmap(mcorr_raw,
-             cluster_rows = FALSE,
-             cluster_cols = FALSE,
-             annotation_col = annotate_col1,
-             show_rownames = FALSE,
-             show_colnames = FALSE,
-             main = paste(cnvr1, "raw & not do refine"))
-    dev.off()
+    if ( flag_plot ) {
+      filename_png = paste0(cnvr1, "_boundary_refinement.png")
+      png(filename = file.path(path_png, filename_png), width = 12, height = 12, res = 512, units = "in")
+      par(mar = c(4, 4, 4, 4))
+      pheatmap(mcorr_raw,
+               cluster_rows = FALSE,
+               cluster_cols = FALSE,
+               annotation_col = annotate_col1,
+               show_rownames = FALSE,
+               show_colnames = FALSE,
+               main = paste(cnvr1, "raw & not do refine"))
+      dev.off()
+    }
     
     res1 = data.frame(CNVR_ID = cnvr1, Chr = chr1, Freq = freq1,
                       n.snps.raw = n_snp_chr1, 
@@ -217,8 +204,9 @@ for (i in 1:nrow(dat_CNVR1)) {
   
   idx_start_round1 = ifelse((idx_start - n_extend_round1) < 0, 1, (idx_start - n_extend_round1))
   flag_start_round1 = ifelse((idx_start - n_extend_round1) < 0, "out", "in")
-  idx_end_round1 = ifelse((idx_end + n_extend_round1) > n_snp_cnvr1, n_snp_cnvr1, (idx_end + n_extend_round1))
-  flag_end_round1 = ifelse((idx_end + n_extend_round1) > n_snp_cnvr1, "out", "in")
+  idx_end_round1 = ifelse((idx_end + n_extend_round1) > n_snps_cnvr1, n_snps_cnvr1, (idx_end + n_extend_round1))
+  flag_end_round1 = ifelse((idx_end + n_extend_round1) > n_snps_cnvr1, "out", "in")
+  
   
   ## set _chr1 for each cnvr1
   n_snp_round1 = idx_end_round1 - idx_start_round1 + 1
@@ -245,6 +233,7 @@ for (i in 1:nrow(dat_CNVR1)) {
   snp.round2.right = NULL
   flag_start_round2 = NULL
   flag_end_round2 = NULL
+  
   
   if ( (max.l.chr1 != 1) & (max.r.chr1 != n_snp_round1) ) {
     # donot do round2
@@ -331,7 +320,7 @@ for (i in 1:nrow(dat_CNVR1)) {
     snp.round2.right = colnames(mat_round2)[n_snp_round2]
     
   }
-
+  
   # results -----------------------------------------------------------------
   ## create annotate for heatmap
   idx1 = which(colnames(mat_round2) == snp_start)
@@ -412,7 +401,7 @@ for (i in 1:nrow(dat_CNVR1)) {
       group_final = snps_flag_final
     )
   }
-
+  
   rownames(annotate_col1) = colnames(mat_round2)
   
   snp_cnvr1_round2 = colnames(mat_round2) # for following res1
@@ -450,34 +439,25 @@ for (i in 1:nrow(dat_CNVR1)) {
   }
   
   # pheatmap
-  filename_png = paste0(cnvr1, "_boundary_refinement.png")
-  png(filename = file.path(path_png, filename_png), width = 12, height = 12, res = 512, units = "in")
-  par(mar = c(4, 4, 4, 4))
-  pheatmap(mcorr_round2,
-           cluster_rows = FALSE,
-           cluster_cols = FALSE,
-           annotation_col = annotate_col1,
-           show_rownames = FALSE,
-           show_colnames = FALSE,
-           main = paste(cnvr1, "type_refine:", flag.round2, 
-                        "flag_boundary:", paste0("(left:", flag_start_round2,")", "(right:", flag_end_round2, ")"),
-                        "\n", "type.overlap:", type.overlap.cnvr1,
-                        "freq:", freq1,
-                        "cor.raw:", round(max.value.raw, 2), 
-                        "cor.refine:", round(max.value.chr1, 2)))
-  dev.off()
-  
-  dat_main <- data.frame(cnvr1 = cnvr1, flag.round2 = flag.round2,
-                         flag_start_round2 = flag_start_round2, 
-                         flag_end_round2 = flag_end_round2,
-                         type.overlap.cnvr1 = type.overlap.cnvr1,
-                         freq1 = freq1, max.value.raw = max.value.raw,
-                         max.value.chr1 = max.value.chr1,
-                         stringsAsFactors = FALSE)
-  saveRDS(dat_main, file = file.path(path_output, "dat_heatmap_main.rds"))
-  
-  
-  
+  if ( flag_plot ) {
+    filename_png = paste0(cnvr1, "_boundary_refinement.png")
+    png(filename = file.path(path_png, filename_png), width = 12, height = 12, res = 512, units = "in")
+    par(mar = c(4, 4, 4, 4))
+    pheatmap(mcorr_round2,
+             cluster_rows = FALSE,
+             cluster_cols = FALSE,
+             annotation_col = annotate_col1,
+             show_rownames = FALSE,
+             show_colnames = FALSE,
+             main = paste(cnvr1, "type_refine:", flag.round2, 
+                          "flag_boundary:", paste0("(left:", flag_start_round2,")", "(right:", flag_end_round2, ")"),
+                          "\n", "type.overlap:", type.overlap.cnvr1,
+                          "freq:", freq1,
+                          "cor.raw:", round(max.value.raw, 2), 
+                          "cor.refine:", round(max.value.chr1, 2)))
+    dev.off()
+  }
+
   res1 = data.frame(CNVR_ID = cnvr1, Chr = chr1, Freq = freq1, 
                     n.snps.raw = snp.num.raw.cnvr1, 
                     n.snps.refine = snp.num.refine.cnvr1, 
@@ -491,9 +471,12 @@ for (i in 1:nrow(dat_CNVR1)) {
                     type.overlap.based.on.raw = type.overlap.cnvr1,
                     stringsAsFactors = FALSE)
   res = rbind(res, res1)
-}
+  
+} 
 
 filename = paste0("CNVR_refine_chr_", chr1, "_detail.rds")
 saveRDS(res, file = file.path(path_res, filename))
+
+
 
 

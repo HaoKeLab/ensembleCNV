@@ -1,23 +1,33 @@
 #!/usr/bin/env Rscript
 
-path_refinement_result <- ""
-path_output <- ""
+suppressMessages(library(optparse))
+
+option_list <- list(
+  make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
+              help = "path save all refinement results (cnvrs_refinement).")
+)
+
+opt <- parse_args(OptionParser(option_list = option_list))
+
+pars <- c(opt$resultpath)
+if (any(is.na(pars))) {
+  stop("All parameters must be supplied. (--help for detail)")
+}
+
+path_result <- opt$resultpath
 # combine refinement results ----------------------------------------------
+path_refine <- file.path(path_result, "res_refine")
+folders_chr1 <- list.files(path = path_refine, pattern = "^chr")
 
 res_refinement <- data.frame()
-
-for ( chr1 in 1:22 ) {
+for ( folder.chr1 in folders_chr1 ) {
   
-  cat("chr:", chr1, "\n") 
-  
-  folder.chr1 <- paste("chr", chr1, sep = "")
-  if (!dir.exists(paths = file.path(path_refinement_result, folder.chr1))) next
-  file.chr1   <- paste("CNVR_refine_chr_", chr1, "_detail.rds", sep = "")
-  
-  res.chr1 <- readRDS( file = file.path( path_refinement_result, folder.chr1, file.chr1) )
+  chr1 <- gsub("^chr", "", folder.chr1, perl = T)
+  file.chr1 <- paste("CNVR_refine_chr_", chr1, "_detail.rds", sep = "")
+  path.chr1.data <- file.path(path_refine, folder.chr1, "data")
+  res.chr1 <- readRDS( file = file.path( path.chr1.data, file.chr1) )
   
   res_refinement <- rbind(res_refinement, res.chr1)
-  # type.overlap.based.on.raw
 }
 
 res_refinement$identicalID <- paste(res_refinement$Chr,
@@ -30,7 +40,7 @@ res_refinement_refine <- subset(res_refinement, type.overlap.based.on.raw != "sa
 res_refinement_refine <- subset(res_refinement_refine, 
                                 !identicalID %in% res_refinement_same$identicalID)
 
-## de-dulplicate CNVR
+# de-dulplicate CNVR
 res_refinement_refine <- res_refinement_refine[!duplicated(res_refinement_refine$identicalID), ]
 nrow(res_refinement_refine)
 
@@ -38,20 +48,18 @@ cnvrID_refine_same <- res_refinement_same$CNVR_ID
 
 # clean -------------------------------------------------------------------
 
-cnvrID_keep <- readRDS(file = file.path(path_output, "cnvrs_keep.rds"))
+cnvrID_keep <- readRDS(file = file.path(path_result, "cnvrs_keep.rds"))
 
-dat_cnvr_keep <- readRDS(file = file.path(path_output, "dat_cnvrs_keep.rds"))
+dat_cnvr_keep <- readRDS(file = file.path(path_result, "dat_cnvrs_keep.rds"))
 dat_cnvr_keep$identicalID <- paste(dat_cnvr_keep$chr,
-                                 dat_cnvr_keep$start_snp,
-                                 dat_cnvr_keep$end_snp, sep = "___")
+                                   dat_cnvr_keep$start_snp,
+                                   dat_cnvr_keep$end_snp, sep = "___")
 
-res_refinement_refine_clean <- subset(res_refinement_refine, !identicalID %in% dat_cnvr_keep$identicalID)
-nrow(res_refinement_refine_clean)
+res_refinement_refine_clean <- subset( res_refinement_refine, !identicalID %in% dat_cnvr_keep$identicalID )
 
-cnvrID_final_keep <- union(cnvrID_keep, cnvrID_refine_same)
+cnvrID_keep_final <- union(cnvrID_keep, cnvrID_refine_same)
 
-saveRDS(cnvrID_final_keep, file = file.path(path_output, "cnvrs_final_keep.rds"))
-saveRDS(res_refinement_refine_clean, file = file.path(path_output, "dat_cnvrs_regenotype.rds"))
-
+saveRDS(cnvrID_final_keep, file = file.path(path_result, "cnvrs_keep_after_refine.rds"))
+saveRDS(res_refinement_refine_clean, file = file.path(path_result, "dat_cnvrs_regenotype.rds"))
 
 
