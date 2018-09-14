@@ -837,13 +837,6 @@ if (is.na(opt$icnv) | is.na(opt$pcnv) | is.na(opt$qcnv) | is.na(opt$snp) | is.na
   stop("All arguments must be supplied. Type --help for details.\n")
 }
 
-# opt <- list()
-# opt$icnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.ipattern.txt"
-# opt$pcnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.penncnv.txt"
-# opt$qcnv = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/cnv.quantisnp.txt"
-# opt$snp = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/01_initial_call/run_PennCNV/data_auxiliary/SNP.pfb"
-# opt$centromere = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/data/centromere_hg19.txt"
-# opt$output = "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/03_create_CNVR/"
 
 path_output <- opt$output ## output path
 

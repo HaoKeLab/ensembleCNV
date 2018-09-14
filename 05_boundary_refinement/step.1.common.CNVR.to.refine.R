@@ -8,7 +8,7 @@ option_list <- list(
   make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
               help = "Path to the directory for saving results."),
   make_option(c("-c", "--freq"), action = "store", type = "double", default = NA,
-              help = "Frequency cutoff to select CNVRs with common CNVs for boundary refinement.")
+              help = "Frequency cut-off to select CNVRs with common CNVs for boundary refinement.")
 )
 
 
