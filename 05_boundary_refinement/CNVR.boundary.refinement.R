@@ -33,7 +33,7 @@ if ( any(is.na(pars)) ) {
 chr1        <- opt$chr
 path_data   <- opt$datapath
 path_matrix <- opt$matrixpath
-path_result <- opt$resultpath # cnvr_refinement
+path_result <- opt$resultpath ## cnvr_refine.txt located in this directory
 file_rcpp   <- opt$rcppfile
 flag_plot   <- opt$plot
 
@@ -42,6 +42,7 @@ dat_cnvrs_refine <- read.delim( file = file.path(path_result, "cnvr_refine.txt")
 stopifnot( nrow(dat_cnvrs_refine) > 0 )
 
 dat_cnvrs_refine_chr1 <- subset(dat_cnvrs_refine, chr == chr1)
+stopifnot( nrow(dat_cnvrs_refine_chr1) > 0 )
 
 # LRR matrix
 file_LRR <- paste0("matrix_chr_", chr1, "_LRR.rds")

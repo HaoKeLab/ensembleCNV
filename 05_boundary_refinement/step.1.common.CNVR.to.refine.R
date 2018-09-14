@@ -60,9 +60,11 @@ if (length(idxs.refine) > 0) {
              # file = file.path(path_output, "cnvrs_keep.txt"),
              # quote = F, row.names = F, col.names = F, sep = "\t")
 
-file_cnvr  <- "cnvr_batch.txt"  ## with batch information
-dat_cnvrs  <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
-dat_cnvrs  <- merge( dat_cnvrs, dat_freq)
+file_cnvr <- "cnvr_genotype.txt"  ## with CNV genotype information
+dat_cnvrs <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
+dat_cnvrs <- subset(dat_cnvrs, genotype == 1)
+dat_cnvrs <- merge( dat_cnvrs, dat_freq)
+dat_cnvrs <- dat_cnvrs[order(dat_cnvrs$chr, dat_cnvrs$posStart, dat_cnvrs$posEnd), ]
 stopifnot( nrow(dat_cnvrs) == nrow(dat_freq) )
 
 if (length(cnvrs_refine) > 0) {
