@@ -19,15 +19,15 @@ if ( any(is.na(pars)) ) {
   stop("All three parameters must be supplied. (--help for detail)")
 }
 
-cutoff_freq <- as.numeric( opt$freq)
+cutoff_freq <- as.numeric( opt$freq )
 path_data   <- opt$datapath
 path_result <- opt$resultpath
 
-path_output <- file.path(path_result, "cnvr_refinement")
+path_output <- file.path( path_result ) ##"cnvr_refinement"
 if (!dir.exists(paths = path_output) ) dir.create(path = path_output, showWarnings = F, recursive = T)
 
 # the copy number matrix generated from CNV genotyping step
-mat_CN <- readRDS( file = file.path(path_result, "mat_CN.rds"))
+mat_CN <- readRDS( file = file.path(path_data, "matrix_CN.rds"))
 n.sample <- ncol( mat_CN )
 n.CNVR   <- nrow( mat_CN )
 
@@ -62,8 +62,11 @@ if (length(idxs.refine) > 0) {
 
 file_cnvr <- "cnvr_genotype.txt"  ## with CNV genotype information
 dat_cnvrs <- read.delim(file = file.path(path_data, file_cnvr), as.is = TRUE)
+nms <- names(dat_cnvrs)
+names(dat_cnvrs)[nms == "Freq"] <- "raw_Freq"
 dat_cnvrs <- subset(dat_cnvrs, genotype == 1)
-dat_cnvrs <- merge( dat_cnvrs, dat_freq)
+
+dat_cnvrs <- merge( dat_cnvrs, dat_freq, by = "CNVR_ID", all = FALSE)
 dat_cnvrs <- dat_cnvrs[order(dat_cnvrs$chr, dat_cnvrs$posStart, dat_cnvrs$posEnd), ]
 stopifnot( nrow(dat_cnvrs) == nrow(dat_freq) )
 
