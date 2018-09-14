@@ -38,12 +38,14 @@ file_rcpp   <- opt$rcppfile
 flag_plot   <- opt$plot
 
 # cnvrs refinement
-dat_cnvrs_refine <- readRDS( file = file.path(path_result, "dat_cnvrs_refine.rds") ) 
+dat_cnvrs_refine <- read.delim( file = file.path(path_result, "cnvr_refine.txt"), as.is = TRUE ) 
+stopifnot( nrow(dat_cnvrs_refine) > 0 )
+
 dat_cnvrs_refine_chr1 <- subset(dat_cnvrs_refine, chr == chr1)
 
 # LRR matrix
 file_LRR <- paste0("matrix_chr_", chr1, "_LRR.rds")
-dt_matrix_LRR <- readRDS(file = file.path( path_matrix, "LRR", file_LRR))
+dt_matrix_LRR <- readRDS(file = file.path(path_matrix, "LRR", file_LRR))
 mat_LRR <- as.matrix(dt_matrix_LRR)
 
 samples_LRR <- rownames( mat_LRR )
@@ -66,8 +68,8 @@ pos_centromere_chr1 <- centromere$position[centromere$chr == chr1]
 
 # position
 dat_pfb <- read.table(file = file.path(path_data, "SNP.pfb"), sep = "\t",
-                     header = TRUE, as.is = TRUE, check.names = FALSE,
-                     comment.char = "")
+                      header = TRUE, as.is = TRUE, check.names = FALSE,
+                      comment.char = "")
 dat_pfb_chr1 <- subset(dat_pfb, Chr == chr1)
 snp_chr1 <- dat_pfb_chr1
 
@@ -102,15 +104,15 @@ dir.create(path = path_res, showWarnings = F, recursive = T)
 
 res <- data.frame()
 n_cnvrs_chr1 <- nrow(dat_cnvrs_refine_chr1)
-cat("number of CNVR refine:", n_cnvrs_chr1, "\n")
+cat("number of CNVRs to be boundary-refined:", n_cnvrs_chr1, "\n")
 
 for ( i in 1:n_cnvrs_chr1 ) {
   
-  cnvr1 <- dat_cnvrs_refine_chr1$CNVR_ID[i]
-  chr1  <- dat_cnvrs_refine_chr1$chr[i]
+  cnvr1     <- dat_cnvrs_refine_chr1$CNVR_ID[i]
+  chr1      <- dat_cnvrs_refine_chr1$chr[i]
   snp_start <- dat_cnvrs_refine_chr1$start_snp[i]
   snp_end   <- dat_cnvrs_refine_chr1$end_snp[i]
-  freq1 <- dat_cnvrs_refine_chr1$Freq[i]
+  freq1     <- dat_cnvrs_refine_chr1$Freq[i]
   
   cat(i, "in", n_cnvrs_chr1, "CNVR_ID:", cnvr1, "\n")
   # p or q arm
@@ -458,15 +460,21 @@ for ( i in 1:n_cnvrs_chr1 ) {
     dev.off()
   }
 
-  res1 = data.frame(CNVR_ID = cnvr1, Chr = chr1, Freq = freq1, 
+  res1 = data.frame(CNVR_ID = cnvr1, 
+                    Chr = chr1, 
+                    Freq = freq1, 
                     n.snps.raw = snp.num.raw.cnvr1, 
                     n.snps.refine = snp.num.refine.cnvr1, 
                     cor.raw = max.value.raw, 
-                    snp.start.raw = snp.start.raw.cnvr1, snp.posStart.raw = snp.posStart.raw.cnvr1,
-                    snp.end.raw = snp.end.raw.cnvr1, snp.posEnd.raw = snp.posEnd.raw.cnvr1,
+                    snp.start.raw = snp.start.raw.cnvr1, 
+                    snp.posStart.raw = snp.posStart.raw.cnvr1,
+                    snp.end.raw = snp.end.raw.cnvr1, 
+                    snp.posEnd.raw = snp.posEnd.raw.cnvr1,
                     cor.refine = max.value.chr1, 
-                    snp.start.refine = snp.start.refine.cnvr1, snp.posStart.refine = snp.posStart.refine.cnvr1,
-                    snp.end.refine = snp.end.refine.cnvr1, snp.posEnd.refine = snp.posEnd.refine.cnvr1,
+                    snp.start.refine = snp.start.refine.cnvr1, 
+                    snp.posStart.refine = snp.posStart.refine.cnvr1,
+                    snp.end.refine = snp.end.refine.cnvr1, 
+                    snp.posEnd.refine = snp.posEnd.refine.cnvr1,
                     flag.refine = "refine",
                     type.overlap.based.on.raw = type.overlap.cnvr1,
                     stringsAsFactors = FALSE)
