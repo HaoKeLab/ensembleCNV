@@ -1,0 +1,2 @@
+CNVR_ID	outer.start	outer.end	nCNV	chr	arm	posStart	posEnd	start_snp	end_snp	nPeak	Freq	batch
+CNVR_79_r1_chr1_p	11259	11268	326	1	p	25598276	25642596	rs2517979	rs28393458	1	233	2
