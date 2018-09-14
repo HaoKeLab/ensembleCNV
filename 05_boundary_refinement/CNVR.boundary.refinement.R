@@ -8,19 +8,19 @@ suppressMessages({
 
 option_list <- list(
   make_option(c("-c", "--chr"), action = "store", type = "integer", default = NA,
-              help = "subset cnvrs using CHR to do refinement."),
-  make_option(c("-m", "--matrixpath"), action = "store", type = "character", default = NA, 
-              help = "path save all LRR and BAF chromosome based data"),
-  make_option(c("-n", "--plot"), action = "store_true", default = FALSE,
-              help = "plot png or not"),
+              help = "Select CNVRs on chromosome CHR for boundary refinement."),
   make_option(c("-p", "--datapath"), action = "store", type = "character", default = NA,
-              help = "path contain all running needed data"),
+              help = "Path to the directory containing necessary input data."),
   make_option(c("-o", "--resultpath"), action = "store", type = "character", default = NA,
-              help = "path save all results (cnvr_refinement from step.1)"),
+              help = "Path to the directory for saving results."),              
+  make_option(c("-m", "--matrixpath"), action = "store", type = "character", default = NA, 
+              help = "Path to chromosome-wise LRR and BAF matrices."),
   make_option(c("-s", "--rcppfile"), action = "store", type = "character", default = NA,
-              help = "rcpp script need to be soucred"),
+              help = "Path to refine.rcpp to be used in this R script."),
   make_option(c("-r", "--centromere"), action = "store", type = "character", default = NA,
-              help = "centromere position of each chromosome.")
+              help = "Path to file with centromere position of each chromosome."),
+  make_option(c("-n", "--plot"), action = "store_true", default = FALSE,
+              help = "[optional] Whether to generate diagnosis plots.")
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
@@ -30,8 +30,8 @@ if ( any(is.na(pars)) ) {
   stop("All parameters must be supplied. (--help for detail)")
 }
 
-chr1 <- opt$chr
-path_data <- opt$datapath
+chr1        <- opt$chr
+path_data   <- opt$datapath
 path_matrix <- opt$matrixpath
 path_result <- opt$resultpath # cnvr_refinement
 file_rcpp   <- opt$rcppfile
