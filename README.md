@@ -20,15 +20,12 @@ The detailed step-by-step instructions are listed as follows.
   - [PCA on summary statistics](#pca-on-summary-statistics)
 - [3 Create CNVR](#3-create-cnvr)
 - [4 CNV genotyping for each CNVR](#4-cnv-genotyping-for-each-cnvr)
-  - [split cnvrs into batches](#split-cnvr-into-batches)
-  - [regenotype](#regenotype)
-  - [combine prediction results](#combine-prediction-results)
-- [5 boundary refinement](#5-boundary-refinement)
-- [6 performance assessment](#6-performance-assessment)
+- [5 Boundary refinement](#5-boundary-refinement)
+- [6 Performance assessment](#6-performance-assessment)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
-- [test](#test)
-  - [test ensembleCNV](#test-ensemblecnv)
-  - [test regenotype](#test-regenotype)
+- [Example](#test)
+  - [Create CNVR](#create-CNVR)
+  - [CNV genotype](#cnv-genotype)
 
 
 ## 1 Initial call
@@ -283,7 +280,7 @@ matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 ```sh
 ./compare.dups.consistency.R path_input cohort_name path_output
 ```
-## test
+## Example
 here, we supply a samll test example for user to test.
 
 copy all the scripts and data folder in test working folder.
