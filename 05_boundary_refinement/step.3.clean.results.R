@@ -44,7 +44,7 @@ res_refinement_refine <- subset(res_refinement_refine,
 
 # de-dulplicate CNVR
 res_refinement_refine <- res_refinement_refine[!duplicated(res_refinement_refine$identicalID), ]
-nrow(res_refinement_refine)
+cat("number of CNVRs with refined boundaries:", nrow(res_refinement_refine), "\n")
 
 cnvrID_refine_same <- res_refinement_same$CNVR_ID
 
@@ -65,10 +65,10 @@ cnvrID_keep_final <- union(cnvrID_keep, cnvrID_refine_same)
 dat_cnvr_keep_after_refine <- rbind(dat_cnvr_keep, dat_cnvr_refine)
 dat_cnvr_keep_after_refine <- subset(dat_cnvr_keep_after_refine, CNVR_ID %in% cnvrID_keep_final)
 
-
+## CNVRs with refined boundaries
 res_refinement_refine_clean <- subset( res_refinement_refine, !identicalID %in% dat_cnvr_keep$identicalID )
 
-
+## CNVRs to be regnotyped after updating boundary information
 dat_cnvr_regt <- subset(dat_cnvr_refine, CNVR_ID %in% res_refinement_refine_clean$CNVR_ID)
 dat_cnvr_regt <- rename(dat_cnvr_regt, 
                         c("posStart"="posStart.round1",
@@ -101,4 +101,7 @@ write.table(res_refinement_refine_clean,
             file = file.path(path_result, "cnvr_refined_after_refine.txt"),
             quote = F, row.names = F, sep = "\t")
 
+write.table(dat_cnvr_regt, 
+            file = file.path(path_result, "cnvr_regenotype_after_refine.txt"),
+            quote = F, row.names = F, sep = "\t")
 
