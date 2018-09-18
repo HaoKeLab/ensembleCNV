@@ -30,6 +30,15 @@ if ( any(is.na(pars)) ) {
   stop("All parameters must be supplied. (--help for detail)")
 }
 
+# # opt <- list()
+# # opt$chr <- 1
+# # opt$datapath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/data/"
+# # opt$resultpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/mid_res/"
+# # opt$matrixpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/"
+# # opt$rcppfile <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/code/05_boundary_refinement/refine.cpp"
+# # opt$centromere <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/data/centromere_hg19.txt"
+# # opt$plot <- TRUE
+
 chr1        <- opt$chr
 path_data   <- opt$datapath
 path_matrix <- opt$matrixpath
@@ -205,8 +214,8 @@ for ( i in 1:n_cnvrs_chr1 ) {
     n_extend_round1 = 25
   }
   
-  idx_start_round1 = ifelse((idx_start - n_extend_round1) < 0, 1, (idx_start - n_extend_round1))
-  flag_start_round1 = ifelse((idx_start - n_extend_round1) < 0, "out", "in")
+  idx_start_round1 = ifelse((idx_start - n_extend_round1) < 1, 1, (idx_start - n_extend_round1))  ##***
+  flag_start_round1 = ifelse((idx_start - n_extend_round1) < 1, "out", "in")  ##***
   idx_end_round1 = ifelse((idx_end + n_extend_round1) > n_snps_cnvr1, n_snps_cnvr1, (idx_end + n_extend_round1))
   flag_end_round1 = ifelse((idx_end + n_extend_round1) > n_snps_cnvr1, "out", "in")
   
@@ -257,8 +266,8 @@ for ( i in 1:n_cnvrs_chr1 ) {
     flag.round2 = "leftside_round2"
     
     n_extend_round2 = 2*(n_extend_round1 + n_snp_chr1)
-    idx_start_round2 = ifelse((idx_start - n_extend_round2) < 0, 1, (idx_start - n_extend_round2))
-    flag_start_round2 = ifelse((idx_start - n_extend_round2) < 0, "out", "in")
+    idx_start_round2 = ifelse((idx_start - n_extend_round2) < 1, 1, (idx_start - n_extend_round2)) ##***
+    flag_start_round2 = ifelse((idx_start - n_extend_round2) < 1, "out", "in") ##***
     idx_end_round2 = idx_end_round1
     flag_end_round2 = flag_end_round1
     
@@ -282,8 +291,8 @@ for ( i in 1:n_cnvrs_chr1 ) {
     n_extend_round2 = 2*(n_extend_round1 + n_snp_chr1)
     idx_start_round2 = idx_start_round1
     flag_start_round2 = flag_start_round1
-    idx_end_round2 = ifelse((idx_end + n_extend_round2) > n_snp_cnvr1, n_snp_cnvr1, (idx_end + n_extend_round2))
-    flag_end_round2 = ifelse((idx_end + n_extend_round2) > n_snp_cnvr1, "out", "in")
+    idx_end_round2 = ifelse((idx_end + n_extend_round2) > n_snps_cnvr1, n_snps_cnvr1, (idx_end + n_extend_round2))
+    flag_end_round2 = ifelse((idx_end + n_extend_round2) > n_snps_cnvr1, "out", "in")
     
     n_snp_round2 = idx_end_round2 - idx_start_round2 + 1
     mat_round2 = mat_LRR_cnvr1[, idx_start_round2:idx_end_round2]
@@ -303,10 +312,10 @@ for ( i in 1:n_cnvrs_chr1 ) {
     flag.round2 = "bothside_round2"
     
     n_extend_round2 = 2*(n_extend_round1 + n_snp_chr1)
-    idx_start_round2 = ifelse((idx_start - n_extend_round2) < 0, 1, (idx_start - n_extend_round2))
-    flag_start_round2 = ifelse((idx_start - n_extend_round2) < 0, "out", "in")
-    idx_end_round2 = ifelse((idx_end + n_extend_round2) > n_snp_cnvr1, n_snp_cnvr1, (idx_end + n_extend_round2))
-    flag_end_round2 = ifelse((idx_end + n_extend_round2) > n_snp_cnvr1, "out", "in")
+    idx_start_round2 = ifelse((idx_start - n_extend_round2) < 1, 1, (idx_start - n_extend_round2)) ##***
+    flag_start_round2 = ifelse((idx_start - n_extend_round2) < 1, "out", "in") ##***
+    idx_end_round2 = ifelse((idx_end + n_extend_round2) > n_snps_cnvr1, n_snps_cnvr1, (idx_end + n_extend_round2))
+    flag_end_round2 = ifelse((idx_end + n_extend_round2) > n_snps_cnvr1, "out", "in")
     
     n_snp_round2 = idx_end_round2 - idx_start_round2 + 1
     mat_round2 = mat_LRR_cnvr1[, idx_start_round2:idx_end_round2]
