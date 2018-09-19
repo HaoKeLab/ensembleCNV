@@ -30,15 +30,6 @@ if ( any(is.na(pars)) ) {
   stop("All parameters must be supplied. (--help for detail)")
 }
 
-# # opt <- list()
-# # opt$chr <- 1
-# # opt$datapath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/data/"
-# # opt$resultpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/mid_res/"
-# # opt$matrixpath <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/"
-# # opt$rcppfile <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/code/05_boundary_refinement/refine.cpp"
-# # opt$centromere <- "/sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/data/centromere_hg19.txt"
-# # opt$plot <- TRUE
-
 chr1        <- opt$chr
 path_data   <- opt$datapath
 path_matrix <- opt$matrixpath

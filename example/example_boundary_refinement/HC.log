@@ -1,0 +1,23 @@
+
+
+
+# result in 
+# /sc/orga/projects/haok01a/chengh04/paper/05_boundary_refinement_HC/sample_HC
+
+Rscript step.2.boundary_refinement.HC.R \
+--chr 2 \
+--matrixpath /sc/orga/projects/haok01a/chengh04/paper/05_boundary_refinement_example_HC/sample_HC/matrix \
+--plot \
+--datapath /sc/orga/projects/haok01a/chengh04/paper/05_boundary_refinement_example_HC/sample_HC/data \
+--centromere /sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/data/centromere_hg19.txt \
+--resultpath /sc/orga/projects/haok01a/chengh04/paper/05_boundary_refinement_example_HC/sample_HC \
+--rcppfile /sc/orga/projects/haok01a/chengh04/paper/05_boundary_refinement_HC/HC/refine.cpp
+
+
+
+
+
+
+
+
+
