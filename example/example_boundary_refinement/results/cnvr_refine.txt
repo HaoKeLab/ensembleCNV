@@ -1,0 +1,2 @@
+CNVR_ID	outer.start	outer.end	nCNV	chr	arm	posStart	posEnd	start_snp	end_snp	nPeak	raw_Freq	batch	genotype	Freq
+CNVR_163_r1_chr2_q	73662	73669	2	2	q	242929164	242971871	rs13432136	rs13431327	1	2	1	1	79
