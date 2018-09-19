@@ -23,9 +23,10 @@ The detailed step-by-step instructions are listed as follows.
 - [5 Boundary refinement](#5-boundary-refinement)
 - [6 Performance assessment](#6-performance-assessment)
   - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
-- [Example](#test)
-  - [Create CNVR](#create-CNVR)
-  - [CNV genotype](#cnv-genotype)
+- [Example](#example)
+  - [Create CNVR](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR)
+  - [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype)
+  - [Boundary refinement](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement)
 
 
 ## 1 Initial call
@@ -315,28 +316,6 @@ matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
 ./compare.dups.consistency.R path_input cohort_name path_output
 ```
 ## Example
-here, we supply a samll test example for user to test.
 
-copy all the scripts and data folder in test working folder.
-
-### test ensembleCNV
-
-```sh
-mkdir res
-./step.2.ensembleCNV.R \
--i ./test_data_ensembleCNV/cnvr1.ipattern.rds \
--p ./test_data_ensembleCNV/cnvr1.penncnv.rds \
--q ./test_data_ensembleCNV/cnvr1.quantisnp.rds \
--s ./test_data_ensembleCNV/SNP.cnvr1.pfb \
--c ./test_data_ensembleCNV/chr_centromere_hg19.rds \
--o ./res
-```
-
-### test regenotype
-
-```sh
-mkdir script; cp 04_genotype/script/* .
-```
-and, run test_regenotype.R line by line to generate regenotype copyt number results.
-
+We provide examples for three major parts of the pipeline: [CNVR creating](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR), [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype), and [boundary refinement](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement). 
 
