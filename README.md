@@ -264,18 +264,19 @@ In current implementation, boundary refinement for CNVRs within different chromo
 
 Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory:
 
-  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
+  - `SNP.pfb` (prepared when running PennCNV; containing chromosome and position information for each probe)
   - `cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
   - `matrix_CN.rds` (matrix of CN genotype with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
-  - `matrix_GQ.rds` (matrix of CN GQ score with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
+  - `matrix_GQ.rds` (matrix of GQ score with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
 
 (1) Select CNVRs with common CNV genotype to be refined.
 ```sh
 Rscript step.1.common.CNVR.to.refine.R \
 --datapath /path/to/data/ \ ## the above input files are all placed in this folder
---resultpath /sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/mid_res/ \ ## directory to save results
+--resultpath /path/to/results/ \ ## directory to save results
 --freq 0.05 # frequency cut-off based on which common CNVRs will be selected
 ```
+The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `/path/to/results/` directory.
 
 (2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
 
