@@ -22,7 +22,6 @@ The detailed step-by-step instructions are listed as follows.
 - [4 CNV genotyping for each CNVR](#4-cnv-genotyping-for-each-cnvr)
 - [5 Boundary refinement](#5-boundary-refinement)
 - [6 Performance assessment](#6-performance-assessment)
-  - [compare duplicate pairs consistency rate](#compare-duplicate-pairs-consistency-rate)
 - [Example](#example)
   - [Create CNVR](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR)
   - [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype)
