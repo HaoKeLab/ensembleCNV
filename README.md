@@ -260,7 +260,7 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 For a CNVR with common CNV genotype (e.g., more than 5% of CNV carriers at the CNVR), the LRR signals would be highly correlated across individuals among involved probes. We can take advantage of this structure to further refine CNVR boundaries. In other words, we are able to find a sub-block of high correlations within a local correlation matrix. When the refined boundaries are different from the initial ones, the probes falling within the range of updated boundaries will change. We need to update the local likelihood model and re-do the CNV genotyping step. If several CNVRs share the exact boundaries after boundary refinement, they will be collapsed into one. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-In current implementation, boundary refinement for CNVRs within different chromosomes are performed in parallel. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). The main script `CNVR.boundary.refinement.R` does boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`.
+In current implementation, boundary refinement for CNVRs within different chromosomes are performed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). The main script `CNVR.boundary.refinement.R` does boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`.
 
 Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory:
 
@@ -296,10 +296,19 @@ When this step is finished, several subdirectories are expected to be generated 
   - `log` (log files for submitted jobs)
 
 (3) Combine results from parallelized jobs.
-
+```sh
+Rscript step.3.clean.results.R \
+--resultpath /path/to/results/
+```
 
 (4) Update CN and GQ matrices as well as CNVR information.
-
+```sh
+Rscript step.4.update.genotype.matrix.R \
+--matrixbeforerefine /path/to/data/ \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here (see above)
+--matrixrefine /path/to/regenotyped CN and GQ matrices/ \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
+--refinepath /path/to/results/ \  ## where cnvr_kept_after_refine.txt is located
+--output /path/to/final results/  ## path to save final results
+```
 
 ## 6 Performance assessment
 
