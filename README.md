@@ -272,14 +272,28 @@ Running boundary refinement in parallel is implemented in the following four ste
 (1) Select CNVRs with common CNV genotype to be refined.
 ```sh
 Rscript step.1.common.CNVR.to.refine.R \
---datapath /path/to/data/ \ ## the above input files are all placed in this folder
---resultpath /path/to/results/ \ ## directory to save results
---freq 0.05 # frequency cut-off based on which common CNVRs will be selected
+--datapath /path/to/data/ \  ## the above input files are all placed in this folder
+--resultpath /path/to/results/ \  ## directory to save results
+--freq 0.05  ## frequency cut-off based on which common CNVRs will be selected
 ```
-The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `/path/to/results/` directory.
+The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype based on data from `matrix_CN.rds`, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `/path/to/results/` directory.
 
 (2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
+```sh
+Rscript step.2.submit.jobs.R \
+--datapath /path/to/data/ \  ## the above input files are all placed in this folder
+--resultpath /path/to/results/ \  ## directory to save results
+--matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
+--refinescript /path/to/CNVR.boundary.refinement.R \  ## the main script for boundary refinement
+--rcppfile /path/to/refine.cpp \  ## the C++ code for sub-block searching in local correlation matrix
+--centromere /path/to/chromosome_centromere_file \  ## the information can be found in UCSC genome browser
+--plot  ## (optional) indicates whether diagnosis plots to be generated
+```
 
+When this step is finished, several subdirectories are expected to be generated in each `res_refine/chr*` directory:
+  - `data` (refined boundary information for each CNVR)
+  - `png` (diagnosis plots generated in "png" format)
+  - `log` (log files for submitted jobs)
 
 (3) Combine results from parallelized jobs.
 
