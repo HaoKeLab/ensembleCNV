@@ -262,16 +262,29 @@ For a CNVR with common CNV genotype (e.g., more than 5% of CNV carriers at the C
 
 In current implementation, boundary refinement for CNVRs within different chromosomes are performed in parallel. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). The main script `CNVR.boundary.refinement.R` does boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`.
 
-Running CNV genotyping in parallel is implemented in the following four steps.
+Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory:
 
-There are 5 steps in boundary refinement, as following:
+  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
+  - `cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
+  - `matrix_CN.rds` (matrix of CN genotype with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
+  - `matrix_GQ.rds` (matrix of CN GQ score with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
 
-All scripts are in folder 05_boundary_refinement.
-
-The main part is script named as step.2.boundary_refinement.R:
+(1) Select CNVRs with common CNV genotype to be refined.
 ```sh
-./step.2.boundary_refinement.R --help for detail
+Rscript step.1.common.CNVR.to.refine.R \
+--datapath /path/to/data/ \ ## the above input files are all placed in this folder
+--resultpath /sc/orga/projects/haok01a/chengh04/paper/ensembleCNV_code_test/test/05_boundary_refinement/mid_res/ \ ## directory to save results
+--freq 0.05 # frequency cut-off based on which common CNVRs will be selected
 ```
+
+(2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
+
+
+(3) Combine results from parallelized jobs.
+
+
+(4) Update CN and GQ matrices as well as CNVR information.
+
 
 ## 6 Performance assessment
 
