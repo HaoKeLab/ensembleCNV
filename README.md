@@ -300,6 +300,12 @@ When this step is finished, several subdirectories are expected to be generated 
 Rscript step.3.clean.results.R \
 --resultpath /path/to/results/
 ```
+When this step is finished, three files are expected to be generated in the result folder:
+  - `cnvr_kept_after_refine.txt`
+  - `cnvr_refined_after_refine.txt`
+  - `cnvr_regenotype_after_refine.txt`
+
+The information of rare CNVRs with CNV genotype frequency less than the cut-off will be saved in `cnvr_kept_after_refine.txt`. Some of common CNVRs go through the boundary refinement procedure, but their boundaries may remain the same, suggesting the boundaries constructed from the "create CNVR" step are correct and do not need to be updated -- the information of common CNVRs falling in this category will also be saved in `cnvr_kept_after_refine.txt`. Among CNVRs with updated boundaries, two further checking steps will be performed: a) If several CNVRs share the exact boundaries, they will be collapsed into one; b) If a CNVR has the exactt boundaries as one in `cnvr_kept_after_refine.txt`, it will be removed from the list. The remaining CNVRs will be saved in `cnvr_refined_after_refine.txt`, from which a new table of the similar format as `cnvr_clean.txt` (generated in "create CNVR" step) will be generated with updated boundary information in columns `posStart`, `posEnd`, `snp_start` and `snp_end`, and be saved in `cnvr_regenotype_after_refine.txt`. The CNVRs in `cnvr_regenotype_after_refine.txt` will need to go through all the steps in "CNV genotyping" step to update relevant CN and GQ matrices, as the probes involved in each of these CNVRs are altered after boundary refinement. As a result, the total number of CNVRs may be slightly reduced after boundary refinement and CNV regenotyping steps.
 
 (4) Update CN and GQ matrices as well as CNVR information.
 ```sh
@@ -309,6 +315,14 @@ Rscript step.4.update.genotype.matrix.R \
 --refinepath /path/to/results/ \  ## where cnvr_kept_after_refine.txt is located
 --output /path/to/final results/  ## path to save final results
 ```
+
+When this step is finished, three files are expected to be generated in the result folder:
+  - `matrix_CN_final.rds`
+  - `matrix_GQ_final.rds`
+  - `cnvr_final.txt`
+
+In this step, the subset of CN and GQ matrices for CNVRs in `cnvr_kept_after_refine.txt` will be extracted, and combined with those generated for the CNVRs subject to re-genotyping (see above). The combined matrices are saved in `matrix_CN_final.rds` and `matrix_GQ_final.rds`. The information for the combined list of CNVRs is saved in `cnvr_final.txt`.
+
 
 ## 6 Performance assessment
 
