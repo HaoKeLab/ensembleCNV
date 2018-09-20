@@ -323,6 +323,7 @@ When this step is finished, three files are expected to be generated in the resu
 
 In this step, the subset of CN and GQ matrices for CNVRs in `cnvr_kept_after_refine.txt` will be extracted, and combined with those generated for the CNVRs subject to re-genotyping (see above). The combined matrices are saved in `matrix_CN_final.rds` and `matrix_GQ_final.rds`. The information for the combined list of CNVRs is saved in `cnvr_final.txt`.
 
+We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement) of input and output files for this step at one sample CNVR.
 
 ## 6 Performance assessment
 
