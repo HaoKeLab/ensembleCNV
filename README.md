@@ -327,17 +327,35 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 ## 6 Performance assessment
 
-summary compare results between all CNV calling methods with ensembleCNV method.
-copy all following files to path_input:
-dup_samples.rds with columns: sample1.name, sample1.name
-matrix_iPattern.rds; matrix_PennCNV.rds; matrix_QuantiSNP.rds; 
-matrix_IPQ_intersect.rds; matrix_IPQ_union.rds; matrix_ensembleCNV.rds
+In large-scale genetic studies, for QC purposes in SNP genotyping, technical duplicates are often available. The concordance rate of CNV calls in duplicated pairs, i.e. the reproducibility, can be used as a surrogate of accuracy measurement. In ensembleCNV, we define the genotyping quality (GQ) score to quantify the confidence of the CN genotype assigned to each individual at each CNVR. As the GQ score threshold increases, the concordance rate constantly increases at the cost of decreased sample-wise and CNVR-wise call rates. The users can select a GQ score threshold to achieve a balance between concordance rate and call rate. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-### compare duplicate pairs consistency rate
+When technical duplicates are available, we can use the following 
+
+(1) Evaluate concordance rate of CNV calls between technical duplicates as well as sample-wise and CNVR-wise call rates.
 
 ```sh
-./compare.dups.consistency.R path_input cohort_name path_output
+Rscript step.1.performance.assessment.R \
+--duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
+--matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
+--matrixGQ /path/matrix_GQ_final.rds \ ## GQ matrix generated in "boundary refinement" step (see above)
+--resultpath /path/to/results/  ## path to directory for saving results
 ```
+When this step is finished, two files will be generated in results folder:
+ - `performance_assessment.rds` (concordance rate, number of CNVRs, sample-wise call rate and CNVR-wise call rate at different GQ score thresholds)
+ - `performance_assessment.png` (visualization of information in `performance_assessment.rds`, based on which the users can choose a GQ score threhold to achieve desirable between concordance rate and call rate)
+
+(2) Set GQ score threshold to generate final results.
+```sh
+Rscript step.1.performance.assessment.R \
+--duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
+--matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
+--matrixGQ /path/matrix_GQ_final.rds \ ## GQ matrix generated in "boundary refinement" step (see above)
+--resultpath /path/to/results/  ## path to directory for saving results
+```
+
+
+
+
 ## Example
 
 We provide examples for three major parts of the pipeline: [CNVR creating](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR), [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype), and [boundary refinement](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement). 
