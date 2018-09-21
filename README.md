@@ -329,10 +329,9 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 In large-scale genetic studies, for QC purposes in SNP genotyping, technical duplicates are often available. The concordance rate of CNV calls in duplicated pairs, i.e. the reproducibility, can be used as a surrogate of accuracy measurement. In ensembleCNV, we define the genotyping quality (GQ) score to quantify the confidence of the CN genotype assigned to each individual at each CNVR. As the GQ score threshold increases, the concordance rate constantly increases at the cost of decreased sample-wise and CNVR-wise call rates. The users can select a GQ score threshold to achieve a balance between concordance rate and call rate. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-When technical duplicates are available, we can use the following 
-
 (1) Evaluate concordance rate of CNV calls between technical duplicates as well as sample-wise and CNVR-wise call rates.
 
+When technical duplicates are available, we can use the following script to evaluate the quality of CNV calls.
 ```sh
 Rscript step.1.performance.assessment.R \
 --duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
@@ -346,8 +345,8 @@ When this step is finished, two files will be generated in results folder:
 
 (2) Set GQ score threshold to generate final results.
 ```sh
-Rscript step.1.performance.assessment.R \
---duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
+Rscript step.2.set.GQ.generate.results.R \
+
 --matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
 --matrixGQ /path/matrix_GQ_final.rds \ ## GQ matrix generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
