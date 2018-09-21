@@ -336,7 +336,7 @@ When technical duplicates are available, the users can use the following script 
 Rscript step.1.performance.assessment.R \
 --duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
 --matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
---matrixGQ /path/matrix_GQ_final.rds \ ## GQ matrix generated in "boundary refinement" step (see above)
+--matrixGQ /path/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
 ```
 When this step is finished, two files will be generated in results folder:
@@ -344,17 +344,20 @@ When this step is finished, two files will be generated in results folder:
  - `performance_assessment.png` (visualization of information in `performance_assessment.rds`, based on which the users can choose a GQ score threhold to achieve desirable between concordance rate and call rate)
 
 When technical duplicates are not available, the users can skip step (1) and choose an empirical GQ score threshold directly. 
+
 (2) Set GQ score threshold to generate final results.
 ```sh
 Rscript step.2.set.GQ.generate.results.R \
-
 --matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
---matrixGQ /path/matrix_GQ_final.rds \ ## GQ matrix generated in "boundary refinement" step (see above)
+--matrixGQ /path/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
+--cnvrfile /path/to/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
+--gqscore [INT]  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
 ```
-
-
-
+When this step is finished, three files will be generated in results folder:
+ - `matrix_CN_after_GQ.rds` (CN matrix with rows as CNVRs and columns as samples; the CN values associated with GQ < threshold are set as missing value, which is indicated by -9)
+ - `cnvr_after_GQ.txt` (CNVR information and summary statistics; CNVRs with no CNV calls (i.e. no CN = 0, 1, 3) are excluded)
+ - `sample_after_GQ.txt`(sample information and summary statistics)
 
 ## Example
 
