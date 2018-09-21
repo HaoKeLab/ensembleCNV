@@ -1,4 +1,0 @@
-sub("\\.txt$", ".list", "abc.txt")
-?colMeans
-?prcomp
-?predict.prcomp
