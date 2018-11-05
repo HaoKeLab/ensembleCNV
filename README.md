@@ -58,7 +58,7 @@ path_to_LRR_BAF_matrices
 ```
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
-Rscript tranform_from_tab_to_rds.R path_input path_output chr_start chr_end
+Rscript transform_from_tab_to_rds.R path_input path_output chr_start chr_end
 ```
 Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step.
 
