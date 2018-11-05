@@ -140,9 +140,40 @@ while($line = <REPORT>) {
 			}
 
 			$combine_chr_snp = join("___", @array_chr_snp);
-						
-			die "chr $item snp number are not same $snp_chr_number{$item}" unless (scalar(@array_chr_snp) == $snp_chr_number{$item});
-			die "chr $item snp name are not same" unless ($combine_chr_snp eq $snp_chr_name{$item}); 
+
+            ## 2018-11-05 haoxiang ##
+			$n_sample = keys %samples;
+			if ( $n_sample > 1) {
+				die "chr $item snp number are not same $snp_chr_number{$item}" unless (scalar(@array_chr_snp) == $snp_chr_number{$item});
+				die "chr $item snp name are not same" unless ($combine_chr_snp eq $snp_chr_name{$item}); 
+			}			
+			
+			if ( $n_sample == 1) {
+
+				$combine_chr_snp = join("___", @array_chr_snp);
+
+				$snp_chr_number{$item} = scalar(@array_chr_snp);
+				$snp_chr_name{$item} = $combine_chr_snp;
+
+				open($fh_snp_number, ">$file_snps_number");
+				foreach my $item_chr (keys %snp_chr_number) {
+					print $fh_snp_number "$item_chr\t$snp_chr_number{$item_chr}\n";
+				}
+				close $fh_snp_number;
+
+				open($fh_snp_name, ">$file_snps_name");
+				foreach my $item_chr (keys %snp_chr_name) {
+					print $fh_snp_name "$item_chr\t$snp_chr_name{$item_chr}\n";
+				}
+				close $fh_snp_name;
+
+				open($fh_snp_position, ">$file_snps_position");
+				foreach my $item_snp (keys %snp_chr_position) {
+					print $fh_snp_position "$item_snp\t$snp_chr_position{$item_snp}\n";
+				}
+				close $fh_snp_position;
+			}
+			## end ##
 
 			my $chr_LRR = join("\t", $sample_before, join("\t", @array_chr_LRR));
 			my $chr_BAF = join("\t", $sample_before, join("\t", @array_chr_BAF));

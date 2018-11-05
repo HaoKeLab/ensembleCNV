@@ -18,8 +18,8 @@ chr_end     <- as.integer(args[4])  ## end chr
 
 
 # create LRR/BAF folder ---------------------------------------------------/
-if ( !dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"))
-if ( !dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"))
+if ( !dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"), recursive = TRUE)
+if ( !dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"), recursive = TRUE)
 
 # read in annotate files --------------------------------------------------/
 dat_snpName = fread( input = file.path(path_input, "snps_name.txt"), header = FALSE)
@@ -67,8 +67,8 @@ for ( chr1 in chr_start:chr_end ) {
   names(dat_chr1_LRR) <- snp1
   names(dat_chr1_BAF) <- snp1
   
-  dat_chr1_LRR <- dat_chr1_LRR[, snp1_order]
-  dat_chr1_BAF <- dat_chr1_BAF[, snp1_order]
+  dat_chr1_LRR <- dat_chr1_LRR[, snp1_order, drop = FALSE]
+  dat_chr1_BAF <- dat_chr1_BAF[, snp1_order, drop = FALSE]
  
   saveRDS( dat_chr1_LRR, file = file.path(path_output, "LRR", paste0("matrix_chr_", chr1, "_LRR.rds")))
   saveRDS( dat_chr1_BAF, file = file.path(path_output, "BAF", paste0("matrix_chr_", chr1, "_BAF.rds")))
