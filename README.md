@@ -58,9 +58,13 @@ path_to_LRR_BAF_matrices
 ```
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
-Rscript transform_from_tab_to_rds.R path_input path_output chr_start chr_end
+Rscript transform_from_tab_to_rds.R \
+path_input \
+path_output \
+chr_start \
+chr_end
 ```
-Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step.
+Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step; `path_output` is the path to the directory to save output data; `chr_start` and `chr_end` indicate the data from which chromosomes will be processed (e.g., chr 1 ~ 22).
 
 When finishing running the scripts, there will be two folders `LRR` and `BAF` created under `path_to_LRR_BAF_matrices`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
