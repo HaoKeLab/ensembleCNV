@@ -48,7 +48,7 @@ The raw data needs to be converted into proper format required by ensembleCNV as
 
 ### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
-We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes.
+We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes. Note: the perl code is designed to process a final report file with multiple samples and is supposed to run on perl version 5.22+ (The latest version of perl can be found at [http://www.perl.org/](http://www.perl.org/)).
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```perl
