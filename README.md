@@ -46,7 +46,7 @@ The detailed step-by-step instructions are listed as follows.
   - plyr (1.8.4+)
   - RColorBrewer (1.1-2+) 
   - Rcpp (0.12.17+)
-- Perl (5.22.2+) (https://www.perl.org/about.html)
+- Perl (5.22.2+) (https://www.perl.org/)
 
 ## 1 Initial call
 
