@@ -54,7 +54,7 @@ Note: The scripts of ensembleCNV have been developed and tested on [Minerva](htt
 ### Installation
 
 ```sh
-git clone --recursive git@https://github.com/HaoKeLab/ensembleCNV
+git clone https://github.com/HaoKeLab/ensembleCNV
 ```
 
 ## 1 Initial call
