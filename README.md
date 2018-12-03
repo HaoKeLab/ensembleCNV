@@ -81,7 +81,9 @@ In the GenomeStudio, the exported final report text file is supposed to include 
   - Log R Ratio (used by PennCNV, QuantiSNP, and ensembleCNV)
   - B Allele Freq (used by PennCNV, QuantiSNP, and ensembleCNV)
 
-Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may be already prepared by the investigators ahead of time (i.e., this is typical the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators.
+Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may be already prepared by the investigators ahead of time (i.e., this is typical the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
+
+
 
 The raw data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
