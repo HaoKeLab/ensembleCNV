@@ -61,7 +61,7 @@ Note:
 ```sh
 git clone https://github.com/HaoKeLab/ensembleCNV
 ```
-The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts run for each step in different folders. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow.
+The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow.
 
 Please go through the detailed step-by-step instructions as follows.
 
