@@ -8,8 +8,6 @@ More details can be found in the manuscript:
 
 Zhongyang Zhang, Haoxiang Cheng, Xiumei Hong, Antonio F. Di Narzo, Oscar Franzen, Shouneng Peng, Arno Ruusalepp, Jason C. Kovacic, Johan LM Bjorkegren, Xiaobin Wang, Ke Hao (2018) EnsembleCNV: An ensemble machine learning algorithm to identify and genotype copy number variation using SNP array data. bioRxiv 356667; doi: https://doi.org/10.1101/356667 
 
-The detailed step-by-step instructions are listed as follows.
-
 ## Table of Contents
 
 - [Installation](#installation)
@@ -49,13 +47,16 @@ The detailed step-by-step instructions are listed as follows.
 - Perl (5.22.2+) (https://www.perl.org/)
 - Each of the 3 third-source CNV callers has its own installation requirements. Please refer to their specific installation instructions: [iPattern](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern), [PennCNV](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_PennCNV) and [QuantiSNP](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_QuantiSNP).
 
-Note: The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted your specific computational environment.
+Note: The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted to your specific computational environment.
 
 ### Installation
 
 ```sh
 git clone https://github.com/HaoKeLab/ensembleCNV
 ```
+The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts run for each step in different folders. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow.
+
+The detailed step-by-step instructions are listed as follows.
 
 ## 1 Initial call
 
