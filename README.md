@@ -52,7 +52,7 @@ The scripts are in its beta version. Please report bugs and issues or provide su
 
 Note: 
 
-- The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted to your specific computational environment. Running the whole pipeline on a Linux workstation may be possible, but may take much longer time and sometimes may be infeasible, especially for large projects with thousands to tens of thousands of samples (i.e., typical GWAS data).
+- The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted to your specific computational environment. Running the whole pipeline on a Linux workstation may be theorectically possible, but may take much longer time and sometimes may be computationally infeasible, especially for large projects with thousands to tens of thousands of samples (i.e., typical GWAS data).
 
 - Please be advised that ensembleCNV is designed to detect and genotype CNVs on a relatively large cohort usually consists of at least a few hundred samples. In particular, the steps [Creating CNVR](#3-create-cnvr), [CNV genotyping for each CNVR](#4-cnv-genotyping-for-each-cnvr), and [Boundary refinement](#5-boundary-refinement) requires relatively large sample size to achieve a reasonable call rate and accuracy. Results generated from only a few samples are not valid.  
 
@@ -83,9 +83,9 @@ In the GenomeStudio, the exported final report text file is supposed to include 
 
 Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
 
-Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Such a table can be downloaded from UCSC genome browser at here.
+Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere postion for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
 
-The raw data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
+The raw final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
 ### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
