@@ -12,6 +12,7 @@ The detailed step-by-step instructions are listed as follows.
 
 ## Table of Contents
 
+- [Installation](#installation)
 - [1 Initial call](#1-initial-call)
   - [Prepare chromosome-wise LRR and BAF matrices for CNV genotyping](#prepare-chromosome-wise-lrr-and-baf-matrices-for-cnv-genotyping)
   - [Prepare data for individual CNV callers](#prepare-data-for-individual-cnv-callers)
@@ -27,6 +28,25 @@ The detailed step-by-step instructions are listed as follows.
   - [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype)
   - [Boundary refinement](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement)
 
+## Installation
+
+### Requirements
+
+- R (3.3.1+) (https://www.r-project.org/) with the following packages:
+  - cowplot (0.9.2+)
+  - data.table (1.10.4-3+)
+  - dplyr (0.7.4+)
+  - ggplot2 (3.0.0+)
+  - gridExtra (2.3+)
+  - mclust (5.4+)
+  - mixtools (1.1.0+)
+  - modeest (2.1+)
+  - optparse (1.3.2+)
+  - pheatmap (1.0.8+)
+  - plyr (1.8.4+)
+  - RColorBrewer (1.1-2+) 
+  - Rcpp (0.12.17+)
+- Perl (5.22.2+) (https://www.perl.org/about.html)
 
 ## 1 Initial call
 
