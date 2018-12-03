@@ -8,6 +8,8 @@ More details can be found in the manuscript:
 
 Zhongyang Zhang, Haoxiang Cheng, Xiumei Hong, Antonio F. Di Narzo, Oscar Franzen, Shouneng Peng, Arno Ruusalepp, Jason C. Kovacic, Johan LM Bjorkegren, Xiaobin Wang, Ke Hao (2018) EnsembleCNV: An ensemble machine learning algorithm to identify and genotype copy number variation using SNP array data. bioRxiv 356667; doi: https://doi.org/10.1101/356667 
 
+The scripts are in its beta version. Please report bugs and issues or provide suggestions at [here](https://github.com/HaoKeLab/ensembleCNV/issues).
+
 ## Table of Contents
 
 - [Installation](#installation)
