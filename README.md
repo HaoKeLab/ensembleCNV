@@ -47,6 +47,7 @@ The detailed step-by-step instructions are listed as follows.
   - RColorBrewer (1.1-2+) 
   - Rcpp (0.12.17+)
 - Perl (5.22.2+) (https://www.perl.org/)
+- Each of the 3 third-source CNV callers has its own installation requirements. Please refer to their specific installation instructions: [iPattern](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern), [PennCNV](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_PennCNV) and [QuantiSNP](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_QuantiSNP).
 
 ## 1 Initial call
 
