@@ -46,10 +46,15 @@ The scripts are in its beta version. Please report bugs and issues or provide su
   - plyr (1.8.4+)
   - RColorBrewer (1.1-2+) 
   - Rcpp (0.12.17+)
+  - RcppArmadillo (0.7.500.0.0+)
 - Perl (5.22.2+) (https://www.perl.org/)
 - Each of the 3 third-source CNV callers has its own installation requirements. Please refer to their specific installation instructions: [iPattern](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern), [PennCNV](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_PennCNV) and [QuantiSNP](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_QuantiSNP).
 
-Note: The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted to your specific computational environment.
+Note: 
+
+- The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation need to be adjusted to your specific computational environment. Running the whole pipeline on a Linux workstation may be possible, but may take much longer time, especially for large projects with thousands to tens of thousands of samples.
+
+- Please be advised ensembleCNV is designed to detect and genotype CNVs on a relatively large cohort usually consists of at least a few hundred samples. 
 
 ### Installation
 
@@ -58,7 +63,7 @@ git clone https://github.com/HaoKeLab/ensembleCNV
 ```
 The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts run for each step in different folders. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow.
 
-The detailed step-by-step instructions are listed as follows.
+Please go through the detailed step-by-step instructions as follows before using the pipeline.
 
 ## 1 Initial call
 
@@ -76,7 +81,9 @@ In the GenomeStudio, the exported final report text file is supposed to include 
   - Log R Ratio (used by PennCNV, QuantiSNP, and ensembleCNV)
   - B Allele Freq (used by PennCNV, QuantiSNP, and ensembleCNV)
 
-The raw data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers (see below).
+Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. 
+
+The raw data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
 ### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
