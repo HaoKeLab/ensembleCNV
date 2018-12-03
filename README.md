@@ -83,13 +83,13 @@ In the GenomeStudio, the exported final report text file is supposed to include 
 
 Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
 
-Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere postion for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
+Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
 
 The raw final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
 ### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
-We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes. Note: the perl code is designed to process a final report file with multiple samples. Although the code can accommodate a final report file with one or a few samples, the output files are not meaningful for downstream analysis.
+We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/finalreport_to_matrix_LRR_and_BAF) to extract LRR and BAF information from final report, combine them across individuals and divide them by chromsomes. Note: the perl code is designed to process a final report file with multiple samples. Although the code can accommodate a final report file with one or a few samples, the output files in the case are not meaningful for downstream analysis.
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```perl
