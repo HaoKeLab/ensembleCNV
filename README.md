@@ -220,12 +220,12 @@ After finishing this step, three tab-delimited tables for each respective method
 
 (2) Merge CNV calls from individual methods into CNVRs
 ```sh
-Rscript step.2.create.CNVR.R \
---icnv /path/to/iPattern_CNV_call \   ## generated in step (1)
---pcnv /path/to/PennCNV_CNV_call \
---qcnv /path/to/QuantiSNP_CNV_call \
---snp /path/to/SNP_position_file \   ## SNP.pfb for PennCNV analysis can serve for SNP position
---centromere /path/to/chromosome_centromere_file   ## the information can be found in UCSC genome browser
+Rscript ${WKDIR}/03_create_CNVR/step.2.create.CNVR.R \
+--icnv ${WKDIR}/03_create_CNVR/cnv.ipattern.txt \
+--pcnv ${WKDIR}/03_create_CNVR/cnv.penncnv.txt \
+--qcnv ${WKDIR}/03_create_CNVR/cnv.quantisnp.txt \
+--snp ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt \
+--centromere ${WKDIR}/data/centromere_hg19.txt   ## for other assemblies, check UCSC genome browser (see above)
 ```
 Two tab-delimited tables will be generated in this step: i) `cnvr_clean.txt` with the information for each constructed CNVR; ii) `cnv_clean.txt` with the information for each CNV calls from individual methods, including which CNVR each CNV belongs to.
 
