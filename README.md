@@ -235,11 +235,11 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 The initial CNV calls within a CNVR may be mixed with false positives and false negatives from the initial call set. Moreover, the baseline LRR value corresponding to normal CN status may substantially deviate from 0, violating the essential model assumptions for individual-wise CNV callers (e.g., PennCNV and QuantiSNP). To address these issues, we re-genotyped CN status per individual at each CNVR by a locally fitted likelihood model, with information from other CNVRs borrowed for the initialization of model parameters. Both the LRR and BAF signals from SNP probes and the LRR signal from CNV probes within a particular CNVR were used for model fitting. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-In current implementation, `CNV.genotype.one.chr.one.batch.R` is the main script that performs CNV genotyping on one batch of CNVRs at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts) when being run in an R seesion. The main script can genotype one CNVR at a time (i.e., a batch of only one CNVR) (see this [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype))
+In current implementation, `CNV.genotype.one.chr.one.batch.R` is the main script that performs CNV genotyping on one batch of CNVRs at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts). The main script can genotype one CNVR at a time (i.e., a batch of only one CNVR). Please see this [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype). 
 
-We split the core scripts and the platform-specific scripts ()
+Note: We split the core scripts and the platform-specific workflow scripts (see below) in order to provide flexibity for users to develop their own workflow scripts specific to their particular platform, especially when a high-performance cluster is not accessible to the users. 
 
-CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
+Here, we provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
 
 Running CNV genotyping in parallel is implemented in the following four steps.
 
