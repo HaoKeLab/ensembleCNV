@@ -62,7 +62,7 @@ Note:
 ```sh
 git clone https://github.com/HaoKeLab/ensembleCNV
 ```
-The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow.
+The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder struture to organize the data and analysis workflow. Assume `WKDIR=/path/to/working_directory`.
 
 Please go through the detailed step-by-step instructions as follows.
 
@@ -85,6 +85,8 @@ With the GenomeStudio, the exported final report text file is supposed to includ
 Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
 
 Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
+
+Please put finalreport file (e.g. "final_report.txt") and sample table (e.g. "Samples_Table.txt") in the folder `${WKDIR}/data`.
 
 The raw final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
