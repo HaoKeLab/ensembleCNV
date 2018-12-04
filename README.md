@@ -403,7 +403,7 @@ Rscript ${WKDIR}/06_performance_assessment/step.2.set.GQ.generate.results.R \
 --matrixCN ${WKDIR}/05_boundary_refinement/results/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
 --matrixGQ ${WKDIR}/05_boundary_refinement/results/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
 --cnvrfile ${WKDIR}/05_boundary_refinement/results/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
---resultpath /path/to/results/  ## path to directory for saving results
+--resultpath ${WKDIR}/06_performance_assessment  ## path to directory for saving results
 --gqscore <INT>  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
 ```
 When this step is finished, three files will be generated in results folder:
