@@ -387,9 +387,9 @@ When technical duplicates are available, the users can use the following script 
 ```sh
 Rscript ${WKDIR}/06_performance_assessment/step.1.performance.assessment.R \
 --duplicates ${WKDIR}/data/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
---matrixCN ${WKDIR}/05_boundary_refinement/resultsmatrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
---matrixGQ ${WKDIR}/05_boundary_refinement/resultsmatrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
---resultpath /path/to/results/  ## path to directory for saving results
+--matrixCN ${WKDIR}/05_boundary_refinement/results/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
+--matrixGQ ${WKDIR}/05_boundary_refinement/results/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
+--resultpath ${WKDIR}/06_performance_assessment  ## path to directory for saving results
 ```
 When this step is finished, two files will be generated in results folder:
  - `performance_assessment.rds` (concordance rate, number of CNVRs, sample-wise call rate and CNVR-wise call rate at different GQ score thresholds)
@@ -399,10 +399,10 @@ When technical duplicates are not available, the users can skip step (1) and cho
 
 (2) Set GQ score threshold to generate final results.
 ```sh
-Rscript step.2.set.GQ.generate.results.R \
---matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
---matrixGQ /path/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
---cnvrfile /path/to/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
+Rscript ${WKDIR}/06_performance_assessment/step.2.set.GQ.generate.results.R \
+--matrixCN ${WKDIR}/05_boundary_refinement/results/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
+--matrixGQ ${WKDIR}/05_boundary_refinement/results/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
+--cnvrfile ${WKDIR}/05_boundary_refinement/results/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
 --gqscore <INT>  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
 ```
