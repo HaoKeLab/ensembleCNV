@@ -1,15 +1,15 @@
 #!/usr/bin/env Rscript
 
 # generate the list of 100000 randomly selected SNPs
-# Input is SNP_Map.txt generated from Genome Studio
-# including at least 3 columns: Name, Chromosome, Position
+# Input is SNP_pos.txt
+# including 3 columns: Name, Chr, Position
 
 suppressMessages({
   require( data.table, quietly = TRUE)
 })
 
 args <- commandArgs( trailingOnly = TRUE )
-file_snps <- args[1]   ## SNP_Table.txt file from Genome Studio
+file_snps <- args[1]   ## SNP_pos.txt
 path_output <- args[2] ## path to save randomly selected SNPs
 
 ## sampleing from chr: 1-22

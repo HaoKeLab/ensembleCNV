@@ -108,43 +108,43 @@ Rscript transform_from_tab_to_rds.R \
 --startChr <INT> \ ## default: 1
 --endChr <INT>  ## default: 22
 ```
-Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step; `path_output` is the path to the directory to save output data; `chr_start` and `chr_end` indicate the range of chromosomes (1 <=s startChr <= endChr ) to be processed. By default, all the autosomal chrosomes (chr 1 ~ 22). If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
+`output` is the directory to save LRR and BAF matrices in `.rds` format; `--startChr` and `--endChr` indicate the range of chromosomes (1 <=s startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chrosomes (chr 1 ~ 22) will be processed by default,. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
 Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing CNVs in sex chromosomes is yet to be developed.
 
 When finishing running the scripts, there will be two folders `LRR` and `BAF` created under `path_to_LRR_BAF_matrices`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
-In addition, a text file named "SNP_pos.txt" with `Name`, `Chr`, and `Position` information of each probe will be generated at `path_to_LRR_BAF_matrices`.
+In addition, a text file named "SNP_pos.txt" with `Name`, `Chr`, and `Position` information of each probe will be generated at `${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF` and used in downstream analysis.
 
 ### Prepare data for individual CNV callers
 
-We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/prepare_IPQ_input_file) to extract information from final report and convert the data into the formatted input files required by iPattern, PennCNV and QuantiSNP.
+We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/prepare_IPQ_input_file) to extract information from final report and convert the data into the formatted input files required by iPattern, PennCNV and QuantiSNP. The required columns in final report will be retrived for each CNV caller and split into individual tab-delimited text files, each for one sample. 
 
 #### iPattern
 ```sh
-perl finalreport_to_iPattern.pl \
--prefix path_to_save_ipattern_input_file/ \
+perl ${WKDIR}/01_initial_call/prepare_IPQ_input_file/finalreport_to_iPattern.pl \
+-prefix ${WKDIR}/01_initial_call/run_iPattern/data/ \
 -suffix .txt \
-path_to_finalreport
+${WKDIR}/data/final_report.txt
 ```
 
 #### PennCNV
 ```sh
-perl finalreport_to_PennCNV.pl \
--prefix path_to_save_penncnv_input_file/ \
+perl ${WKDIR}/01_initial_call/prepare_IPQ_input_file/finalreport_to_PennCNV.pl \
+-prefix ${WKDIR}/01_initial_call/run_PennCNV/data/ \
 -suffix .txt \
-path_to_finalreport
+${WKDIR}/data/final_report.txt
 ```
 
 #### QuantiSNP
 ```sh
-perl finalreport_to_QuantiSNP.pl \
--prefix path_to_save_quantisnp_input_file/ \
+perl ${WKDIR}/01_initial_call/prepare_IPQ_input_file/finalreport_to_QuantiSNP.pl \
+-prefix ${WKDIR}/01_initial_call/run_QuantiSNP/data/ \
 -suffix .txt \
-path_to_finalreport
+${WKDIR}/data/final_report.txt
 ```
 
-To run each individual CNV caller, we provide auxiliary scripts for [iPattern](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern), [PennCNV](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_PennCNV) and [QuantiSNP](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_QuantiSNP). We encourage users to consult with the original documents of these methods for more details. 
+To run each individual CNV caller, we provide complimentary scripts for [iPattern](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern), [PennCNV](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_PennCNV) and [QuantiSNP](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_QuantiSNP). We encourage users to consult with the original documents of these methods for more details. 
 
 
 ## 2 Batch effect
@@ -157,26 +157,26 @@ Note: While isolated outliers should be excluded from downstream analysis, if ba
 
 This analysis is implemented in the following 3 steps.
 
-(1) Randomly select 100,000 SNPs based on information from SNP_Map.txt generated from Genome Studio, which is supposed to include at least three columns: Name, Chromosome, Position. The information in SNP_Map.txt can be also retrieved from final report.
+(1) Randomly select 100,000 SNPs based on information from "SNP_pos.txt".
 ```sh
-Rscript step.1.down.sampling.R \
-/path/to/SNP_Map.txt \ ## SNP_Map.txt generated from Genome Studio
-path_to_output
+Rscript ${WKDIR}/02_batch_effect/PCA_on_LRR/step.1.down.sampling.R \
+${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt \
+${WKDIR}/02_batch_effect/PCA_on_LRR    ## path to snps.down.sample.txt
 ```
 
 (2) Extract LRR values at the list of randomly selected SNPs across individuals from final report file generated by Genome Studio.
 ```sh
-perl step.2.LRR.matrix.pl \
-/path/to/snps.down.sample.txt \   ## the list of SNPs generated in step (1)
-/path/to/final_report.txt \       ## generated by Genome Studio
-/path/to/output_LRR_matrix_file
+perl ${WKDIR}/02_batch_effect/PCA_on_LRR/step.2.LRR.matrix.pl \
+${WKDIR}/02_batch_effect/PCA_on_LRR/snps.down.sample.txt \   ## the list of SNPs generated in step (1)
+${WKDIR}/data/final_report.txt \       ## generated by Genome Studio
+${WKDIR}/02_batch_effect/PCA_on_LRR/   ## path to LRR_matrix_for_PCA.txt
 ```
 
 (3) PCA on LRR matrix.
 ```sh
-Rscript step.3.LRR.PCA.R \
-/path/to/wk_dir/ \       ## working directory where the LRR matrix is located and results will be saved for PCA
-filename_of_LRR_matrix   ## the LRR matrix generated in step (2)
+Rscript ${WKDIR}/02_batch_effect/PCA_on_LRR/step.3.LRR.PCA.R \
+${WKDIR}/02_batch_effect/PCA_on_LRR/ \                       ## path to PCA results
+${WKDIR}/02_batch_effect/PCA_on_LRR/LRR_matrix_for_PCA.txt   ## the LRR matrix generated in step (2)
 ``` 
 When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file, and scatter plots of the first three PCs will also be generated. 
 
