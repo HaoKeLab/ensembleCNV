@@ -241,9 +241,9 @@ Running CNV genotyping in parallel is implemented in the following four steps.
 
 (1) Split CNVRs into different batches in each chromosome.
 ```sh
-Rscript step.1.split.cnvrs.into.batches.R \
--i /path/to/cnvr_clean.txt \  ## generated in "create CNVR" step
--o /path/to/data/cnvr_batch.txt \
+Rscript ${WKDIR}/04_CNV_genotype/step.1.split.cnvrs.into.batches.R \
+-i ${WKDIR}/03_create_CNVR/cnvr_clean.txt \  ## generated in "create CNVR" step
+-o ${WKDIR}/04_CNV_genotype/data/cnvr_batch.txt \
 -n 200
 ```
 The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The script goes over the table of CNVRs in `cnvr_clean.txt` generated in the previous "create CNVR" step, appends to the table an additional column indicating the batches each CNVR belongs to, and writes the updated table to tab-delimited file `cnvr_batch.txt`.
@@ -254,20 +254,20 @@ Before running the script below, the following files prepared in previous steps 
 
   - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
   - `cnv_clean.txt` (generated in "create CNVR" step)
-  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, which is generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
+  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
 ```sh
-Rscript step.2.submit.jobs.R \
+Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
 --type 0 \ ## "0" indicates initial submission
---datapath /path/to/data/ \  ## the above input files are all placed in this folder
---resultpath /path/to/results/ \  ## directory to save results
---matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
---sourcefile /path/to/scripts/ \  ## where relavent R functions are placed (see above)
+--datapath ${WKDIR}/04_CNV_genotype/data \        ## the above input files are all placed in this folder
+--resultpath ${WKDIR}/04_CNV_genotype/results/ \  ## directory to save results
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/ \  ## chromosome-wise LRR and BAF matrices generated in the intial step
+--sourcefile ${WKDIR}/04_CNV_genotype/scripts \  ## relavent R functions used by the main script (see above)
 --duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
---plot \  ## (optional) indicates whether diagnosis plots to be generated
---script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
---joblog /path/to/log directory/ ## where jobs log files to be placed
+--plot \        ## (optional) indicates whether diagnosis plots to be generated
+--script ${WKDIR}/04_CNV_genotype \        ## path to main script CNV.genotype.one.chr.one.batch.R
+--joblog ${WKDIR}/04_CNV_genotype/results   ## where jobs log files to be placed
 ```
 
 When this step is finished, several subdirectories are expected to be generated:
@@ -280,23 +280,23 @@ When this step is finished, several subdirectories are expected to be generated:
 
 (3) Check submitted jobs and resubmit failed jobs.
 ```sh
-Rscript step.3.check.and.resubmit.jobs.R \
---datapath /path/to/data/ \  ## the above input files are all placed in this folder
---resultpath /path/to/results/ \  ## directory to save results
---matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
---sourcefile /path/to/scripts/ \  ## where relavent R functions are placed (see above)
+Rscript ${WKDIR}/04_CNV_genotype/step.3.check.and.resubmit.jobs.R \
+--datapath ${WKDIR}/04_CNV_genotype/data \  ## the above input files are all placed in this folder
+--resultpath ${WKDIR}/04_CNV_genotype/results/ \  ## directory to save results
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/ \  ## chromosome-wise LRR and BAF matrices generated in the intial step
+--sourcefile ${WKDIR}/04_CNV_genotype/scripts \  ## relavent R functions used by the main script (see above)
 --duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
---plot \  ## (optional) indicates whether diagnosis plots to be generated
---script /path/to/main script/ \  ## where CNV.genotype.one.chr.one.batch.R is placed
---joblog /path/to/log directory/ \  ## where jobs log files to be placed
+--plot \        ## (optional) indicates whether diagnosis plots to be generated
+--script ${WKDIR}/04_CNV_genotype \          ## path to main script CNV.genotype.one.chr.one.batch.R
+--joblog ${WKDIR}/04_CNV_genotype/results \  ## where jobs log files to be placed
 --flag 1 ##0: only print the status of submitted jobs; 1: resubmit jobs for failed jobs
 ```
 
 (4) Combine results from parallelized jobs
 ```sh
-Rscript step.4.prediction.results.R \
---datapath /path/to/data/ \  ## the above input files are all placed in this folder
---resultpath /path/to/results/  ## directory to save results
+Rscript ${WKDIR}/04_CNV_genotype/step.4.prediction.results.R \
+--datapath ${WKDIR}/04_CNV_genotype/data \  ## the above input files are all placed in this folder
+--resultpath ${WKDIR}/04_CNV_genotype/results  ## directory to save results
 ```
 When this step is finished, four files are expected to be generated in the results folder:
   - `matrix_CN.rds` (matrix of predicted copy number (CN), each row corresponds to a CNVR and each column a sample)
