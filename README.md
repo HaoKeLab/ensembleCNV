@@ -108,7 +108,7 @@ Rscript transform_from_tab_to_rds.R \
 ```
 Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step; `path_output` is the path to the directory to save output data; `chr_start` and `chr_end` indicate the range of chromosomes to be processed. By default, all the autosomal chrosomes (chr 1 ~ 22). If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
-Note: In current version, this code only processes autosomal chromosomes, since we have not developed a module for genotyping CNVs in sex chromosomes in downstream analysis.
+Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing CNVs in sex chromosomes is yet to be developed.
 
 When finishing running the scripts, there will be two folders `LRR` and `BAF` created under `path_to_LRR_BAF_matrices`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
