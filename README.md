@@ -178,7 +178,7 @@ Rscript ${WKDIR}/02_batch_effect/PCA_on_LRR/step.3.LRR.PCA.R \
 ${WKDIR}/02_batch_effect/PCA_on_LRR/ \                       ## path to PCA results
 ${WKDIR}/02_batch_effect/PCA_on_LRR/LRR_matrix_for_PCA.txt   ## the LRR matrix generated in step (2)
 ``` 
-When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file, and scatter plots of the first three PCs will also be generated. 
+When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file ("LRR_PCA_res.txt"), as well as scatter plots of the first three PCs ("LRR_PCA_plots.png"). 
 
 ### PCA on summary statistics
 
@@ -186,19 +186,19 @@ Besides CNV calls, iPattern, PennCNV and QuantiSNP also generate 10 sample-level
 
 (1) Generate iPattern, PennCNV and QuantiSNP sample-level summary statistics.
 ```sh
-Rscript step.1.prepare.stats.R \
-/path/to/iPattern/results/ \
-/path/to/PennCNV/results/ \
-/path/to/QuantiSNP/results/ \
-/path/to/output/  ## saving summary statistics from iPattern, PennCNV and QuantiSNP results
+Rscript ${WKDIR}/02_batch_effect/PCA_on_summary_stats/step.1.prepare.stats.R \
+${WKDIR}/01_initial_call/run_iPattern/results \
+${WKDIR}/01_initial_call/run_PennCNV/results \
+${WKDIR}/01_initial_call/run_QuantiSNP/results \
+${WKDIR}/02_batch_effect/PCA_on_summary_stats  ## summary statistics IPQ.stats.txt from iPattern, PennCNV and QuantiSNP results
 ```
 
 (2) PCA on sample-level summary statistics.
 ```sh
 Rscript step.2.stats.PCA.R \
-/path/to/wk_dir/ ## this is the path to IPQ.stats.txt generated in step (1)
+${WKDIR}/02_batch_effect/PCA_on_summary_stats ## path to IPQ.stats.txt generated in step (1)
 ```
-When the analysis is finished, in the working directory, the PCs of all samples will be saved in tab-delimited text file, and scatter plots of the first three PCs will also be generated. 
+When the analysis is finished, in the working directory, the PCs of all samples will be saved in tab-delimited text file ("IPQ_stats_PCA_res.txt"), as well as scatter plots of the first three PCs ("IPQ_stats_PCA_plots.png"). 
 
 
 ## 3 Create CNVR
