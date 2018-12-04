@@ -34,7 +34,7 @@ if ( !(is.integer(startChr) & is.integer(endChr)) ) {
 }
 
 if ( startChr > endChr | startChr < 1 | endChr > 22 ) {
-  stop("parameters startChr and endChr should satisfy 1 <= startChr < endChr <= 22.")
+  stop("parameters startChr and endChr should satisfy 1 <= startChr <= endChr <= 22.")
 }
 
 chrs <- seq(startChr, endChr)

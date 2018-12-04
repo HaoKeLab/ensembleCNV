@@ -86,7 +86,7 @@ Along with final report file, the users need to prepare a project-specific sampl
 
 Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
 
-Please put finalreport file (e.g. "final_report.txt") and sample table (e.g. "Samples_Table.txt") in the folder `${WKDIR}/data`.
+Please put finalreport file (e.g. named "final_report.txt") and sample table (e.g. named "Samples_Table.txt") in the folder `${WKDIR}/data`.
 
 The raw final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
@@ -96,19 +96,19 @@ We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```perl
-perl finalreport_to_matrix_LRR_and_BAF.pl \
-path_to_finalreport \
-path_to_LRR_BAF_matrices
+perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_to_matrix_LRR_and_BAF.pl \
+${WKDIR}/data/final_report.txt \
+${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
 ```
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
 Rscript transform_from_tab_to_rds.R \
---input path_input \
---oupput path_output \
---startChr chr_start \ ## default: 1
---endChr chr_end  ## default: 22
+--input ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF \
+--output ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \
+--startChr <INT> \ ## default: 1
+--endChr <INT>  ## default: 22
 ```
-Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step; `path_output` is the path to the directory to save output data; `chr_start` and `chr_end` indicate the range of chromosomes to be processed. By default, all the autosomal chrosomes (chr 1 ~ 22). If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
+Here `path_input` is supposed to be `path_to_LRR_BAF_matrices` in the previous step; `path_output` is the path to the directory to save output data; `chr_start` and `chr_end` indicate the range of chromosomes (1 <=s startChr <= endChr ) to be processed. By default, all the autosomal chrosomes (chr 1 ~ 22). If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
 Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing CNVs in sex chromosomes is yet to be developed.
 
