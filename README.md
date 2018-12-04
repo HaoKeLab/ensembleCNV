@@ -250,7 +250,7 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
 
-Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
+Before running the script below, the following files prepared in previous steps need to be copied in the `${WKDIR}/04_CNV_genotype/data` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
 
   - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in this step)
   - `cnv_clean.txt` (generated in "create CNVR" step)
@@ -262,7 +262,7 @@ Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
 --type 0 \ ## "0" indicates initial submission
 --datapath ${WKDIR}/04_CNV_genotype/data \        ## the above input files are all placed in this folder
 --resultpath ${WKDIR}/04_CNV_genotype/results/ \  ## directory to save results
---matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/ \  ## chromosome-wise LRR and BAF matrices generated in the intial step
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## chromosome-wise LRR and BAF matrices generated in the intial step
 --sourcefile ${WKDIR}/04_CNV_genotype/scripts \  ## relavent R functions used by the main script (see above)
 --duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
 --plot \        ## (optional) indicates whether diagnosis plots to be generated
@@ -283,7 +283,7 @@ When this step is finished, several subdirectories are expected to be generated:
 Rscript ${WKDIR}/04_CNV_genotype/step.3.check.and.resubmit.jobs.R \
 --datapath ${WKDIR}/04_CNV_genotype/data \  ## the above input files are all placed in this folder
 --resultpath ${WKDIR}/04_CNV_genotype/results/ \  ## directory to save results
---matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS/ \  ## chromosome-wise LRR and BAF matrices generated in the intial step
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## chromosome-wise LRR and BAF matrices generated in the intial step
 --sourcefile ${WKDIR}/04_CNV_genotype/scripts \  ## relavent R functions used by the main script (see above)
 --duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
 --plot \        ## (optional) indicates whether diagnosis plots to be generated
@@ -314,7 +314,7 @@ For a CNVR with common CNV genotype (e.g., more than 5% of CNV carriers at the C
 
 In current implementation, boundary refinement for CNVRs within different chromosomes are performed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). The main script `CNVR.boundary.refinement.R` does boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`.
 
-Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `/path/to/data/` directory:
+Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `${WKDIR}/05_boundary_refinement/data` directory:
 
   - `SNP.pfb` (prepared when running PennCNV; containing chromosome and position information for each probe)
   - `cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
@@ -323,22 +323,22 @@ Running boundary refinement in parallel is implemented in the following four ste
 
 (1) Select CNVRs with common CNV genotype to be refined.
 ```sh
-Rscript step.1.common.CNVR.to.refine.R \
---datapath /path/to/data/ \  ## the above input files are all placed in this folder
---resultpath /path/to/results/ \  ## directory to save results
+Rscript ${WKDIR}/05_boundary_refinement/step.1.common.CNVR.to.refine.R \
+--datapath ${WKDIR}/05_boundary_refinement/data \  ## the above input files are all placed in this folder
+--resultpath ${WKDIR}/05_boundary_refinement/results \  ## directory to save results
 --freq 0.05  ## frequency cut-off based on which common CNVRs will be selected
 ```
-The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype based on data from `matrix_CN.rds`, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `/path/to/results/` directory.
+The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype based on data from `matrix_CN.rds`, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `${WKDIR}/05_boundary_refinement/results` directory.
 
 (2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
 ```sh
-Rscript step.2.submit.jobs.R \
---datapath /path/to/data/ \  ## the above input files are all placed in this folder
---resultpath /path/to/results/ \  ## directory to save results
---matrixpath /path/to/chromosome wise LRR and BAF matrices/ \  ## generated in the intial step
---refinescript /path/to/CNVR.boundary.refinement.R \  ## the main script for boundary refinement
---rcppfile /path/to/refine.cpp \  ## the C++ code for sub-block searching in local correlation matrix
---centromere /path/to/chromosome_centromere_file \  ## the information can be found in UCSC genome browser
+Rscript ${WKDIR}/05_boundary_refinement/step.2.submit.jobs.R \
+--datapath ${WKDIR}/05_boundary_refinement/data \  ## the above input files are all placed in this folder
+--resultpath ${WKDIR}/05_boundary_refinement/results \  ## directory to save results
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## chromosome-wise LRR and BAF matrices generated in the intial step
+--refinescript ${WKDIR}/05_boundary_refinement/CNVR.boundary.refinement.R \  ## the main script for boundary refinement
+--rcppfile ${WKDIR}/05_boundary_refinement/refine.cpp \  ## the C++ code for sub-block searching in local correlation matrix
+--centromere ${WKDIR}/data/centromere_hg19.txt   ## for other assemblies, check UCSC genome browser (see above)
 --plot  ## (optional) indicates whether diagnosis plots to be generated
 ```
 
@@ -349,8 +349,8 @@ When this step is finished, several subdirectories are expected to be generated 
 
 (3) Combine results from parallelized jobs.
 ```sh
-Rscript step.3.clean.results.R \
---resultpath /path/to/results/
+Rscript ${WKDIR}/05_boundary_refinement/step.3.clean.results.R \
+--resultpath ${WKDIR}/05_boundary_refinement/results/
 ```
 When this step is finished, three files are expected to be generated in the result folder:
   - `cnvr_kept_after_refine.txt`
@@ -361,11 +361,11 @@ The information of rare CNVRs with CNV genotype frequency less than the cut-off 
 
 (4) Update CN and GQ matrices as well as CNVR information.
 ```sh
-Rscript step.4.update.genotype.matrix.R \
---matrixbeforerefine /path/to/data/ \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here (see above)
---matrixrefine /path/to/regenotyped CN and GQ matrices/ \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
---refinepath /path/to/results/ \  ## where cnvr_kept_after_refine.txt is located
---output /path/to/final results/  ## path to save final results
+Rscript ${WKDIR}/05_boundary_refinement/step.4.update.genotype.matrix.R \
+--matrixbeforerefine ${WKDIR}/05_boundary_refinement/data \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here (see above)
+--matrixrefine ${WKDIR}/05_boundary_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
+--refinepath ${WKDIR}/05_boundary_refinement/results \  ## where cnvr_kept_after_refine.txt is located
+--output ${WKDIR}/05_boundary_refinement/results  ## path to save final results
 ```
 
 When this step is finished, three files are expected to be generated in the results folder:
