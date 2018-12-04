@@ -1,25 +1,46 @@
 #!/usr/bin/env Rscript
 
-args <- commandArgs(trailingOnly = TRUE)
-
-## after using perl script to split finalreport into LRR and BAF 'tab' format data
-## transform from .tab format to .rds
-
-
 suppressMessages({
   require(data.table, quietly = TRUE)
   require(tibble, quietly = TRUE)
+  require(optparse, quietly = TRUE)
 })
 
-path_input  <- args[1]  ## path_output from perl code
-path_output <- args[2]  ## path to save .rds data
-chr_start   <- as.integer(args[3])  ## start chr
-chr_end     <- as.integer(args[4])  ## end chr
+option_list = list(
+  make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
+              help = "path of perl code output"),
+  make_option(c("-o", "--output"), action = "store", default = NA, type = "character",
+              help = "path to save .rds file"),
+  make_option(c("-s", "--startChr"), action = "store", default = 1, type = "integer",
+              help = "start Chr name [default %default]"),
+  make_option(c("-d", "--endChr"), action = "store", default = 22, type = "integer",
+              help = "end Chr name [default %default]")
+)
 
+opt <- parse_args(OptionParser(option_list = option_list))
+pars <- c(opt$input, opt$output, opt$startChr, opt$endChr)
 
+if ( any(is.na(pars)) ) {
+  stop("All parameters must be supplied. (--help for detail)")
+}
+
+path_input <- opt$input
+path_output <- opt$output
+startChr <- opt$startChr
+endChr <- opt$endChr
+
+if ( !(is.integer(startChr) & is.integer(endChr)) ) {
+  stop("parameters startChr and endChr must be integer.")
+}
+
+if ( startChr > endChr | startChr < 1 | endChr > 22 ) {
+  stop("parameters startChr and endChr should satisfy 1 <= startChr < endChr <= 22.")
+}
+
+chrs <- seq(startChr, endChr)
 # create LRR/BAF folder ---------------------------------------------------/
-if ( !dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"), recursive = TRUE)
-if ( !dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"), recursive = TRUE)
+if ( !dir.exists(file.path(path_output, "LRR"))) dir.create(path = file.path(path_output, "LRR"), showWarnings = FALSE, recursive = TRUE)
+if ( !dir.exists(file.path(path_output, "BAF"))) dir.create(path = file.path(path_output, "BAF"), showWarnings = FALSE, recursive = TRUE)
 
 # read in annotate files --------------------------------------------------/
 dat_snpName = fread( input = file.path(path_input, "snps_name.txt"), header = FALSE)
@@ -30,11 +51,18 @@ dat_snpNum = fread( input = file.path(path_input, "snps_number.txt"), header = F
 dat_snpNum = as.data.frame( dat_snpNum, stringsAsFactors = FALSE)
 names( dat_snpNum) <- c("Chr", "number")
 
-dat_snpPos = fread( input = file.path(path_input, "snps_position.txt"), header = FALSE)
+dat_snpPos = fread( input = file.path(path_input, "SNP_pos.txt"), header = TRUE)
 dat_snpPos = as.data.frame(dat_snpPos, stringsAsFactors = FALSE)
-names( dat_snpPos) <- c("name", "position")
+names( dat_snpPos) <- c("name", "chr","position")
 
-for ( chr1 in chr_start:chr_end ) {
+dat_samples_order <- read.table(file = file.path(path_input, "samples_order.txt"), 
+                                sep = "\t", header = F, stringsAsFactors = F)
+names(dat_samples_order) <- c("sampleID" ,"order")
+dat_samples_order <- dat_samples_order[order(dat_samples_order$order), ]
+
+for (chr1 in chrs) {
+  
+  cat("chr:", chr1, "\n")
   
   snp1 <- unlist(strsplit( dat_snpName$SNPs[dat_snpName$Chr == chr1], 
                            split = "___", fixed = TRUE))
@@ -63,20 +91,21 @@ for ( chr1 in chr_start:chr_end ) {
   
   stopifnot( ncol(dat_chr1_LRR) == n1 )
   stopifnot( ncol(dat_chr1_BAF) == n1 )
-    
+  
   names(dat_chr1_LRR) <- snp1
   names(dat_chr1_BAF) <- snp1
   
   dat_chr1_LRR <- dat_chr1_LRR[, snp1_order, drop = FALSE]
   dat_chr1_BAF <- dat_chr1_BAF[, snp1_order, drop = FALSE]
- 
+  
+  ## check samples_order
+  stopifnot( all(rownames(dat_chr1_LRR) == dat_samples_order$sampleID) )
+  stopifnot( all(rownames(dat_chr1_BAF) == dat_samples_order$sampleID) )
+  
   saveRDS( dat_chr1_LRR, file = file.path(path_output, "LRR", paste0("matrix_chr_", chr1, "_LRR.rds")))
   saveRDS( dat_chr1_BAF, file = file.path(path_output, "BAF", paste0("matrix_chr_", chr1, "_BAF.rds")))
   
 }
 
-
-
-
-
+cat("Analysis completed! The output files are at:", path_output, "\n")
 
