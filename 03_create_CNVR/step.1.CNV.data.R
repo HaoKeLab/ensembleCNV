@@ -38,7 +38,7 @@ read_icnv <- function(file_icnv, col_sel, sample) {
                   "conf", "Sample_ID", "CNV_event_ID", "CNVR_ID")
   dat$length <- dat$posEnd - dat$posStart + 1
   dat$avgConf <- dat$conf/dat$numSNP
-    
+
   # filter chr, CNV_type
   dat <- subset(dat, chr %in% c(1:22) & CNV_type %in% c("Gain", "Loss"))
   dat$CN <- ifelse(dat$CNV_type == "Gain", 3, 1)
@@ -50,8 +50,8 @@ read_icnv <- function(file_icnv, col_sel, sample) {
 
   ## iPattern converts "-" in Sample_ID to "."
   ## recover the original Sample_ID
-  idx <- grep("-", sample$ID) 
-  samples.raw <- sample$ID[ idx ]
+  idx <- grep("-", sample$Sample_ID) 
+  samples.raw <- sample$Sample_ID[ idx ]
   samples.alt <- sub("-", ".", samples.raw)
 
   for (i in 1:length(samples.alt)) {
@@ -59,7 +59,7 @@ read_icnv <- function(file_icnv, col_sel, sample) {
 	if (length(idxs1) > 0 ) dat$Sample_ID[ idxs1 ] <- samples.raw[i]
   }
 
-  stopifnot( all(dat$Sample_ID %in% sample$ID) )
+  stopifnot( all(dat$Sample_ID %in% sample$Sample_ID) )
   dat[, col_sel]  ## selected columns
 }
 
@@ -89,7 +89,7 @@ read_pcnv <- function(file_pcnv, col_sel, sample) {
   dat$method <- "PennCNV"
   dat$CN[which(dat$CN >= 3)] <- 3 ## set CN >= 3 to CN = 3
   
-  stopifnot( all(dat$Sample_ID %in% sample$ID) )
+  stopifnot( all(dat$Sample_ID %in% sample$Sample_ID) )
   dat[, col_sel]
 }
 
@@ -124,7 +124,7 @@ read_qcnv <- function(file_qcnv, col_sel, sample) {
   dat$method <- "QuantiSNP"
   dat$CN[which(dat$CN >= 3)] <- 3  # set CN >= 3 to CN = 3
   
-  stopifnot( all(dat$Sample_ID %in% sample$ID) )
+  stopifnot( all(dat$Sample_ID %in% sample$Sample_ID) )
   dat[, col_sel]
 }
 

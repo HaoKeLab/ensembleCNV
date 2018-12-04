@@ -82,7 +82,7 @@ With the GenomeStudio, the exported final report text file is supposed to includ
   - Log R Ratio (used by PennCNV, QuantiSNP, and ensembleCNV)
   - B Allele Freq (used by PennCNV, QuantiSNP, and ensembleCNV)
 
-Along with final report file, the users need to prepare a project-specific sample table with `Sample ID` and `Gender` information for each sample. Note: The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export a "Samples_Table.txt" with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
+Along with final report file, the users need to prepare a project-specific sample table with `Sample_ID` and `Gender` information for each sample. Note: Please name the table header exactly as `Sample_ID` and `Gender`. The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export the sample table with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
 
 Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
 
@@ -178,7 +178,7 @@ Rscript ${WKDIR}/02_batch_effect/PCA_on_LRR/step.3.LRR.PCA.R \
 ${WKDIR}/02_batch_effect/PCA_on_LRR/ \                       ## path to PCA results
 ${WKDIR}/02_batch_effect/PCA_on_LRR/LRR_matrix_for_PCA.txt   ## the LRR matrix generated in step (2)
 ``` 
-When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file ("LRR_PCA_res.txt"), as well as scatter plots of the first three PCs ("LRR_PCA_plots.png"). 
+When the analysis is finished, in the working directory, the first three PCs of all samples will be saved in tab-delimited text file (`LRR_PCA_res.txt`), as well as scatter plots of the first three PCs (`LRR_PCA_plots.png`). 
 
 ### PCA on summary statistics
 
@@ -190,31 +190,31 @@ Rscript ${WKDIR}/02_batch_effect/PCA_on_summary_stats/step.1.prepare.stats.R \
 ${WKDIR}/01_initial_call/run_iPattern/results \
 ${WKDIR}/01_initial_call/run_PennCNV/results \
 ${WKDIR}/01_initial_call/run_QuantiSNP/results \
-${WKDIR}/02_batch_effect/PCA_on_summary_stats  ## summary statistics IPQ.stats.txt from iPattern, PennCNV and QuantiSNP results
+${WKDIR}/02_batch_effect/PCA_on_summary_stats   ## summary statistics IPQ.stats.txt from iPattern, PennCNV and QuantiSNP results
 ```
 
 (2) PCA on sample-level summary statistics.
 ```sh
-Rscript step.2.stats.PCA.R \
-${WKDIR}/02_batch_effect/PCA_on_summary_stats ## path to IPQ.stats.txt generated in step (1)
+Rscript ${WKDIR}/02_batch_effect/PCA_on_summary_stats/step.2.stats.PCA.R \
+${WKDIR}/02_batch_effect/PCA_on_summary_stats   ## path to IPQ.stats.txt generated in step (1)
 ```
-When the analysis is finished, in the working directory, the PCs of all samples will be saved in tab-delimited text file ("IPQ_stats_PCA_res.txt"), as well as scatter plots of the first three PCs ("IPQ_stats_PCA_plots.png"). 
+When the analysis is finished, in the working directory, the PCs of all samples will be saved in tab-delimited text file (`IPQ_stats_PCA_res.txt`), as well as scatter plots of the first three PCs (`IPQ_stats_PCA_plots.png`). 
 
 
 ## 3 Create CNVR
 
-We defined copy number variable region (CNVR) as the region in which CNVs called from different individuals by different callers substantially overlap with each other. We modeled the CNVR construction problem as identification of cliques (a sub-network in which every pair of nodes is connected) in a network context, where (i) CNVs detected for each individual from a method are considered as nodes; (ii) two nodes are connected when the reciprocal overlap between their corresponding CNV segments is greater than a pre-specified threshold (e.g. 30%); (iii) a clique corresponds to a CNVR in the sense that, for each CNV (node) belonging to the CNVR (clique), its average overlap with all the other CNVs of this CNVR is above a pre-specified threshold (e.g. 30%). The computational complexity for clique identification can be dramatically reduced in this special case, since the CNVs can be sorted by their genomic locations and the whole network can be partitioned by chromosome arms – CNVs from different arms never belong to the same CNVR. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
+We define copy number variable region (CNVR) as the region in which CNVs called from different individuals by different callers substantially overlap with each other. We model the CNVR construction problem as identification of cliques (a sub-network in which every pair of nodes is connected) in a network context, where (i) CNVs detected for each individual from a method are considered as nodes; (ii) two nodes are connected when the reciprocal overlap between their corresponding CNV segments is greater than a pre-specified threshold (e.g. 30%); (iii) a clique corresponds to a CNVR in the sense that, for each CNV (node) belonging to the CNVR (clique), its average overlap with all the other CNVs of this CNVR is above a pre-specified threshold (e.g. 30%). The computational complexity for clique identification can be dramatically reduced in this special case, since the CNVs can be sorted by their genomic locations and the whole network can be partitioned by chromosome arms – CNVs from different arms never belong to the same CNVR. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
 The algorithm is implemented in the following two steps.
 
 (1) Extract CNV information from individual calls made by iPattern, PennCNV and QuantiSNP
 ```sh
-Rscript step.1.CNV.data.R \
-/path/to/working_directory \   ## where output files are saved
-/path/to/iPattern_CNV_file \
-/path/to/PennCNV_CNV_file \
-/path/to/QuantiSNP_CNV_file \
-/path/to/Sample_Map.txt   ## generated along with final report from Genome Studio
+Rscript ${WKDIR}/03_create_CNVR/step.1.CNV.data.R \
+${WKDIR}/03_create_CNVR \
+${WKDIR}/01_initial_call/run_iPattern/results/STARNET_all_calls.txt \
+${WKDIR}/01_initial_call/run_iPattern/results/CNV.PennCNV_new.txt \
+${WKDIR}/01_initial_call/run_iPattern/results/quantisnp.cnv \
+${WKDIR}/data/Samples_Table.txt
 ```
 After finishing this step, three tab-delimited tables for each respective method, `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, will be generated with such fields as `Sample_ID`, `chr`, `posStart`, `posEnd`, `CNV_type`, etc. These files will be used as input in the following step (2).
 
