@@ -357,13 +357,13 @@ When this step is finished, three files are expected to be generated in the resu
   - `cnvr_refined_after_refine.txt`
   - `cnvr_regenotype_after_refine.txt`
 
-The information of rare CNVRs with CNV genotype frequency less than the cut-off will be saved in `cnvr_kept_after_refine.txt`. Some of common CNVRs go through the boundary refinement procedure, but their boundaries may remain the same, suggesting the boundaries constructed from the "create CNVR" step are correct and do not need to be updated -- the information of common CNVRs falling in this category will also be saved in `cnvr_kept_after_refine.txt`. Among CNVRs with updated boundaries, two further checking steps will be performed: a) If several CNVRs share the exact boundaries, they will be collapsed into one; b) If a CNVR has the exact boundaries as one in `cnvr_kept_after_refine.txt`, it will be removed from the list. The remaining CNVRs will be saved in `cnvr_refined_after_refine.txt`, from which a new table in the similar format as `cnvr_clean.txt` (generated in "create CNVR" step) will be generated with updated boundary information in columns `posStart`, `posEnd`, `snp_start` and `snp_end`, and be saved in `cnvr_regenotype_after_refine.txt`. The CNVRs in `cnvr_regenotype_after_refine.txt` will need to go through all the steps in "CNV genotyping" step to update relevant CN and GQ matrices, as the probes involved in each of these CNVRs are altered after boundary refinement. As a result, the total number of CNVRs may be slightly reduced after boundary refinement and CNV regenotyping steps.
+The information of rare CNVRs with CNV genotype frequency less than the cut-off will be saved in `cnvr_kept_after_refine.txt`. Some of common CNVRs go through the boundary refinement procedure, but their boundaries may remain the same, suggesting the boundaries constructed from the "create CNVR" step are correct and do not need to be updated -- the information of common CNVRs falling in this category will also be saved in `cnvr_kept_after_refine.txt`. Among CNVRs with updated boundaries, two further checking steps will be performed: a) If several CNVRs share the exact boundaries, they will be collapsed into one; b) If a CNVR has the exact boundaries as one in `cnvr_kept_after_refine.txt`, it will be removed from the list. The remaining CNVRs will be saved in `cnvr_refined_after_refine.txt`, from which a new table in the similar format as `cnvr_clean.txt` (generated in "create CNVR" step) will be generated with updated boundary information in columns `posStart`, `posEnd`, `snp_start` and `snp_end`, and be saved in `cnvr_regenotype_after_refine.txt`. The CNVRs in `cnvr_regenotype_after_refine.txt` will need to go through all the steps in [CNV genotyping](#4-cnv-genotyping-for-each-cnvr) step to update relevant CN and GQ matrices, as the probes involved in each of these CNVRs are altered after boundary refinement (assume the results from regenotyped CNVRs are saved at `${WKDIR}/05a_CNVR_regenotype_after_refinement/results`). As a result, the total number of CNVRs may be slightly reduced after boundary refinement and CNV regenotyping steps.
 
 (4) Update CN and GQ matrices as well as CNVR information.
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.4.update.genotype.matrix.R \
 --matrixbeforerefine ${WKDIR}/05_boundary_refinement/data \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here (see above)
---matrixrefine ${WKDIR}/05_boundary_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
+--matrixrefine ${WKDIR}/05a_CNVR_regenotype_after_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
 --refinepath ${WKDIR}/05_boundary_refinement/results \  ## where cnvr_kept_after_refine.txt is located
 --output ${WKDIR}/05_boundary_refinement/results  ## path to save final results
 ```
@@ -385,10 +385,10 @@ When technical duplicates are available, the users can use the following script 
 
 (1) Evaluate concordance rate of CNV calls between technical duplicates as well as sample-wise and CNVR-wise call rates.
 ```sh
-Rscript step.1.performance.assessment.R \
---duplicates /path/to/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
---matrixCN /path/to/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
---matrixGQ /path/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
+Rscript ${WKDIR}/06_performance_assessment/step.1.performance.assessment.R \
+--duplicates ${WKDIR}/data/duplicate_pairs.txt \  ## duplicates information, an option in "CNV genotyping" step (see above)
+--matrixCN ${WKDIR}/05_boundary_refinement/resultsmatrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
+--matrixGQ ${WKDIR}/05_boundary_refinement/resultsmatrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
 ```
 When this step is finished, two files will be generated in results folder:
@@ -404,7 +404,7 @@ Rscript step.2.set.GQ.generate.results.R \
 --matrixGQ /path/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
 --cnvrfile /path/to/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
 --resultpath /path/to/results/  ## path to directory for saving results
---gqscore [INT]  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
+--gqscore <INT>  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
 ```
 When this step is finished, three files will be generated in results folder:
  - `matrix_CN_after_GQ.rds` (CN matrix with rows as CNVRs and columns as samples; the CN values associated with GQ < threshold are set as missing value, which is indicated by -9)
