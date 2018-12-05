@@ -353,22 +353,14 @@ Note:
 
 - We provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). 
 
-Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
+Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/05_boundary_refinement/data` directory, and named exactly as follows:
 
-  - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
-  - `cnvr_clean.txt -> ${WKDIR}/03_create_CNVR/cnvr_clean.txt` (generated in "create CNVR" step)
-  - `cnv_clean.txt -> ${WKDIR}/03_create_CNVR/cnv_clean.txt` (generated in "create CNVR" step)
-  - `sample_QC.txt -> ${WKDIR}/01_initial_call/run_PennCNV/results/CNV.PennCNV_qc_new.txt` (generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
-  - `duplicate_pairs.txt -> ${WKDIR}/data/duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
+  - `SNP_pos.txt -> ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt` (prepared in the initial step; containing chromosome and position information for each probe)
+  - `cnvr_genotype.txt -> ${WKDIR}/04_CNV_genotype/results/cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
+  - `matrix_CN.rds -> ${WKDIR}/04_CNV_genotype/results/matrix_CN.rds` (matrix of CN genotype with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
+  - `matrix_GQ.rds -> ${WKDIR}/04_CNV_genotype/results/matrix_GQ.rds` (matrix of GQ score with rows as CNVRs and columns as samples, generated in "CNV genotyping" step) 
 
-
-
-Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `${WKDIR}/05_boundary_refinement/data` directory:
-
-  - `SNP.pfb` (prepared when running PennCNV; containing chromosome and position information for each probe)
-  - `cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
-  - `matrix_CN.rds` (matrix of CN genotype with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
-  - `matrix_GQ.rds` (matrix of GQ score with rows as CNVRs and columns as samples, generated in "CNV genotyping" step)
+Running boundary refinement in parallel is implemented in the following four steps. 
 
 (1) Select CNVRs with common CNV genotype to be refined.
 ```sh
