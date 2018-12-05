@@ -346,7 +346,22 @@ We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/exam
 
 For a CNVR with common CNV genotype (e.g., more than 5% of CNV carriers at the CNVR), the LRR signals would be highly correlated across individuals among involved probes. We can take advantage of this structure to further refine CNVR boundaries. In other words, we are able to find a sub-block of high correlations within a local correlation matrix. When the refined boundaries are different from the initial ones, the probes falling within the range of updated boundaries will change. We need to update the local likelihood model and re-do the CNV genotyping step. If several CNVRs share the exact boundaries after boundary refinement, they will be collapsed into one. More details can be found in the [manuscript](https://doi.org/10.1101/356667).
 
-In current implementation, boundary refinement for CNVRs within different chromosomes are performed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). The main script `CNVR.boundary.refinement.R` does boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`.
+In current implementation, `CNVR.boundary.refinement.R` the main script that performs boundary refinement for CNVRs in one chromosome at a time. It utilizes the `Rcpp` package and implements the computationally intensive part with C++ code in `refine.cpp`. Please see this [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_boundary_refinement). 
+
+Note: 
+- We split the core scripts and the platform-specific workflow scripts (see below) in order to provide flexibity for users to develop their own workflow scripts specific to their particular platform, especially when a high-performance cluster is not accessible to the users. 
+
+- We provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). 
+
+Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
+
+  - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
+  - `cnvr_clean.txt -> ${WKDIR}/03_create_CNVR/cnvr_clean.txt` (generated in "create CNVR" step)
+  - `cnv_clean.txt -> ${WKDIR}/03_create_CNVR/cnv_clean.txt` (generated in "create CNVR" step)
+  - `sample_QC.txt -> ${WKDIR}/01_initial_call/run_PennCNV/results/CNV.PennCNV_qc_new.txt` (generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
+  - `duplicate_pairs.txt -> ${WKDIR}/data/duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
+
+
 
 Running boundary refinement in parallel is implemented in the following four steps. Before running the script below, the following files prepared in previous steps need to be copied in the `${WKDIR}/05_boundary_refinement/data` directory:
 
