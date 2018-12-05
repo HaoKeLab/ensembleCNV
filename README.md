@@ -134,7 +134,7 @@ The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 
 
 Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing CNVs in sex chromosomes is yet to be developed.
 
-When finishing running the scripts, there will be two folders `LRR` and `BAF` created under `path_to_LRR_BAF_matrices`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
+When finishing running the scripts, there will be two folders `LRR` and `BAF` created under the folder specified by `--output`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
 In addition, a text file named "SNP_pos.txt" with `Name`, `Chr`, and `Position` information of each probe will be generated at `${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF` and used in downstream analysis.
 
