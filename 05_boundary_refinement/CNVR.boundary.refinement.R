@@ -68,7 +68,7 @@ centromere <- read.delim(file = opt$centromere, as.is = TRUE)
 pos_centromere_chr1 <- centromere$position[centromere$chr == chr1]
 
 # position
-dat_pfb <- read.table(file = file.path(path_data, "SNP.pfb"), sep = "\t",
+dat_pfb <- read.table(file = file.path(path_data, "SNP_pos.txt"), sep = "\t",
                       header = TRUE, as.is = TRUE, check.names = FALSE,
                       comment.char = "")
 dat_pfb_chr1 <- subset(dat_pfb, Chr == chr1)
