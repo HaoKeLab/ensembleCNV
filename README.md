@@ -122,7 +122,7 @@ We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01
 
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
-```perl
+```sh
 perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_to_matrix_LRR_and_BAF.pl \
 ${WKDIR}/data/final_report.txt \
 ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
@@ -131,7 +131,7 @@ Note: this perl code is designed to process a final report file with multiple sa
 
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
-Rscript transform_from_tab_to_rds.R \
+Rscript ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/transform_from_tab_to_rds.R \
 --input ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF \
 --output ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \
 --startChr <INT> \ ## default: 1
@@ -240,7 +240,7 @@ The algorithm is implemented in the following two steps.
 ```sh
 Rscript ${WKDIR}/03_create_CNVR/step.1.CNV.data.R \
 ${WKDIR}/03_create_CNVR \
-${WKDIR}/01_initial_call/run_iPattern/results/STARNET_all_calls.txt \
+${WKDIR}/01_initial_call/run_iPattern/results/<project_name>_all_calls.txt \  ## <project_name> used in iPattern analysis
 ${WKDIR}/01_initial_call/run_iPattern/results/CNV.PennCNV_new.txt \
 ${WKDIR}/01_initial_call/run_iPattern/results/quantisnp.cnv \
 ${WKDIR}/data/Samples_Table.txt
@@ -270,6 +270,15 @@ Note: We split the core scripts and the platform-specific workflow scripts (see 
 
 Here, we provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
 
+Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
+
+  - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` 
+    (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
+  - `cnv_clean.txt` (generated in "create CNVR" step)
+  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
+  - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
+
+
 Running CNV genotyping in parallel is implemented in the following four steps.
 
 (1) Split CNVRs into different batches in each chromosome.
@@ -283,12 +292,6 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
 
-Before running the script below, the following files prepared in previous steps need to be copied in the `${WKDIR}/04_CNV_genotype/data` directory, where `cnvr_batch.txt` is located, and renamed exactly as follows:
-
-  - `SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
-  - `cnv_clean.txt` (generated in "create CNVR" step)
-  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
-  - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
