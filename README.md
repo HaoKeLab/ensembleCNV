@@ -266,14 +266,14 @@ The initial CNV calls within a CNVR may be mixed with false positives and false 
 
 In current implementation, `CNV.genotype.one.chr.one.batch.R` is the main script that performs CNV genotyping on one batch of CNVRs at a time. It loads the R functions in the subdirectory [scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype/scripts). The main script can genotype one CNVR at a time (i.e., a batch includes only one CNVR). Please see this [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype). 
 
-Note: We split the core scripts and the platform-specific workflow scripts (see below) in order to provide flexibity for users to develop their own workflow scripts specific to their particular platform, especially when a high-performance cluster is not accessible to the users. 
+Note: 
+- We split the core scripts and the platform-specific workflow scripts (see below) in order to provide flexibity for users to develop their own workflow scripts specific to their particular platform, especially when a high-performance cluster is not accessible to the users. 
 
-Here, we provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
+- Here, we provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
 
 Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
 
-  - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` 
-  (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
+  - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
   - `cnv_clean.txt` (generated in "create CNVR" step)
   - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
