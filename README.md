@@ -85,7 +85,15 @@ The raw data comes from the [final report](http://jp.support.illumina.com/conten
 
 ### Sample table
 
-The users need to prepare a project-specific sample table with `Sample_ID` and `Gender` information for each sample. Note: Please name the table header exactly as `Sample_ID` and `Gender`. The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export the sample table with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
+The users need to prepare a project-specific tab-delimited sample table with `Sample_ID` and `Gender` information for each sample. Note: Please name the table header exactly as `Sample_ID` and `Gender`. For example,
+```
+Sample_ID Gender
+sample1 Female
+sample2 Male
+sample3 Male
+...
+```
+The gender information is required by QuanitSNP and iPattern rather than ensembleCNV. Such table may have been already prepared by the investigators (i.e., this is typically the case for GWAS). Another option is to export the sample table with GenomeStudio, which has a build-in function to estimate gender if gender information is not provided by the investigators. Please refer to [GenomeStudio manual](http://jp.support.illumina.com/content/dam/illumina-support/documents/documentation/software_documentation/genomestudio/genomestudio-2-0/genomestudio-genotyping-module-v2-user-guide-11319113-01.pdf) for details.
 
 ### Centromere position
 
