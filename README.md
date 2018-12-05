@@ -97,7 +97,11 @@ The gender information is required by QuanitSNP and iPattern rather than ensembl
 
 ### Centromere position
 
-Also, we have prepared a data table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from correspoding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
+We have prepared a tab-delimited table [centromere_hg19.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_create_CNVR/data/centromere_hg19.txt) for the centromere position (hg19) of each chromosome. Centromere positions for other assemblies can be extracted from corresponding Chromosome Band tables from UCSC genome browser at [here](https://genome.ucsc.edu/cgi-bin/hgTables).
+
+### Duplicated pairs [optional]
+
+
 
 Please put finalreport file (e.g. named "final_report.txt") and sample table (e.g. named "Samples_Table.txt") in the folder `${WKDIR}/data`.
 
