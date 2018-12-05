@@ -107,9 +107,7 @@ Before running the analysis, please put the final report file (e.g., named "fina
 
 ## 1 Initial call
 
-The pipeline begins with running inividual CNV callers, including [iPattern](https://www.ncbi.nlm.nih.gov/pubmed/?term=21552272), [PennCNV](http://penncnv.openbioinformatics.org/en/latest/), and [QuantiSNP](https://sites.google.com/site/quantisnp/), to make initial CNV calls. 
-
-Before that, the final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
+The pipeline begins with running inividual CNV callers, including [iPattern](https://www.ncbi.nlm.nih.gov/pubmed/?term=21552272), [PennCNV](http://penncnv.openbioinformatics.org/en/latest/), and [QuantiSNP](https://sites.google.com/site/quantisnp/), to make initial CNV calls. Before that, the final report data needs to be converted into proper format required by ensembleCNV as well as inividual CNV callers.
 
 ### Prepare chromosome-wise LRR and BAF matrices for CNV genotyping
 
