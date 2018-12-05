@@ -101,9 +101,9 @@ We have prepared a tab-delimited table [centromere_hg19.txt](https://github.com/
 
 ### Duplicate pairs [optional]
 
-If duplicated samples (either technical duplicates or monozygotic twins) are available, we can use the information for quality control and deciding the GQ score threshold in the step [Performance assessment](#6-performance-assessment). Please refer to the [manuscript](https://doi.org/10.1101/356667) for details. We provdie an example table [duplicate_pairs.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_CNV_genotype/data/duplicate_pairs.txt). Note: Please name the table header exactly as `sample1.name` and `sample2.name`.
+If duplicated samples (either technical duplicates or monozygotic twins) are available, we can use the information for quality control and deciding the GQ score threshold in the step [performance assessment](#6-performance-assessment). Please refer to the [manuscript](https://doi.org/10.1101/356667) for details. We provdie an example table [duplicate_pairs.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_CNV_genotype/data/duplicate_pairs.txt). Note: Please name the table header exactly as `sample1.name` and `sample2.name`.
 
-Before running the analysis, please put the final report file (e.g., named "final_report.txt"), sample table (exactly named as "Samples_Table.txt"), centromere position table (e.g., named "centromere_hg19.txt"), and duplicates table (exactly named as "duplicate_pairs.txt") in the folder `${WKDIR}/data`.
+Before running the analysis, please put the final report file (e.g., named "final_report.txt"), sample table (exactly named as "Samples_Table.txt"), centromere position table (e.g., named "centromere_hg19.txt"), and duplicates table [optional] (exactly named as "duplicate_pairs.txt") in the folder `${WKDIR}/data`.
 
 ## 1 Initial call
 
