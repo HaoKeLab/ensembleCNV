@@ -273,7 +273,7 @@ Here, we provide workflow scripts for a cluster environment, where CNVRs within 
 Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
 
   - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` 
-    (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
+  (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
   - `cnv_clean.txt` (generated in "create CNVR" step)
   - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
   - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
