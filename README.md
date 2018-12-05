@@ -269,15 +269,15 @@ In current implementation, `CNV.genotype.one.chr.one.batch.R` is the main script
 Note: 
 - We split the core scripts and the platform-specific workflow scripts (see below) in order to provide flexibity for users to develop their own workflow scripts specific to their particular platform, especially when a high-performance cluster is not accessible to the users. 
 
-- Here, we provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
+- We provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
 
 Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
 
   - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
-  - `cnv_clean.txt` (generated in "create CNVR" step)
-  - `sample_QC.txt` (renamed from `CNV.PennCNV_qc_new.txt`, generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
-  - `duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
-
+  - `cnvr_clean.txt -> ${WKDIR}/03_create_CNVR/cnvr_clean.txt` (generated in "create CNVR" step)
+  - `cnv_clean.txt -> ${WKDIR}/03_create_CNVR/cnv_clean.txt` (generated in "create CNVR" step)
+  - `sample_QC.txt -> ${WKDIR}/01_initial_call/run_PennCNV/results/CNV.PennCNV_qc_new.txt` (generated when finishing PennCNV analysis; the columns "LRR_mean" and "LRR_sd" are used in this step)
+  - `duplicate_pairs.txt -> ${WKDIR}/data/duplicate_pairs.txt` (optional) (tab-delimited table of two columns with header names: "sample1.name" and "sample2.name"; each row is a duplicated pair with one sample ID in the first column and the other in the second column)
 
 Running CNV genotyping in parallel is implemented in the following four steps.
 
@@ -290,9 +290,7 @@ Rscript ${WKDIR}/04_CNV_genotype/step.1.split.cnvrs.into.batches.R \
 ```
 The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The script goes over the table of CNVRs in `cnvr_clean.txt` generated in the previous "create CNVR" step, appends to the table an additional column indicating the batches each CNVR belongs to, and writes the updated table to tab-delimited file `cnvr_batch.txt`.
 
-(2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch in one chromosome.
-
-
+(2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch.
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
 --type 0 \ ## "0" indicates initial submission
