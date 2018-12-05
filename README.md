@@ -49,7 +49,7 @@ The scripts are in its beta version. Please report bugs and issues or provide su
   - Rcpp (0.12.17+)
   - RcppArmadillo (0.7.500.0.0+)
   - tibble (1.4.2+)
-- Perl (5.22.2+) (https://www.perl.org/)
+- Perl (5.10.1+) (https://www.perl.org/)
 
 Note: 
 
@@ -104,7 +104,7 @@ We have prepared a tab-delimited table [centromere_hg19.txt](https://github.com/
 
 If duplicated samples (either technical duplicates or monozygotic twins) are available, we can use the information for quality control and deciding the GQ score threshold in the step [performance assessment](#6-performance-assessment). Please refer to the [manuscript](https://doi.org/10.1101/356667) for details. We provdie an example table [duplicate_pairs.txt](https://github.com/HaoKeLab/ensembleCNV/blob/master/example/example_CNV_genotype/data/duplicate_pairs.txt). Note: Please name the table header exactly as `sample1.name` and `sample2.name`.
 
-Before running the analysis, please put the final report file (e.g., named "final_report.txt"), sample table (exactly named as "Samples_Table.txt"), centromere position table (e.g., named "centromere_hg19.txt"), and duplicates table [optional] (exactly named as "duplicate_pairs.txt") in the folder `${WKDIR}/data`.
+Before running the analysis, please put (or create symbolic link to) the final report file (e.g., named "final_report.txt"), sample table (exactly named as "Samples_Table.txt"), centromere position table (e.g., named "centromere_hg19.txt"), and duplicates table [optional] (exactly named as "duplicate_pairs.txt") in the folder `${WKDIR}/data`.
 
 ## 1 Initial call
 
@@ -333,7 +333,7 @@ When this step is finished, four files are expected to be generated in the resul
 
 Users can decide a threshold of GQ score afterwards. A CN genotype with GQ score below the threshold can be set as missing.
 
-We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype) of input and output files for this step corresponding to one sample CNVR.
+We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_CNV_genotype) for this step corresponding to one example CNVR.
 
 ## 5 Boundary refinement
 
@@ -384,13 +384,13 @@ When this step is finished, three files are expected to be generated in the resu
   - `cnvr_refined_after_refine.txt`
   - `cnvr_regenotype_after_refine.txt`
 
-The information of rare CNVRs with CNV genotype frequency less than the cut-off will be saved in `cnvr_kept_after_refine.txt`. Some of common CNVRs go through the boundary refinement procedure, but their boundaries may remain the same, suggesting the boundaries constructed from the "create CNVR" step are correct and do not need to be updated -- the information of common CNVRs falling in this category will also be saved in `cnvr_kept_after_refine.txt`. Among CNVRs with updated boundaries, two further checking steps will be performed: a) If several CNVRs share the exact boundaries, they will be collapsed into one; b) If a CNVR has the exact boundaries as one in `cnvr_kept_after_refine.txt`, it will be removed from the list. As a result, the total number of CNVRs may be slightly reduced after boundary refinement and CNV regenotyping steps. The remaining CNVRs will be saved in `cnvr_refined_after_refine.txt`, from which a new table in the similar format as `cnvr_clean.txt` (generated in "create CNVR" step) will be generated with updated boundary information in columns `posStart`, `posEnd`, `snp_start` and `snp_end`, and be saved in `cnvr_regenotype_after_refine.txt`. The CNVRs in `cnvr_regenotype_after_refine.txt` will need to go through all the steps in [CNV genotyping](#4-cnv-genotyping-for-each-cnvr) to update relevant CN and GQ matrices, as the probes involved in each of these CNVRs are altered after boundary refinement (assume the working folder for CNVR regenotyping after boundary refinement: `${WKDIR}/05a_CNVR_regenotype_after_refinement`, which has similar struture as `${WKDIR}/04_CNV_genotype`; see step (4) below). 
+The information of rare CNVRs with CNV genotype frequency less than the cut-off will be saved in `cnvr_kept_after_refine.txt`. Some of common CNVRs go through the boundary refinement procedure, but their boundaries may remain the same, suggesting the boundaries constructed from the "create CNVR" step are correct and do not need to be updated -- the information of common CNVRs falling in this category will also be saved in `cnvr_kept_after_refine.txt`. Among CNVRs with updated boundaries, two further checking steps will be performed: a) If several CNVRs share the exact boundaries, they will be collapsed into one; b) If a CNVR has the exact boundaries as one in `cnvr_kept_after_refine.txt`, it will be removed from the list. As a result, the total number of CNVRs may be slightly reduced after boundary refinement and CNV regenotyping steps. The remaining CNVRs will be saved in `cnvr_refined_after_refine.txt`, from which a new table in the similar format as `cnvr_clean.txt` (generated in "create CNVR" step) will be generated with updated boundary information in columns `posStart`, `posEnd`, `snp_start` and `snp_end`, and be saved in `cnvr_regenotype_after_refine.txt`. The CNVRs in `cnvr_regenotype_after_refine.txt` will need to go through all the steps in [CNV genotyping](#4-cnv-genotyping-for-each-cnvr) to update relevant CN and GQ matrices, as the probes involved in each of these CNVRs are altered after boundary refinement (assume the working folder for CNVR regenotyping after boundary refinement: `${WKDIR}/05a_regenotype_after_refinement`, which has similar struture as `${WKDIR}/04_CNV_genotype`; see step (4) below). 
 
 (4) Update CN and GQ matrices as well as CNVR information.
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.4.update.genotype.matrix.R \
 --matrixbeforerefine ${WKDIR}/05_boundary_refinement/data \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here
---matrixrefine ${WKDIR}/05a_CNVR_regenotype_after_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
+--matrixrefine ${WKDIR}/05a_regenotype_after_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
 --refinepath ${WKDIR}/05_boundary_refinement/results \  ## where cnvr_kept_after_refine.txt is located
 --output ${WKDIR}/05_boundary_refinement/results  ## path to save final results
 ```

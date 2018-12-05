@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 ## build matrix file for all samples using 100000 selected SNPs
-
+use strict;
 use Carp;
 
 ## input
@@ -10,23 +10,23 @@ my $reportfile          = $ARGV[1];   ## finalreport from Genome Studio
 my $file_matrix_LRR     = $ARGV[2];   ## output LRR matrix file
 
 ## read in selected snps
-open(IN, "< $file_snps_selected") or die "Error: can't open snps file $in_snps: $!";
-%snps=();
-while ($line=<IN>) {
+open(IN, "< $file_snps_selected") or die "Error: can't open snps file $file_snps_selected: $!";
+my %snps=();
+while (my $line=<IN>) {
 	chomp $line;
 	#print "$line\n";
 	$snps{$line}++;
 }
 close IN;
 
-@snps=(keys %snps);
+my @snps=(keys %snps);
 print "total number of SNPs: ".scalar(@snps)."\n";
 
 ## parse the header of final report
-open(REPORT, "< $reportfile") or die "Error: can't open finalreport $in_file: $!";
+open(REPORT, "< $reportfile") or die "Error: can't open finalreport $reportfile: $!";
 
 my (@field);
-my ($count_line, $sample_index, $name_index, $LRR_index) = 0;
+my ($count_line, $sample_index, $name_index, $LRR_index) = (0); ## HC
 
 while (<REPORT>) {
 	$count_line++;
@@ -51,8 +51,8 @@ defined $sample_index or confess "Error: the 'Sample ID' field is not found in h
 defined $LRR_index or confess "Error: the 'Log R Ratio' field is not found in header line in report file $reportfile: <$_>\n";
 
 ## parse data part of final report
-%samples = (); ## hash for sample ID 
-%hash = ();    ## hash of LRR values at selected SNPs for one sample
+my %samples = (); ## hash for sample ID 
+my %hash = ();    ## hash of LRR values at selected SNPs for one sample
 
 my $flagsample = 0;    ## indicator of the first sample =0; following samples =1
 my $lrrsample = ();    ## tab-delimited LRR values for one sample
@@ -60,16 +60,17 @@ my $SampleIDraw = ();  ## temporary sample ID of one sample
 my $total = 0;         ## counter of current number of LRR values recorded in $lrrsample
 my $flageof = 0;       ## indicaotr of eof =0 not EOF; =1 EOF
 
-while ($line = <REPORT>) {
+while (my $line = <REPORT>) {
+	
 	$flageof = 1 if eof; ## add file eof flag
-	chomp $line;
+	$line =~ s/[\r\n]+$//; # HC
 
-	@line=split(/\t/, $line);	
+	my @line=split(/\t/, $line);	
 
 	## tansform Log R Ratio
 	if (exists($samples{$line[$sample_index]}) && exists($snps{$line[$name_index]})) { ##%snps has been converted to @snps in line 22??
 
-		$lrrvalue = $line[$LRR_index];
+		my $lrrvalue = $line[$LRR_index];
 		$lrrvalue =~ tr/\015//d;
 		$lrrsample = $lrrsample."\t".$lrrvalue;
 		$flagsample = 1;
@@ -99,8 +100,7 @@ while ($line = <REPORT>) {
 			## initialize the first sample
 			if (exists($snps{$line[$name_index]})) {
 				$samples{$line[$sample_index]}++;
-				$lrrvalue = $line[$LRR_index];
-				$lrrvalue =~ tr/\015//d;
+				my $lrrvalue = $line[$LRR_index];
 				$lrrsample = $lrrvalue;
 				$total++;
 			}
@@ -115,8 +115,7 @@ while ($line = <REPORT>) {
 				## initialize another new sample
 				$samples{$line[$sample_index]}++;
 				$lrrsample = ();
-				$lrrvalue = $line[$LRR_index];
-				$lrrvalue =~ tr/\015//d;
+				my $lrrvalue = $line[$LRR_index];
 				$lrrsample = $lrrvalue;
 				$total = 1;
 			}
