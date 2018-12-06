@@ -12,9 +12,9 @@ Step 1: reformat the CNV calls generated from individual CNV caller: iPattern, P
 ```sh
 Rscript ${ENSEMBLECNV}/03_create_CNVR/step.1.CNV.data.R \
 ${ENSEMBLECNV}/example/example_create_CNVR/results/ \
-${ENSEMBLECNV}/example/example_create_CNVR/data/iPattern_cnvr1_all_calls.txt \
-${ENSEMBLECNV}/example/example_create_CNVR/data/PennCNV_cnvr1.txt \
-${ENSEMBLECNV}/example/example_create_CNVR/data/QuantiSNP_cnvr1.txt \
+${ENSEMBLECNV}/example/example_create_CNVR/data/iPattern_all_calls.txt \
+${ENSEMBLECNV}/example/example_create_CNVR/data/CNV.PennCNV_new.txt \
+${ENSEMBLECNV}/example/example_create_CNVR/data/quantisnp.cnv \
 ${ENSEMBLECNV}/example/example_create_CNVR/data/Samples_Table.txt
 ```
 

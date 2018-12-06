@@ -246,8 +246,8 @@ The algorithm is implemented in the following two steps.
 Rscript ${WKDIR}/03_create_CNVR/step.1.CNV.data.R \
 ${WKDIR}/03_create_CNVR \
 ${WKDIR}/01_initial_call/run_iPattern/results/<project_name>_all_calls.txt \  ## <project_name> used in iPattern analysis
-${WKDIR}/01_initial_call/run_iPattern/results/CNV.PennCNV_new.txt \
-${WKDIR}/01_initial_call/run_iPattern/results/quantisnp.cnv \
+${WKDIR}/01_initial_call/run_PennCNV/results/CNV.PennCNV_new.txt \
+${WKDIR}/01_initial_call/run_QuantiSNP/results/quantisnp.cnv \
 ${WKDIR}/data/Samples_Table.txt
 ```
 After finishing this step, three tab-delimited tables for each respective method, `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, will be generated with such fields as `Sample_ID`, `chr`, `posStart`, `posEnd`, `CNV_type`, etc. These files will be used as input in the following step (2).
