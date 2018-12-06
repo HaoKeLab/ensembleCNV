@@ -1,6 +1,6 @@
 ## Example: Boundary refinement
 
-Here is a demo of the main script `CNVR.boundary.refinement.R` for boundary refinement using example data from one CNVR.
+Here is a demo of the main script `CNVR.boundary.refinement.R` for [boundary refinement](https://github.com/HaoKeLab/ensembleCNV#5-boundary-refinement) using example data from one CNVR.
 
 Please specify where the git clone of ensembleCNV are located.
 ```sh

@@ -1,5 +1,13 @@
-## path to the directory in which all ensembleCNV scripts and data are located. 
-path_ensembleCNV=""
+
+## Example: Boundary refinement
+
+Here is a demo of [creating CNVR]() using example data of CNVs clumping around one CNVR.
+
+Please specify where the git clone of ensembleCNV are located.
+```sh
+ENSEMBLECNV=</path/to/ensembleCNV>
+```
+
 
 Rscript ${path_ensembleCNV}/03_create_CNVR/step.1.CNV.data.R \
 ${path_ensembleCNV}/example/example_create_CNVR/results/ \
