@@ -128,7 +128,10 @@ perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_to_m
 ${WKDIR}/data/final_report.txt \
 ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
 ```
-Note: this perl code is designed to process a final report file with multiple samples. Although the code can accommodate a final report file with one or a few samples, the output files in the case are not meaningful for downstream analysis.
+Note: 
+- This perl script is designed to process a final report file with multiple samples. Although the code can accommodate a final report file with one or a few samples, the output files in the case are not meaningful for downstream analysis. The script will issue a warning if sample size is too small for subsequent steps.
+
+- 
 
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
@@ -138,9 +141,9 @@ Rscript ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/transform_fro
 --startChr <INT> \ ## default: 1
 --endChr <INT>  ## default: 22
 ```
-The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 <=s startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chrosomes (chr 1 ~ 22) will be processed by default. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
+The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 <= startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chrosomes (i.e., Chr 1 ~ 22) will be processed by default. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
-Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing CNVs in sex chromosomes is yet to be developed.
+Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing and genotyping CNVs in sex chromosomes is yet to be developed.
 
 When finishing running the scripts, there will be two folders `LRR` and `BAF` created under the folder specified by `--output`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
