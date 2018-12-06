@@ -330,7 +330,7 @@ Rscript ${WKDIR}/04_CNV_genotype/step.3.check.and.resubmit.jobs.R \
 (4) Combine results from parallelized jobs
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.4.prediction.results.R \
---datapath ${WKDIR}/04_CNV_genotype/data \  ## the above input files are all placed in this folder
+--datapath ${WKDIR}/04_CNV_genotype/data \     ## the above input files are all placed in this folder
 --resultpath ${WKDIR}/04_CNV_genotype/results  ## directory to save results
 ```
 When this step is finished, four files are expected to be generated in the results folder:
@@ -366,9 +366,9 @@ Running boundary refinement in parallel is implemented in the following four ste
 (1) Select CNVRs with common CNV genotype to be refined.
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.1.common.CNVR.to.refine.R \
---datapath ${WKDIR}/05_boundary_refinement/data \  ## the above input files are all placed in this folder
+--datapath ${WKDIR}/05_boundary_refinement/data \       ## the above input files are all placed in this folder
 --resultpath ${WKDIR}/05_boundary_refinement/results \  ## directory to save results
---freq 0.05  ## frequency cut-off based on which common CNVRs will be selected
+--freq 0.05                                             ## frequency cut-off based on which common CNVRs will be selected
 ```
 The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype based on data from `matrix_CN.rds`, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `${WKDIR}/05_boundary_refinement/results` directory.
 
