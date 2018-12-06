@@ -3,7 +3,7 @@
 
 Here is a demo of [creating CNVR](https://github.com/HaoKeLab/ensembleCNV#3-create-cnvr) using example data of CNVs clumping around one CNVR.
 
-Please specify where the git clone of ensembleCNV are located.
+Please specify where the git clone of ensembleCNV is located.
 ```sh
 ENSEMBLECNV=</path/to/ensembleCNV>
 ```

@@ -263,7 +263,7 @@ Rscript ${WKDIR}/03_create_CNVR/step.2.create.CNVR.R \
 ```
 Two tab-delimited tables will be generated in this step: i) `cnvr_clean.txt` with the information for each constructed CNVR; ii) `cnv_clean.txt` with the information for each CNV calls from individual methods, including which CNVR each CNV belongs to.
 
-We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR) of input and output files for this step corresponding to one sample CNVR.
+We provide an [example](https://github.com/HaoKeLab/ensembleCNV/tree/master/example/example_create_CNVR) of this step corresponding to one example CNVR.
 
 ## 4 CNV genotyping for each CNVR
 
