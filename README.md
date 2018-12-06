@@ -67,8 +67,9 @@ git clone https://github.com/HaoKeLab/ensembleCNV
 The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder structure to organize the data and analysis workflow. We prepared a script for creating new project.
 ```sh
 cd /path/to/ensembleCNV
-WKDIR=/path/to/working_directory
 chmod +x create_new_project.sh
+
+WKDIR=/path/to/working_directory
 ./create_new_project.sh $WKDIR
 ```
 

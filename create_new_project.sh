@@ -1,9 +1,9 @@
 #!/bin/bash
 
-## creat new project
+## create new project
 wkdir=$1
 
-## creaste working directory
+## create working directory
 mkdir -p $wkdir
 
 ## data: final report, sample table, centromere position, and duplicate pairs [optional]
