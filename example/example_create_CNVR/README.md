@@ -37,5 +37,5 @@ Rscript ${ENSEMBLECNV}/03_create_CNVR/step.2.create.CNVR.R \
 ```
 
 Note: When this step is successfully completed, you will find outputs in the directory `${ENSEMBLECNV}/example/example_create_CNVR/results/`.
- - `cnv_clean.txt`: 
- - `cnvr_clean.txt`:
+- `cnv_clean.txt`: the table of merged CNV events from iPattern, PennCNV and QuantiSNP; the `CNVR_ID` in the table indicates which CNVR each CNV belongs to.
+- `cnvr_clean.txt`: the table of constructed CNVRs with each assigned a `CNVR_ID`.
