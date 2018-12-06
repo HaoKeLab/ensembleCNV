@@ -294,15 +294,15 @@ The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch.
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
---type 0 \ ## "0" indicates initial submission
---datapath ${WKDIR}/04_CNV_genotype/data \        ## the above input files are all placed in this folder
---resultpath ${WKDIR}/04_CNV_genotype/results/ \  ## directory to save results
---matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## chromosome-wise LRR and BAF matrices generated in the intial step
---sourcefile ${WKDIR}/04_CNV_genotype/scripts \  ## relavent R functions used by the main script (see above)
---duplicates \  ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
---plot \        ## (optional) indicates whether diagnosis plots to be generated
---script ${WKDIR}/04_CNV_genotype \        ## path to main script CNV.genotype.one.chr.one.batch.R
---joblog ${WKDIR}/04_CNV_genotype/results   ## where jobs log files to be placed
+--type 0 \                                        ## "0" indicates initial submission
+--script     ${WKDIR}/04_CNV_genotype \           ## path to main script CNV.genotype.one.chr.one.batch.R
+--sourcefile ${WKDIR}/04_CNV_genotype/scripts \   ## relavent R functions used by the main script (see above)
+--datapath   ${WKDIR}/04_CNV_genotype/data \      ## the above input files are all placed in this folder
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## LRR and BAF matrices generated in the initial step
+--resultpath ${WKDIR}/04_CNV_genotype/results \   ## directory to save results
+--joblog ${WKDIR}/04_CNV_genotype/results \       ## where jobs log files to be placed
+--duplicates \                                    ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
+--plot                                            ## (optional) indicates whether diagnosis plots to be generated
 ```
 
 When this step is finished, several subdirectories are expected to be generated:
