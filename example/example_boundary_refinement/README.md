@@ -11,7 +11,7 @@ Rscript ${ENSEMBLECNV}/05_boundary_refinement/CNVR.boundary.refinement.R \
 --chr 2 \
 --rcppfile ${ENSEMBLECNV}/05_boundary_refinement/refine.cpp \
 --datapath ${ENSEMBLECNV}/example/example_boundary_refinement/data \
---matrixpath ${ENSEMBLECNV}/example/example_boundary_refinement/matrix \
+--matrixpath ${ENSEMBLECNV}/example/example_boundary_refinement/RDS \
 --centromere ${ENSEMBLECNV}/example/example_boundary_refinement/data/centromere_hg19.txt \
 --resultpath ${ENSEMBLECNV}/example/example_boundary_refinement/results \
 --plot
