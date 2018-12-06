@@ -376,8 +376,8 @@ The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVR
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.2.submit.jobs.R \
 --refinescript ${WKDIR}/05_boundary_refinement/CNVR.boundary.refinement.R \    ## the main script for boundary refinement
---rcppfile ${WKDIR}/05_boundary_refinement/refine.cpp \                        ## the C++ code for sub-block searching in local correlation matrix
---datapath ${WKDIR}/05_boundary_refinement/data \                              ## the above input files are all placed in this folder
+--rcppfile   ${WKDIR}/05_boundary_refinement/refine.cpp \                      ## the C++ code for sub-block searching in local correlation matrix
+--datapath   ${WKDIR}/05_boundary_refinement/data \                            ## the above input files are all placed in this folder
 --matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## LRR and BAF matrices generated in the initial step
 --centromere ${WKDIR}/data/centromere_hg19.txt \                               ## for other assemblies, check UCSC genome browser (see above)
 --resultpath ${WKDIR}/05_boundary_refinement/results \                         ## directory to save results
