@@ -53,7 +53,7 @@ The scripts are in its beta version. Please report bugs and issues or provide su
 
 Note: 
 
-- The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation needs to be adjusted to your specific computational environment. Running the whole pipeline on a Linux laptop/desktop may be possible, but may take much longer time and sometimes may be computationally prohibitive, especially for large projects with thousands to tens of thousands of samples (i.e., typical GWAS data).
+- The scripts of ensembleCNV have been developed and tested on [Minerva](https://hpc.mssm.edu/), a high-performance multi-node linux cluster (CentOS 6.9) wtih LSF (Load Sharing Facility). Part of the scripts used for job submission to parallelize the computation needs to be adjusted to your specific computational environment (see below sections [CNV genotyping for each CNVR](#4-cnv-genotyping-for-each-cnvr) and [Boundary refinement](#5-boundary-refinement)). Running the whole pipeline on a Linux laptop/desktop may be possible, but may take much longer time and sometimes may be computationally prohibitive, especially for large projects with thousands to tens of thousands of samples (i.e., typical GWAS data).
 
 - Please be advised that ensembleCNV is designed to detect and genotype CNVs on a relatively large cohort usually consisting of at least a few hundred samples. In particular, the steps [creating CNVR](#3-create-cnvr), [CNV genotyping](#4-cnv-genotyping-for-each-cnvr), and [boundary refinement](#5-boundary-refinement) require relatively large sample size to achieve a reasonable reproducibility and accuracy. Results generated from only a few samples are not valid.  
 
@@ -64,16 +64,17 @@ Note:
 ```sh
 git clone https://github.com/HaoKeLab/ensembleCNV
 ```
-The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder structure to organize the data and analysis workflow. We prepared a script for creating new project.
+The scripts in the installation folder `ensembleCNV` are organized step by step, with scripts for each step located in each individual subfolder. For a new project, we recommend the user make a copy of the original installation folder `ensembleCNV` in the working directory and keep the folder structure to organize the data and analysis workflow. We prepared a shell script for creating new project.
 ```sh
-cd /path/to/ensembleCNV
+ENSEMBLECNV=</path/to/ensembleCNV>
+cd $ENSEMBLECNV
 chmod +x create_new_project.sh
 
-WKDIR=/path/to/working_directory
+WKDIR=</path/to/working_directory>
 ./create_new_project.sh $WKDIR
 ```
 
-Please go through the detailed step-by-step instructions as follows.
+Please go through the detailed step-by-step instructions as follows when using ensembleCNV for the first time.
 
 ## Data
 
