@@ -131,7 +131,7 @@ ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
 Note: 
 - This perl script is designed to process a final report file with multiple samples. Although the code can accommodate a final report file with one or a few samples, the output files in the case are not meaningful for downstream analysis. The script will issue a warning if sample size is too small for subsequent steps.
 
-- 
+- In addtion to creating LRR and BAF matrices, the perl script also screens the whole final report file and performs sanity check. It will stop and report errors if there is any discripancy in the number of probes between samples. It will issue warnings if any columns required by ensembleCNV or the three CNV callers are missing.
 
 (2) Tansform tab-delimited text file to .rds format for quick loading in R
 ```sh
