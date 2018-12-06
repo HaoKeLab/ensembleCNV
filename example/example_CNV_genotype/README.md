@@ -9,14 +9,14 @@ ENSEMBLECNV=</path/to/ensembleCNV>
 
 Then run the following code for a demo of the main script `CNV.genotype.one.chr.one.batch.R` for CNV genotyping.
 ```sh
-Rscript ${path_ensembleCNV}/04_CNV_genotype/CNV.genotype.one.chr.one.batch.R \
+Rscript ${ENSEMBLECNV}/04_CNV_genotype/CNV.genotype.one.chr.one.batch.R \
 --chr 1 \
 --batch 2 \
 --type 0 \
---sourcefile ${path_ensembleCNV}/04_CNV_genotype/scripts/ \
---datapath ${path_ensembleCNV}/example/example_CNV_genotype/data \
---matrixpath ${path_ensembleCNV}/example/example_CNV_genotype/RDS \
---resultpath ${path_ensembleCNV}/example/example_CNV_genotype/results \
+--sourcefile ${ENSEMBLECNV}/04_CNV_genotype/scripts/ \
+--datapath ${ENSEMBLECNV}/example/example_CNV_genotype/data \
+--matrixpath ${ENSEMBLECNV}/example/example_CNV_genotype/RDS \
+--resultpath ${ENSEMBLECNV}/example/example_CNV_genotype/results \
 --duplicates \
 --plot
 ```
