@@ -21,4 +21,4 @@ Rscript ${path_ensembleCNV}/04_CNV_genotype/CNV.genotype.one.chr.one.batch.R \
 --plot
 ```
 
-Note: When the analysis is successfully completed, in the directory `${path_ensembleCNV}/example/example_CNV_genotype/results`, you will find similar directory structure as in a real project.
+Note: When the analysis is successfully completed, in the directory `${path_ensembleCNV}/example/example_CNV_genotype/results`, you will find similar directory structure and outputs as in a real project.
