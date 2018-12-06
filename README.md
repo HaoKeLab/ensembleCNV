@@ -375,13 +375,13 @@ The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVR
 (2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.2.submit.jobs.R \
---datapath ${WKDIR}/05_boundary_refinement/data \  ## the above input files are all placed in this folder
---resultpath ${WKDIR}/05_boundary_refinement/results \  ## directory to save results
---matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## chromosome-wise LRR and BAF matrices generated in the intial step
---refinescript ${WKDIR}/05_boundary_refinement/CNVR.boundary.refinement.R \  ## the main script for boundary refinement
---rcppfile ${WKDIR}/05_boundary_refinement/refine.cpp \  ## the C++ code for sub-block searching in local correlation matrix
---centromere ${WKDIR}/data/centromere_hg19.txt \  ## for other assemblies, check UCSC genome browser (see above)
---plot  ## (optional) indicates whether diagnosis plots to be generated
+--refinescript ${WKDIR}/05_boundary_refinement/CNVR.boundary.refinement.R \    ## the main script for boundary refinement
+--rcppfile ${WKDIR}/05_boundary_refinement/refine.cpp \                        ## the C++ code for sub-block searching in local correlation matrix
+--datapath ${WKDIR}/05_boundary_refinement/data \                              ## the above input files are all placed in this folder
+--matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## LRR and BAF matrices generated in the initial step
+--centromere ${WKDIR}/data/centromere_hg19.txt \                               ## for other assemblies, check UCSC genome browser (see above)
+--resultpath ${WKDIR}/05_boundary_refinement/results \                         ## directory to save results
+--plot                                                                         ## (optional) indicates whether diagnosis plots to be generated
 ```
 
 When this step is finished, several subdirectories are expected to be generated in each `res_refine/chr*` directory:
@@ -445,7 +445,7 @@ Rscript ${WKDIR}/06_performance_assessment/step.2.set.GQ.generate.results.R \
 --matrixCN ${WKDIR}/05_boundary_refinement/results/matrix_CN_final.rds \  ## CN matrix generated in "boundary refinement" step (see above)
 --matrixGQ ${WKDIR}/05_boundary_refinement/results/matrix_GQ_final.rds \  ## GQ matrix generated in "boundary refinement" step (see above)
 --cnvrfile ${WKDIR}/05_boundary_refinement/results/cnvr_final.txt \  ## CNVR information generated in "boundary refinement" step (see above)
---resultpath ${WKDIR}/06_performance_assessment  ## path to directory for saving results
+--resultpath ${WKDIR}/06_performance_assessment \ ## path to directory for saving results
 --gqscore <INT>  ## GQ score threhold chosen based on evaluation in step (1) or chosen empirically based on previous studies
 ```
 When this step is finished, three files will be generated in results folder:
