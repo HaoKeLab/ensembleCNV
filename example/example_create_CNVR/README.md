@@ -17,6 +17,13 @@ ${ENSEMBLECNV}/example/example_create_CNVR/data/CNV.PennCNV_new.txt \
 ${ENSEMBLECNV}/example/example_create_CNVR/data/quantisnp.cnv \
 ${ENSEMBLECNV}/example/example_create_CNVR/data/Samples_Table.txt
 ```
+Note:
+
+- `iPattern_all_calls.txt`, `CNV.PennCNV_new.txt`, and `quantisnp.cnv` are examples of what raw CNV calls generated from iPattern, PennCNV and QuantiSNP look like.
+
+- We do not include `Gender` column in `Samples_Table.txt` as gender information is not relevant for CNVR construction.
+
+- When the analysis is successfully completed, you will find in `${ENSEMBLECNV}/example/example_create_CNVR/results/` directory `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, which are reformated CNV calls from the 3 CNV callers.
 
 Step 2: create CNVR
 ```sh
