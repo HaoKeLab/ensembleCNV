@@ -300,7 +300,7 @@ Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
 --datapath   ${WKDIR}/04_CNV_genotype/data \      ## the above input files are all placed in this folder
 --matrixpath ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/RDS \  ## LRR and BAF matrices generated in the initial step
 --resultpath ${WKDIR}/04_CNV_genotype/results \   ## directory to save results
---joblog ${WKDIR}/04_CNV_genotype/results \       ## where jobs log files to be placed
+--joblog     ${WKDIR}/04_CNV_genotype/results \   ## where jobs log files to be placed
 --duplicates \                                    ## (optional) indicates whether the information duplicate pairs is used in diagnosis plots
 --plot                                            ## (optional) indicates whether diagnosis plots to be generated
 ```
