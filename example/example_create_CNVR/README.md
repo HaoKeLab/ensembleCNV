@@ -1,7 +1,7 @@
 
 ## Example: Boundary refinement
 
-Here is a demo of [creating CNVR](https://github.com/HaoKeLab/ensembleCNV#4-cnv-genotyping-for-each-cnvr) using example data of CNVs clumping around one CNVR.
+Here is a demo of [creating CNVR](https://github.com/HaoKeLab/ensembleCNV#3-create-cnvr) using example data of CNVs clumping around one CNVR.
 
 Please specify where the git clone of ensembleCNV are located.
 ```sh
