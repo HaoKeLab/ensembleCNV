@@ -5,7 +5,7 @@ Please specify where the scripts of ensembleCNV are located.
 ENSEMBLECNV=</path/to/ensembleCNV>
 ```
 
-This is a demo of how the main script `CNVR.boundary.refinement.R` for boundary refinement works.
+Then run the following code for a demo of how the main script `CNVR.boundary.refinement.R` for boundary refinement works.
 ```sh
 Rscript ${ENSEMBLECNV}/05_boundary_refinement/CNVR.boundary.refinement.R \
 --chr 2 \
