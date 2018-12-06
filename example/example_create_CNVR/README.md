@@ -23,7 +23,7 @@ Note:
 
 - We do not include `Gender` column in `Samples_Table.txt` as gender information is not relevant for creating CNVR in this example.
 
-- When the analysis is successfully completed, you will find in `${ENSEMBLECNV}/example/example_create_CNVR/results/` directory `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, which are reformated CNV calls from the 3 CNV callers.
+- When this step is successfully completed, you will find in `${ENSEMBLECNV}/example/example_create_CNVR/results/` directory `cnv.ipattern.txt`, `cnv.penncnv.txt`, and `cnv.quantisnp.txt`, which are reformated CNV calls from the 3 CNV callers.
 
 Step 2: create CNVR
 ```sh
@@ -36,3 +36,6 @@ Rscript ${ENSEMBLECNV}/03_create_CNVR/step.2.create.CNVR.R \
 --output ${ENSEMBLECNV}/example/example_create_CNVR/results/
 ```
 
+Note: When this step is successfully completed, you will find outputs in the directory `${ENSEMBLECNV}/example/example_create_CNVR/results/`.
+ - `cnv_clean.txt`: 
+ - `cnvr_clean.txt`:
