@@ -404,10 +404,10 @@ The information of rare CNVRs with CNV genotype frequency less than the cut-off 
 (4) Update CN and GQ matrices as well as CNVR information.
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.4.update.genotype.matrix.R \
---matrixbeforerefine ${WKDIR}/05_boundary_refinement/data \  ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here
---matrixrefine ${WKDIR}/05a_regenotype_after_refinement/results \  ## CNVRs listed in cnvr_regenotype_after_refine.txt need to be regenotyped as done in "CNV genotyping" step; cnvr_genotype.txt accompany with CN and GQ matrices is also in the directory 
---refinepath ${WKDIR}/05_boundary_refinement/results \  ## where cnvr_kept_after_refine.txt is located
---output ${WKDIR}/05_boundary_refinement/results  ## path to save final results
+--matrixbeforerefine ${WKDIR}/05_boundary_refinement/data \        ## matrix_CN.rds and matrix_GQ.rds before boundary refinement have been copied here
+--matrixrefine ${WKDIR}/05a_regenotype_after_refinement/results \  ## path to updated CN and GQ matrices for CNVRs listed in cnvr_regenotype_after_refine.txt
+--refinepath ${WKDIR}/05_boundary_refinement/results \             ## where cnvr_kept_after_refine.txt is located
+--output ${WKDIR}/05_boundary_refinement/results                   ## path to save final results
 ```
 
 When this step is finished, three files are expected to be generated in the results folder:
