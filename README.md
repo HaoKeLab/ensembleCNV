@@ -295,6 +295,9 @@ Rscript ${WKDIR}/04_CNV_genotype/step.1.split.cnvrs.into.batches.R \
 The parameter `-n 200` indicates the maximum number of CNVRs in each batch. The script goes over the table of CNVRs in `cnvr_clean.txt` generated in the previous "create CNVR" step, appends to the table an additional column indicating the batches each CNVR belongs to, and writes the updated table to tab-delimited file `cnvr_batch.txt`.
 
 (2) Submit parallelized jobs for CNV genotyping, each corresponding to one batch.
+
+Note: In `step.2.submit.jobs.R`, The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system.
+
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.2.submit.jobs.R \
 --type 0 \                                        ## "0" indicates initial submission
@@ -317,6 +320,9 @@ When this step is finished, several subdirectories are expected to be generated:
   - `cnvrs_error` (list of CNVRs encourtering errors when fitting local model)
 
 (3) Check submitted jobs and resubmit failed jobs.
+
+Note: In `step.3.check.and.resubmit.jobs.R`, The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system.
+
 ```sh
 Rscript ${WKDIR}/04_CNV_genotype/step.3.check.and.resubmit.jobs.R \
 --flag 1 \                                       ## 0: only print the status of submitted jobs; 1: resubmit failed jobs
@@ -376,6 +382,9 @@ Rscript ${WKDIR}/05_boundary_refinement/step.1.common.CNVR.to.refine.R \
 The parameter `--freq 0.05` indicates the frequency cut-off, based on which CNVRs with common CNV genotype will be selected and subject to boundary refinement. The script goes over the table of CNVRs in `cnvr_genotype.txt` generated in the previous "CNV genotyping" step, calculates frequency of CNV genotype based on data from `matrix_CN.rds`, and appends to the table an additional column indicating the frequency of CNV genotype for each CNVR. The table of CNVRs with frequency below the cut-off will be saved in tab-delimited file `cnvr_keep.txt`, while those with frequency above the cut-off will be saved in `cnvr_refine.txt`, both in the `${WKDIR}/05_boundary_refinement/results` directory.
 
 (2) Submit parallelized jobs for boundary refinement, each corresponding to CNVRs in one chromosome.
+
+Note: In `step.2.submit.jobs.R`, The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system.
+
 ```sh
 Rscript ${WKDIR}/05_boundary_refinement/step.2.submit.jobs.R \
 --refinescript ${WKDIR}/05_boundary_refinement/CNVR.boundary.refinement.R \    ## the main script for boundary refinement

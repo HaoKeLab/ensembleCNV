@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
+
 suppressMessages(library(optparse))
 
 option_list <- list(
@@ -60,15 +62,18 @@ for (chr1 in chrs) {
   path_log <- file.path(path_result, "res_refine/chr", chr1, "log")
   if (!dir.exists(path_log)) dir.create(path = path_log, recursive = TRUE)
 
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+## configure based on your system
   bsub.cmd.chr1 <- paste("bsub -n 2 -W 10:00",
                          "-R 'rusage[mem=10000]'",
-                         "-P [accout]",   ## need to modify based on specific system
+                         "-P <account>",
                          "-J", paste0("chr", chr1),
                          "-q premium",
                          "-e", file.path(path_log, paste0("boundary_refine_chr", chr1, ".err")),
                          "-o", file.path(path_log, paste0("boundary_refine_chr", chr1, ".log")),
                          shQuote( cmd.chr1 ))
-  
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
   cat("chr:", chr1, bsub.cmd.chr1, "\n")
   system( bsub.cmd.chr1 )
   Sys.sleep(0.1)

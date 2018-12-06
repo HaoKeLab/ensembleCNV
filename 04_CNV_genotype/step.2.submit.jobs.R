@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
+
 suppressMessages(library(optparse))
 
 option_list = list(
@@ -67,10 +69,15 @@ for ( chr1 in chrs ) {
     
     cat("chr:", chr1, "batch1:", batch1, "\n")
     cmd1 = paste(cmd, "--chr", chr1, "--batch", batch1)
-    bsub.cmd = paste("bsub -n 2 -W 10:00 -R 'rusage[mem=20000]' -P [account]", ## need to modify based on specific system
+    
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+## configure based on your system
+    bsub.cmd = paste("bsub -n 2 -W 10:00 -R 'rusage[mem=20000]' -P <account>",
                      "-e", file.path(path_job_error, paste0("chr_", chr1, "_batch_", batch1, ".e")), 
                      "-o", file.path(path_job_out, paste0("chr_", chr1, "_batch_", batch1, ".o")),
                      "-q premium", shQuote(cmd1))
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
     cat(bsub.cmd, "\n")
     system(bsub.cmd)
     
