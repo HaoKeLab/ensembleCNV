@@ -1,5 +1,7 @@
 ## Example: Boundary refinement
 
+Here is a demo of the main script `CNVR.boundary.refinement.R` for boundary refinement using example data from one CNVR.
+
 Please specify where the scripts of ensembleCNV are located.
 ```sh
 ENSEMBLECNV=</path/to/ensembleCNV>
