@@ -21,4 +21,8 @@ Rscript ${ENSEMBLECNV}/04_CNV_genotype/CNV.genotype.one.chr.one.batch.R \
 --plot
 ```
 
-Note: When the analysis is successfully completed, in the directory `${path_ensembleCNV}/example/example_CNV_genotype/results`, you will find similar directory structure and outputs as in a real project.
+Note: When the analysis is successfully completed, in the directory `${path_ensembleCNV}/example/example_CNV_genotype/results`, you will find similar directory structure and outputs as in a real project. In particular,
+
+- in the subfolders of the `pred` folder, you will find `*_pred.rds`, each corresponding to the CN genotype and GQ score for a CNVR. They are stored in `.rds` format in order to save space and improve I/O time.
+
+- in the subfolders of the `png` folder, you will find different diagnosis plots for each CNVR.
