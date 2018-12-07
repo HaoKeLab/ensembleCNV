@@ -62,7 +62,7 @@ ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 ```
 
 When the analysis is completed, you will find two files (among others) in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
--
--
+- `${PROJECT_NAME}_all_calls.txt`:
+- `${PROJECT_NAME}_sample.stats.txt`:
 
-
+These two files will be used by ensembleCNV.
