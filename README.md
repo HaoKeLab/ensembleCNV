@@ -276,7 +276,7 @@ Note:
 
 - We provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel, and CNVRs within the same chromosomes are further grouped into batches for additional level of parallelization. Relevant R scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/04_CNV_genotype). 
 
-Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
+Before running the script below, the following files generated in previous steps need to be copied (or linked) into the `${WKDIR}/04_CNV_genotype/data` directory, and named exactly as follows:
 
   - `SNP.pfb -> ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb` (prepared when running PennCNV; containing the column of PFB (Population Frequency of B allele) used in modeling the likelihood of BAF data)
   - `cnvr_clean.txt -> ${WKDIR}/03_create_CNVR/cnvr_clean.txt` (generated in "create CNVR" step)
@@ -364,7 +364,7 @@ Note:
 
 - We provide workflow scripts for a cluster environment, where CNVRs within different chromosomes are processed in parallel. Relevant R and C++ scripts can be found [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/05_boundary_refinement). 
 
-Before running the script below, the following files generated in previous steps need to be copied (or linked) in the `${WKDIR}/05_boundary_refinement/data` directory, and named exactly as follows:
+Before running the script below, the following files generated in previous steps need to be copied (or linked) into the `${WKDIR}/05_boundary_refinement/data` directory, and named exactly as follows:
 
   - `SNP_pos.txt -> ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt` (prepared in the initial step; containing chromosome and position information for each probe)
   - `cnvr_genotype.txt -> ${WKDIR}/04_CNV_genotype/results/cnvr_genotype.txt` (table of CNVR information, generated in "CNV genotyping" step)
