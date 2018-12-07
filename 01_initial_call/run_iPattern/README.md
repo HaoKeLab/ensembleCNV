@@ -23,8 +23,7 @@ Note: the directory structure/name must be kept as it is. Changing the directory
 Remark:
 
 - 
-
-- hg19
+- Two reference files `${IPNBASE}/ipn/known.cnvr.txt` and `${IPNBASE}/preprocess/ref_files/pq.txt` in the iPattern package are in hg18. We perpared a hg19 version here by [LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver). The users can substitute the two files when processing hg19 data. 
 
 ### Analysis workflow
 
