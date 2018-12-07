@@ -15,33 +15,39 @@ After obtaining the package (e.g., ipn.0.581.tar.gz is the version we received),
 
 - untar the package file with `tar -zvxf ipn.0.581.tar.gz`
 - setup environment:
-  - set up environment variable IPNBASE: `export IPNBASE='/your/path/to/ipn'`
-  - set up environment variable PYTHONPATH: `PYTHONPATH=$PYTHONPATH:'/your/path/to/ipn/ipnlib'`
+  - set up environment variable IPNBASE: `export IPNBASE='/path/to/ipn_0.581'`
+  - set up environment variable PYTHONPATH: `PYTHONPATH=$PYTHONPATH:'/path/to/ipn_0.581/ipnlib'`
 
-Note: the directory structure/name must be kept as it is. Changing the directory structure will break the iPattern pipeline, the pipeline finds all the necessary scripts based on IPNBASE and the directory structure. When PBS job submitting system is not available, you can use –noqsub option to run iPattern sequentially.
+Note: the directory structure/name must be kept as it is. Changing the directory structure will break the iPattern pipeline, the pipeline finds all the necessary scripts based on IPNBASE and the directory structure. When PBS job submitting system is not available, you can use `–-noqsub` option to run iPattern sequentially.
+
+Remark:
+
+- 
+
+- hg19
+
+- batch
 
 ### Analysis workflow
 
 The script `run_iPattern.R` contains a template to run iPattern in a cluster environment. The names of directories involved in analysis need to  specified by users. 
 
+```sh
+PROJECT_NAME=<project_name>
+Rscript ${WKDIR}/01_initial_call/run_iPattern/prepare_input_files_for_iPattern.R
 
+```
 
-# run-iPattern on linux command line ------------------------------------------
-
-path_to_ipattern="" ## where iPattern is installed
-export IPNBASE="$path_to_ipattern/ipn_0.581"
-PYTHONPATH=$PYTHONPATH:"$path_to_ipattern/ipn_0.581/ipnlib"
 
 INPUT_PATH="" ## where gender_file.txt, bad_file.txt and data_file.txt are located
-PROJECT_NAME=""
 
 ```sh
-${path_to_ipattern}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
---gender-file ${INPUT_PATH}/${PROJECT_NAME}_gender_file.txt \
---bad-sample-file ${INPUT_PATH}/${PROJECT_NAME}_bad_samples.txt \
---data-file-list ${INPUT_PATH}/${PROJECT_NAME}_data_file.txt \
---experiment PROJECT_NAME \
---output-directory path_run_ipattern \
+${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
+--data-file-list   ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_data_file.txt \
+--gender-file      ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_gender_file.txt \
+--bad-sample-file  ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_bad_samples.txt \
+--experiment       $PROJECT_NAME \
+--output-directory ${WKDIR}/01_initial_call/run_iPattern/results/ \
 --do-log
 --do-cleanup
 --noqsub
