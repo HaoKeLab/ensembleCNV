@@ -23,7 +23,7 @@ Note: the directory structure/name must be kept as it is. Changing the directory
 Remark:
 
 - 
-- Two reference files `${IPNBASE}/ipn/known.cnvr.txt` and `${IPNBASE}/preprocess/ref_files/pq.txt` in the iPattern package are in hg18. We perpared a hg19 version here by [LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver). The users can substitute the two files when processing hg19 data. 
+- Two reference files `${IPNBASE}/ipn/known.cnvr.txt` and `${IPNBASE}/preprocess/ref_files/pq.txt` in the iPattern package are in hg18. We perpared a hg19 version [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern/ref_files_hg19) by [LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver). The users can substitute the two files when processing hg19 data. 
 
 ### Analysis workflow
 
