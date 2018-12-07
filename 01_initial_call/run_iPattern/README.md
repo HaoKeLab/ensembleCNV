@@ -24,3 +24,26 @@ Note: the directory structure/name must be kept as it is. Changing the directory
 
 The script `run_iPattern.R` contains a template to run iPattern in a cluster environment. The names of directories involved in analysis need to  specified by users. 
 
+
+
+# run-iPattern on linux command line ------------------------------------------
+
+path_to_ipattern="" ## where iPattern is installed
+export IPNBASE="$path_to_ipattern/ipn_0.581"
+PYTHONPATH=$PYTHONPATH:"$path_to_ipattern/ipn_0.581/ipnlib"
+
+INPUT_PATH="" ## where gender_file.txt, bad_file.txt and data_file.txt are located
+PROJECT_NAME=""
+
+```sh
+${path_to_ipattern}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
+--gender-file ${INPUT_PATH}/${PROJECT_NAME}_gender_file.txt \
+--bad-sample-file ${INPUT_PATH}/${PROJECT_NAME}_bad_samples.txt \
+--data-file-list ${INPUT_PATH}/${PROJECT_NAME}_data_file.txt \
+--experiment PROJECT_NAME \
+--output-directory path_run_ipattern \
+--do-log
+--do-cleanup
+--noqsub
+```
+
