@@ -26,9 +26,6 @@ Remark:
 
 - hg19
 
-- When the sample size of the project is large, the authors of iPattern recommend the whole dataset be split into batches with balanced sample size in order to control for the number of CNV calls per sample. The batches are analyzed by iPattern independently. In each batch (or iPattern run), a minimum of 90-96 samples (e.g. one 96-well plate of samples) and a maximum of 400 samples are recommended. Creating batches can be easily implemented by splitting `${PROJECT_NAME}_data_file.txt` (see below) into batch-level data files (e.g. `${PROJECT_NAME}_batch1_data_file.txt`, `${PROJECT_NAME}_batch2_data_file.txt`, etc.) with each batch having a batch-specific project name (e.g., `${PROJECT_NAME}_batch1`, `${PROJECT_NAME}_batch2`, etc.). When the analysis for all batches are completed, the batch-wise results (e.g., `${PROJECT_NAME}_batch*_all_calls.txt` and `${PROJECT_NAME}_batch*_sample.stats.txt`; see below) will be combined into the final results (e.g., `${PROJECT_NAME}_all_calls.txt` and `${PROJECT_NAME}_sample.stats.txt`; see below).
-
-
 ### Analysis workflow
 
 #### Prepare auxiliary input files
@@ -61,9 +58,10 @@ ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 --do-cleanup
 --noqsub
 ```
-
 Note: We set all other parameters by default values.
 
 When the analysis is completed, you will find two files, which will be used by ensembleCNV, in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
 - `${PROJECT_NAME}_all_calls.txt`: raw CNV calls of all samples.
 - `${PROJECT_NAME}_sample.stats.txt`: sample-level summary statistics.
+
+Note: When the sample size of the project is large, the authors of iPattern recommend the whole dataset be split into batches with balanced sample size in order to control for the number of CNV calls per sample. The batches are analyzed by iPattern independently. In each batch (or iPattern run), a minimum of 90-96 samples (e.g. one 96-well plate of samples) and a maximum of 400 samples are recommended. Creating batches can be easily implemented by splitting `${PROJECT_NAME}_data_file.txt` (see below) into batch-level data files (e.g. `${PROJECT_NAME}_batch1_data_file.txt`, `${PROJECT_NAME}_batch2_data_file.txt`, etc.) with each batch having a batch-specific project name (e.g., `${PROJECT_NAME}_batch1`, `${PROJECT_NAME}_batch2`, etc.). When the analysis for all batches are completed, the batch-wise results (e.g., `${PROJECT_NAME}_batch*_all_calls.txt` and `${PROJECT_NAME}_batch*_sample.stats.txt`; see below) will be combined into the final results (e.g., `${PROJECT_NAME}_all_calls.txt` and `${PROJECT_NAME}_sample.stats.txt`; see below).
