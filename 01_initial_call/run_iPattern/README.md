@@ -41,7 +41,7 @@ Rscript ${WKDIR}/01_initial_call/run_iPattern/prepare_input_files_for_iPattern.R
 
 When the processing is completed, three files are supposed to be generated at  `${WKDIR}/01_initial_call/run_iPattern/data_aux`
 
-- `${PROJECT_NAME}_data_file.txt`: lists the absolute path to all the sample-wise final report files in `${WKDIR}/01_initial_call/run_iPattern/data`.
+- `${PROJECT_NAME}_data_file.txt`: lists the absolute path to all the sample-wise final report files in `${WKDIR}/01_initial_call/run_iPattern/data`, so that iPattern knows where to find these data files.
 
 - `${PROJECT_NAME}_gender_file.txt`: tab-delimited table including two columns (without column names in table header): Sample ID and Gender ("M" for male and "F" for female), which is generated based on `${WKDIR}/data/Samples_Table.txt` (see the detailed decription of [data](https://github.com/HaoKeLab/ensembleCNV#data)).
 
