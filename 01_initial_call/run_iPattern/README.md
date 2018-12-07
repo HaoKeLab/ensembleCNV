@@ -39,8 +39,15 @@ PROJECT_NAME=<project_name>
 Rscript ${WKDIR}/01_initial_call/run_iPattern/prepare_input_files_for_iPattern.R ${WKDIR} ${PROJECT_NAME}
 ```
 
+When the processing is completed, three files are supposed to be generated at  `${WKDIR}/01_initial_call/run_iPattern/data_aux`
 
-INPUT_PATH="" ## where gender_file.txt, bad_file.txt and data_file.txt are located
+- `${PROJECT_NAME}_data_file.txt`: lists the absolute path to all the sample-wise final report files in `${WKDIR}/01_initial_call/run_iPattern/data`.
+
+- `${PROJECT_NAME}_gender_file.txt`: tab-delimited table including two columns (without column names in table header): Sample ID and Gender ("M" for male and "F" for female), which is generated based on `${WKDIR}/data/Samples_Table.txt` (see the detailed decription of [data](https://github.com/HaoKeLab/ensembleCNV#data)).
+
+- `${PROJECT_NAME}_bad_samples.txt`: lists sample IDs of poor quality to be excluded from iPattern analysis. We prepared an empty file where the users can type in sample IDs of poor quality if there is any.
+
+#### Run iPattern
 
 ```sh
 ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
@@ -53,4 +60,9 @@ ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 --do-cleanup
 --noqsub
 ```
+
+When the analysis is completed, you will find two files (among others) in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
+-
+-
+
 
