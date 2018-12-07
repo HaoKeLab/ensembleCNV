@@ -18,7 +18,7 @@ path_run_ipattern <- file.path(path_wkdir, "01_initial_call", "run_iPattern")
 ## 1) data_file: list of splitted final report files for each sample
 ## the directory contains the input files prepared by finalreport_to_iPattern.pl
 path_ipattern_prepare_data <- file.path(path_run_ipattern, "data")
-fls_all <- list.files(path = path_ipattern_prepare_data,pattern = ".txt$", full.names = TRUE)
+fls_all <- list.files(path = path_ipattern_prepare_data, pattern = ".txt$", full.names = TRUE)
 
 data_file <- data.frame(data_file = fls_all, stringsAsFactors = FALSE)
 write.table( data_file, file = file.path( path_run_ipattern, "data_aux", 
