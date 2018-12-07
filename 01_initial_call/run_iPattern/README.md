@@ -26,7 +26,7 @@ Remark:
 
 - hg19
 
-- batch
+- When the sample size of the project is large, the authors of iPattern recommend the whole dataset be split into batches with balanced sample size in order to control for the number of CNV calls per sample. In each batch (or iPattern run), a minimum of 90-96 samples (e.g. one 96-well plate of samples) and a maximum of 400 samples are recommended. Creating batches can be easily implemented by splitting `${PROJECT_NAME}_data_file.txt` (see below) into batch-level data files (e.g. "${PROJECT_NAME}_batch1_data_file.txt", "${PROJECT_NAME}_batch2_data_file.txt", etc.) with each batch having a batch-specific project name (i.e., ${PROJECT_NAME}_batch1, ${PROJECT_NAME}_batch2, etc.). When the analysis for all batches are completed, the batch-wise
 
 ### Analysis workflow
 
@@ -39,7 +39,7 @@ PROJECT_NAME=<project_name>
 Rscript ${WKDIR}/01_initial_call/run_iPattern/prepare_input_files_for_iPattern.R ${WKDIR} ${PROJECT_NAME}
 ```
 
-When the processing is completed, three files are supposed to be generated at  `${WKDIR}/01_initial_call/run_iPattern/data_aux`
+When the processing is completed, three files are supposed to be generated at  `${WKDIR}/01_initial_call/run_iPattern/data_aux`:
 
 - `${PROJECT_NAME}_data_file.txt`: lists the absolute path to all the sample-wise final report files in `${WKDIR}/01_initial_call/run_iPattern/data`, so that iPattern knows where to find these data files.
 
@@ -61,8 +61,8 @@ ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 --noqsub
 ```
 
-When the analysis is completed, you will find two files (among others) in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
-- `${PROJECT_NAME}_all_calls.txt`:
-- `${PROJECT_NAME}_sample.stats.txt`:
+Note: We set all other parameters by default values.
 
-These two files will be used by ensembleCNV.
+When the analysis is completed, you will find two files, which will be used by ensembleCNV, in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
+- `${PROJECT_NAME}_all_calls.txt`: raw CNV calls of all samples.
+- `${PROJECT_NAME}_sample.stats.txt`: sample-level summary statistics.
