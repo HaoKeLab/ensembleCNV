@@ -22,8 +22,9 @@ Note: the directory structure/name must be kept as it is. Changing the directory
 
 Remark:
 
-- 
-- Two reference files `${IPNBASE}/ipn/known.cnvr.txt` and `${IPNBASE}/preprocess/ref_files/pq.txt` in the iPattern package are in hg18. We perpared a hg19 version [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern/ref_files_hg19) by [LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver). The users can substitute the two files when processing hg19 data. 
+- In version 0.581, `${IPNBASE}/ipnlib/IpnFormat.py` will process the columns `Allele1 - Forward` and `Allele2 - Forward` in the final report (see the detailed decription of [data](https://github.com/HaoKeLab/ensembleCNV#data)). If only the `Allele1 - Top` and `Allele1 - Top` columns exist instead of the `Allele1 - Forward` and `Allele2 - Forward` columns in the final report, the users need to substitute `'Allele1 - Forward'` and `'Allele2 - Forward'` to the corresponding code `'Allele1 - Forward'` and `'Allele2 - Forward'` appearing in the `class IPNFormat` code of `${IPNBASE}/ipnlib/IpnFormat.py`.
+
+- In version 0.581, two reference files `${IPNBASE}/ipn/known.cnvr.txt` and `${IPNBASE}/preprocess/ref_files/pq.txt` in the iPattern package are in hg18. We perpared a hg19 version [here](https://github.com/HaoKeLab/ensembleCNV/tree/master/01_initial_call/run_iPattern/ref_files_hg19) by [LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver). The users can substitute the two files when processing hg19 data. 
 
 ### Analysis workflow
 
