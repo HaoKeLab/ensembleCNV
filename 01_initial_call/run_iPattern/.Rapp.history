@@ -1,2 +1,0 @@
-list.files(getwd(), include.dirs=T)
-list.files(getwd(), full.names = T)
