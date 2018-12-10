@@ -8,18 +8,18 @@ After installation, set up environment variable PENNCNV: `export PENNCNV='/path/
 
 ### Analysis workflow
 
-Note: The auxiliary scripts we provide here were used on our high performance cluster. The users need to modifiy the scripts according to the specific system the users are using. 
+Note: PennCNV was originally designed to sequentially analyze one sample at a time. Please refer to [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for how to perform a sequential analysis. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
 
-Running PennCNV includes the following 5 steps:
+We run PennCNV analysis with the following 5 steps:
 
 (1) Prepare SNP.pfb and SNP.gcmodel files
 
 See scripts in `step.1.prepare.files.sh` for details.
 
 
-Note: PennCNV was originally designed to sequentially analyze one sample at a time. Please refer to [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for how to perform a sequential analysis. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
 
-In the following steps (2) and (3), the scripts embraced by "##<<<... ##>>>..." in the scripts need to be specified based on your system.
+
+Note: In the following steps (2) and (3), the scripts embraced by "##<<<... ##>>>..." in the scripts need to be specified based on your system.
 
 (2) Run PennCNV for each sample in parallel (through job submitting system on cluster)
 
