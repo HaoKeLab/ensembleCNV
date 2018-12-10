@@ -43,7 +43,7 @@ When the processing is completed, three files are supposed to be generated at  `
 
 - `${PROJECT_NAME}_gender_file.txt`: tab-delimited table including two columns (without column names in table header): Sample ID and Gender ("M" for male and "F" for female), which is generated based on `${WKDIR}/data/Samples_Table.txt` (see the detailed decription of [data](https://github.com/HaoKeLab/ensembleCNV#data)).
 
-- `${PROJECT_NAME}_bad_samples.txt`: lists sample IDs of poor quality to be excluded from iPattern analysis. We prepared an empty file where the users can type in the sample IDs to be excluded from the analysis if there is any.
+- `${PROJECT_NAME}_bad_samples.txt`: is used to list sample IDs to be excluded from iPattern analysis. We prepared an empty file where the users can type in the sample IDs to be excluded from the analysis if there is any.
 
 #### Run iPattern
 
