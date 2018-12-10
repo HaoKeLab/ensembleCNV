@@ -2,7 +2,7 @@
 
 ### Installation
 
-To install PennCNV, please follow the detailed instructions (including trouble shooting) at the PennCNV [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/install/). For more information about PennCNV, please refer to their original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/).
+To install PennCNV, please follow the detailed instructions (including trouble shooting) at the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/install/). For more information about PennCNV, please refer to their original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/).
 
 After installation, set up environment variable PENNCNV: `export PENNCNV='/path/to/penncnv'`
 
@@ -66,14 +66,19 @@ This step will screen if the jobs submitted for each sample in step (2) are succ
 (4) Combine PennCNV results from each sample, including the content in .rawcnv and .log files
 ```sh
 perl ${WKDIR}/01_initial_call/run_PennCNV/step.4.combine.PennCNV.res.pl \
---in_dir /path/to/results/ \
---out_dir /path/to/output/
+--in_dir ${WKDIR}/01_initial_call/run_PennCNV/results/res \
+--out_dir ${WKDIR}/01_initial_call/run_PennCNV/results
 ```
+This script screens `.log` and `.rawcnv` files for all samples generated in steps (2) and (3), and combines them. When this step is completed, there will be two files generated in the directory `${WKDIR}/01_initial_call/run_PennCNV/results`:
+
+- `CNV.PennCNV.log`: combined log file of the `.log` files from all samples.
+
+- `CNV.PennCNV.rawcnv`: combined raw CNV calls of the `.rawcnv` files from all samples.
 
 (5) Merge closely adjacent CNVs and generate final results
 ```sh
 Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.5.clean.PennCNV.res.R \
--i /path/to/results/ \
--f /path/to/SNP.pfb \
--n file_name_of_combined_results ## [file_name_of_combined_results].rawcnv from step 4
+--penncnv ${PENNCNV} \                                  ## direct to ${PENNCNV}/bin/detect_cnv.pl
+-i ${WKDIR}/01_initial_call/run_PennCNV/results \
+-f ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ```

@@ -4,26 +4,27 @@
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information
 
-path_to_penncnv <- ""  ## where PennCNV is installed
-
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
 
 option_list <- list(
+  make_option(c("-p", "--penncnv"), action = "store", default = NA, type = "character",
+              help = "path to PennCNV installation folder."),
   make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
               help = "input path for combined PennCNV result."),
   make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
-              help = "pfb file"),
-  make_option(c("-n", "--name"), action = "store", default = NA, type = "character",
-              help = "rawcnv filename")
+              help = "pfb file."),
+  make_option(c("-n", "--name"), action = "store", default = "CNV.PennCNV", type = "character",
+              help = "rawcnv filename.")
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
 
-path_input  <- opt$input
-file_pfb    <- opt$pfb
-name_rawcnv <- opt$name
+path_penncnv <- opt$penncnv
+path_input   <- opt$input
+file_pfb     <- opt$pfb
+name_rawcnv  <- opt$name
 
 if (any(is.na(c(path_input, file_pfb, name_rawcnv)))) {
   stop("All parameters must be supplied.( --help for details )")
@@ -51,7 +52,7 @@ while(flag == 0) {
   n_rawcnv <- as.integer(system(paste("cat", cnv1_in, "|", "wc -l"), intern = TRUE))
   cnv1_out <- paste(name_project, idx, "rawcnv", sep = ".")
   
-  cmd1 <- paste(file.path(path_to_penncnv, "bin/clean_cnv.pl"),
+  cmd1 <- paste(file.path(path_penncnv, "bin/clean_cnv.pl"),
                 "combineseg", cnv1_in, "--signalfile", file_pfb, 
                 "--fraction 0.2", "--bp >", cnv1_out)
   
@@ -79,7 +80,7 @@ while(flag == 0) {
 cnv_penncnv <- paste(name_project, idx, "rawcnv", sep = ".")
 cnv_tab <- paste(name_project, "txt", sep = ".")
 cat("Convert final PennCNV results to tab-delimit text file.\n")
-cmd.transform <- paste(file.path(path_to_penncnv, "bin/convert_cnv.pl"),
+cmd.transform <- paste(file.path(path_penncnv, "bin/convert_cnv.pl"),
                        "--intype", "penncnv", "--outtype", "tab", cnv_penncnv, ">", cnv_tab)
 system(cmd.transform)
 
@@ -87,7 +88,7 @@ system(cmd.transform)
 cat("Extract individual level statistics for QC.\n")
 cnv_log <- paste(name_project, "log", sep = ".")
 cnv_qc <- paste0(name_project, "_qc.txt")
-cmd.extract <- paste(file.path(path_to_penncnv, "bin/filter_cnv.pl"), cnv_penncnv,
+cmd.extract <- paste(file.path(path_penncnv, "bin/filter_cnv.pl"), cnv_penncnv,
                      "-qclogfile", cnv_log, "-qcsumout", cnv_qc, ">", "step5.log")
 system(cmd.extract)
 
