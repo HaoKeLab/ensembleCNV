@@ -1,16 +1,18 @@
 #!/usr/bin/env Rscirpt
 
+## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
+
 ## The script was used to run PennCNV on Minerva high performance cluster.
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original PennCNV documents (http://penncnv.openbioinformatics.org/en/latest/) for more information 
-
-path_to_penncnv <- ""  ## where PennCNV is installed
 
 suppressMessages({
   require( optparse, quietly = TRUE)
 })
 
 option_list <- list(
+  make_option(c("-p", "--penncnv"), action = "store", default = NA, type = "character",
+              help = "path to PennCNV installation folder."),  
   make_option(c("-a", "--data"), action = "store", default = NA, type = "character",
               help = "path to tab-delimit text data files for each sample."),
   make_option(c("-d", "--wkdir"), action = "store", default = NA, type = "character",
@@ -25,6 +27,7 @@ option_list <- list(
 
 opt = parse_args(OptionParser(option_list = option_list))
 
+path_penncnv <- opt$penncnv
 path_data    <- opt$data
 path_wkdir   <- opt$wkdir
 file_pfb     <- opt$pfb
@@ -38,7 +41,7 @@ if (any(is.na(c(path_data, path_wkdir, file_pfb, file_gcmodel, file_hmm)))) {
 # create path -------------------------------------------------------------
 
 path_list  <- file.path(path_wkdir, "list")
-path_res   <- file.path(path_wkdir, "res") ## PennCNV results folder
+path_res   <- file.path(path_wkdir, "res") ## PennCNV raw results folder
 
 if ( !dir.exists(path_list) ) {
   dir.create(path = path_list, showWarnings = FALSE, recursive = TRUE)
@@ -78,7 +81,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
 
-  cmd <- paste(file.path(path_to_penncnv, "bin/detect_cnv.pl"),
+  cmd <- paste(file.path(path_penncnv, "bin/detect_cnv.pl"),
                "-test --confidence",
                "-hmm", file_hmm,
                "-pfb", file_pfb,
@@ -91,10 +94,14 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
 
 cmd_submitjob <- function(cmd.sample, samplename) {
 
-  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P [account]", ## need to modify based on specific system
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+## configure based on your system
+  bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P <account>",
                     "-J", samplename,
                     "-q premium",
                     shQuote(cmd.sample))
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  
   bsub.cmd
 }
 
