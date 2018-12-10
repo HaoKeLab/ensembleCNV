@@ -63,7 +63,7 @@ Rscrip ${WKDIR}/01_initial_call/run_PennCNV/step.3.check.PennCNV.jobs.R \
 This step will screen if the jobs submitted for each sample in step (2) are successfully completed and resubmit failed jobs if there is any.
 
 
-(4) Combine PennCNV results from each sample, including the content in .rawcnv and .log files
+(4) Combine PennCNV results (.rawcnv and .log files) from each sample
 ```sh
 perl ${WKDIR}/01_initial_call/run_PennCNV/step.4.combine.PennCNV.res.pl \
 --in_dir ${WKDIR}/01_initial_call/run_PennCNV/results/res \
