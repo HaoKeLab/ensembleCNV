@@ -18,12 +18,22 @@ We run PennCNV analysis with the following 5 steps:
 
 (1) Prepare SNP.pfb and SNP.gcmodel files
 
-See scripts in `step.1.prepare.files.sh` for details.
+- compile pfb (population frequency of B allele) file
+```sh
+perl ${PENNCNV}/bin/compile_pfb.pl \
+-listfile ${wk_dir}/list_pfb.txt \
+-snpposfile ${wk_dir}/SNP_pos.txt \
+-output ${wk_dir}/SNP.pfb
+```
 
-
-
-
-
+- compile gcmodel file for GC content ajdustment
+## please refer to PennCNV documents about how to prepare gc5Base_hg19.txt.sorted
+```sh
+perl ${PENNCNV}/bin/cal_gc_snp.pl \
+${wk_dir}/gc5Base_hg19.txt.sorted \
+${wk_dir}/SNP.pfb \
+-output ${wk_dir}/SNP.gcmodel
+```
 
 (2) Run PennCNV for each sample in parallel (through job submitting system on cluster)
 
