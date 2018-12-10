@@ -54,8 +54,8 @@ ${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
 --bad-sample-file  ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_bad_samples.txt \
 --experiment       $PROJECT_NAME \
 --output-directory ${WKDIR}/01_initial_call/run_iPattern/results/ \
---do-log
---do-cleanup
+--do-log \
+--do-cleanup \
 --noqsub
 ```
 When the analysis is completed, you will find two files, which will be used by ensembleCNV, in the directory `${WKDIR}/01_initial_call/run_iPattern/results`:
