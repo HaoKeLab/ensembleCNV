@@ -21,19 +21,33 @@ We run PennCNV analysis with the following 5 steps:
 - compile pfb (population frequency of B allele) file
 ```sh
 perl ${PENNCNV}/bin/compile_pfb.pl \
--listfile ${wk_dir}/list_pfb.txt \
--snpposfile ${wk_dir}/SNP_pos.txt \
--output ${wk_dir}/SNP.pfb
+-snpposfile ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt \
+-listfile ${WKDIR}/01_initial_call/run_PennCNV/data_aux/list_pfb.txt \
+-output ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb
 ```
 
+Note:
+
+- For more information about pfb file, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/input/#pfb-population-frequency-of-b-allele-file).
+
+
+specify a file that contains a list of signal file names, one per line. The program will process these files and calculate PFB
+               values based on these files
+
 - compile gcmodel file for GC content ajdustment
-## please refer to PennCNV documents about how to prepare gc5Base_hg19.txt.sorted
+
+
+
+please refer to PennCNV documents about how to prepare gc5Base_hg19.txt.sorted
 ```sh
 perl ${PENNCNV}/bin/cal_gc_snp.pl \
 ${wk_dir}/gc5Base_hg19.txt.sorted \
 ${wk_dir}/SNP.pfb \
 -output ${wk_dir}/SNP.gcmodel
 ```
+
+- For more information about gcmodel file, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/input/#gcmodel-file).
+
 
 (2) Run PennCNV for each sample in parallel (through job submitting system on cluster)
 
