@@ -79,8 +79,8 @@ This script screens `.log` and `.rawcnv` files for all samples generated in step
 ```sh
 Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.5.clean.PennCNV.res.R \
 --penncnv ${PENNCNV} \                                  ## direct to installation directory ${PENNCNV}
--input ${WKDIR}/01_initial_call/run_PennCNV/results \
--pfb ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
+--input ${WKDIR}/01_initial_call/run_PennCNV/results \
+--pfb ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ```
 
 This script is a wrapper to run three perl scripts in PennCNV package will be used:
