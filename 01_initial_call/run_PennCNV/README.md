@@ -42,7 +42,7 @@ Note:
 ```sh
 perl ${PENNCNV}/bin/cal_gc_snp.pl \
 ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
-${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base.txt.sorted \
+${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted \
 -output ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.gcmodel
 ```
 
@@ -50,11 +50,11 @@ Note:
 
 - For more information about gcmodel file, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/input/#gcmodel-file).
 
-- The `gc5Base.txt.sorted` (take hg19 for example) is generated based on UCSC Genome Browser annotation file (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/gc5Base.txt.gz). Despite the file name, it actually contains GC content per 5120bp. If you need GC annotation file for other genome assembly, please download it from the corresponding directory names. After downloading `gc5Base.txt.gz` (put in `${WKDIR}/01_initial_call/run_PennCNV/data_aux`) and unzipping the file, then sort this file such that chromosome and positions are sorted.
+- The `gc5Base_hg19.txt.sorted` (take hg19 for example) is generated based on UCSC Genome Browser annotation file (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/gc5Base.txt.gz). Despite the file name, it actually contains GC content per 5120bp. If you need GC annotation file for other genome assembly, please download it from the corresponding directory names. After downloading `gc5Base.txt.gz` (put in `${WKDIR}/01_initial_call/run_PennCNV/data_aux`) and unzipping the file, then sort this file such that chromosome and positions are sorted.
 ```sh
 sort -k 2,2 -k 3,3n \
 <${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base.txt \
->${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base.txt.sorted
+>${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted
 ```
 
 #### (2) Run PennCNV for each sample in parallel (through job submitting system on cluster)
