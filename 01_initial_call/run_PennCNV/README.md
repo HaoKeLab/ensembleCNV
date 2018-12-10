@@ -12,7 +12,7 @@ Note:
 
 - PennCNV was originally designed to sequentially analyze one sample at a time. Please refer to [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for how to perform a sequential analysis. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
 
-- In the following steps (2) and (3), the scripts regarding job submission embraced by "##<<<... ##>>>..." in the scripts need to be specified based on your system.
+- In the following steps (2) and (3), the scripts regarding job submission embraced by "##<<<... ##>>>..." in the scripts need to be specified by the users based on the system the users are using.
 
 We run PennCNV analysis with the following 5 steps:
 
@@ -31,7 +31,7 @@ Note:
 
 - In `step.2.run.PennCNV.jobs.R`, The scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
 
-- For more information about CNV calling by PennCNV, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/test/)
+- For more information about CNV calling by PennCNV, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/test/).
 
 ```sh 
 Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.2.run.PennCNV.jobs.R \
