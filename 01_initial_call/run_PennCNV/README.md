@@ -78,7 +78,23 @@ This script screens `.log` and `.rawcnv` files for all samples generated in step
 (5) Merge closely adjacent CNVs and generate final results
 ```sh
 Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.5.clean.PennCNV.res.R \
---penncnv ${PENNCNV} \                                  ## direct to ${PENNCNV}/bin/detect_cnv.pl
--i ${WKDIR}/01_initial_call/run_PennCNV/results \
--f ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
+--penncnv ${PENNCNV} \                                  ## direct to installation directory ${PENNCNV}
+-input ${WKDIR}/01_initial_call/run_PennCNV/results \
+-pfb ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ```
+
+This script is a wrapper to run three perl scripts in PennCNV package will be used:
+
+- `${PENNCNV}/bin/clean_cnv.pl`: merge adjacent CNVs which are close to each other. Please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/annotation/#merging-adjacent-cnv-calls) for details.
+
+- `${PENNCNV}/bin/convert_cnv.pl`:
+
+- `${PENNCNV}/bin/filter_cnv.pl`:
+
+When the analysis is completed, you will find two files, which will be used by ensembleCNV, in the directory ${WKDIR}/01_initial_call/run_iPattern/results:
+
+    ${PROJECT_NAME}_all_calls.txt: raw CNV calls of all samples.
+    ${PROJECT_NAME}_sample.stats.txt: sample-level summary statistics.
+
+
+

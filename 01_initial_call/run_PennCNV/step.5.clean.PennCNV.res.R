@@ -16,7 +16,7 @@ option_list <- list(
   make_option(c("-f", "--pfb"), action = "store", default = NA, type = "character",
               help = "pfb file."),
   make_option(c("-n", "--name"), action = "store", default = "CNV.PennCNV", type = "character",
-              help = "rawcnv filename.")
+              help = "rawcnv filename generated in step (4).")
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
