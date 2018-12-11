@@ -81,7 +81,7 @@ When the analysis is completed, there will be subfolders named after sample IDs,
 
 #### (3) Check job status and resubmit failed jobs
 
-Note: In `step.3.check.PennCNV.jobs.R`, The scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
+Note: In `step.3.check.PennCNV.jobs.R`, the scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
 
 ```sh
 Rscrip ${WKDIR}/01_initial_call/run_PennCNV/step.3.check.PennCNV.jobs.R \
