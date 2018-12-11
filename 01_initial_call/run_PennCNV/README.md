@@ -61,7 +61,7 @@ sort -k 2,2 -k 3,3n \
 
 Note: 
 
-- In `step.2.run.PennCNV.jobs.R`, The scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
+- In `step.2.run.PennCNV.jobs.R`, the scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
 
 - For more information about CNV calling by PennCNV, please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/test/).
 
