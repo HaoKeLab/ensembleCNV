@@ -92,7 +92,7 @@ Rscrip ${WKDIR}/01_initial_call/run_PennCNV/step.3.check.PennCNV.jobs.R \
 --gcmodel ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.gcmodel \
 --hmm ${PENNCNV}/lib/hhall.hmm
 ```
-This step will screen if the jobs submitted for each sample in step (2) are successfully completed and resubmit failed jobs if there is any.
+This step checks if the jobs submitted for each sample in step (2) are successfully completed and resubmits failed jobs if there is any.
 
 
 #### (4) Combine PennCNV results (.rawcnv and .log files) from each sample
@@ -115,7 +115,7 @@ Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.5.clean.PennCNV.res.R \
 --pfb ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ```
 
-This script is a wrapper to run three perl scripts in PennCNV package will be used:
+This script is a wrapper to run three perl scripts in PennCNV package:
 
 - `${PENNCNV}/bin/clean_cnv.pl`: merge adjacent CNVs which are close to each other. Please refer to the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/annotation/#merging-adjacent-cnv-calls) for details.
 
