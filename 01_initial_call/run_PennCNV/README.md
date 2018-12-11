@@ -18,7 +18,7 @@ We run PennCNV analysis with the following 5 steps:
 
 #### (1) Prepare SNP.pfb and SNP.gcmodel files
 
-#### (a) compile pfb (population frequency of B allele) file
+#### (1.1) compile pfb (population frequency of B allele) file
 ```sh
 perl ${PENNCNV}/bin/compile_pfb.pl \
 -snpposfile ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt \
@@ -37,7 +37,7 @@ Note:
   - The `SNP.pfb` will not only be used by PennCNV but also employed by ensembleCNV for [CNV genotyping](https://github.com/HaoKeLab/ensembleCNV#4-cnv-genotyping-for-each-cnvr). 
 
 
-#### (b) compile gcmodel file for GC content ajdustment
+#### (1.2) compile gcmodel file for GC content ajdustment
 
 ```sh
 perl ${PENNCNV}/bin/cal_gc_snp.pl \
