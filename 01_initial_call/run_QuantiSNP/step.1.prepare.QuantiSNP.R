@@ -1,18 +1,26 @@
 #!/usr/bin/env Rscript
 
+## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
+
 ## The script was used to run QuantiSNP on Minerva high performance cluster.
 ## You need to modifiy it according to the system you are using if you would like to use it.
 ## Please refer to original QuantiSNP documents (https://sites.google.com/site/quantisnp/) for more information 
 
-path_to_quantisnp <- ""  ## where QuantiSNP is installed
+## sample file: in tab-delimited format and has two columns: Sample_ID and Gender
+## for example
+# Sample_ID	Gender
+# sample_1	Female
+# sample_2	Male
 
 suppressPackageStartupMessages(require(optparse))
 
 option_list <- list(
+  make_option(c("-q", "--quantisnp"), action = "store", default = NA, type = "character",
+              help = "path to QuantiSNP installation folder."),  
   make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
               help = "data folder for runing QuantiSNP"),
-  make_option(c("-g", "--gender"), action = "store", default = NA, type = "character",
-              help = "gender file for runing QuantiSNP"),            
+  make_option(c("-s", "--sample"), action = "store", default = NA, type = "character",
+              help = "sample file with Sample_ID and Gender information for runing QuantiSNP"),            
   make_option(c("-o", "--output"), action = "store", default = NA, type = "character",
               help = "output folder for QuantiSNP results")
 )
@@ -22,26 +30,22 @@ if (is.na(opt$input) | is.na(opt$output)) {
   stop("All input and output arguments must be supplied.")
 }
 
-path_dat <- opt$input
-gender_file <- opt$gender
-path_output <- opt$output
+path_quantisnp <- opt$quantisnp
+path_dat       <- opt$input
+sample_file    <- opt$sample
+path_output    <- opt$output
 
-## gender file: in tab-delimited format and has two columns: Sample_ID and Gender
-## for example
-# Sample_ID	Gender
-# sample_1	female
-# sample_2	male
+dat_sample <- read.delim(file = sample_file, as.is = TRUE)
 
-dat_gender <- read.delim(file = gender_file, as.is = TRUE)
+cat("number of rows of sample table:", nrow(dat_sample), "\n") ## number of samples
 
-cat("rows of dat_gender:", nrow(dat_gender), "\n") ## number of samples
-
-for (i in 1:nrow(dat_gender)) {
+for (i in 1:nrow(dat_sample)) {
   
-  sample_name <- as.character(dat_gender$Sample_ID[i])
-  gender <- tolower(as.character(dat_gender$Gender[i]))
+  sample_name <- as.character(dat_sample$Sample_ID[i])
+  gender <- tolower(as.character(dat_sample$Gender[i]))
+  ## must change Female => female and Male => male
   
-  # check 
+  ## check if folder exists
   res_files <- list.files(path = file.path(path_output, sample_name))
   idx <- grep(pattern = "cnv", res_files)
   if (length(idx) >0) {
@@ -52,10 +56,12 @@ for (i in 1:nrow(dat_gender)) {
   ## define program variables
   EMITERS    <- "10"        ## number of EM iterations to use during training
   LSETTING   <- "2000000"   ## characteristic CNV length parameter
-  GCDIR      <- file.path(path_to_quantisnp, "data/b37/")              ## path to GC data files (contents of gc_data.zip)
-  PARAMSFILE <- file.path(path_to_quantisnp, "2.3/quantisnp/config/params.dat")      ## path to parameters file
-  LEVELSFILE <- file.path(path_to_quantisnp, "2.3/quantisnp/config/levels-hd.dat")   ## path to levels file
-  MCRROOT    <- file.path(path_to_quantisnp, "MATLAB_RT/lib/v79/")     ## path to MCR Run-Time Libraries
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   
+  GCDIR      <- file.path(path_quantisnp, "data/b37/")                        ## path to GC data files (contents of gc_data.zip)
+  PARAMSFILE <- file.path(path_quantisnp, "quantisnp/config/params.dat")      ## path to parameters file
+  LEVELSFILE <- file.path(path_quantisnp, "quantisnp/config/levels-hd.dat")   ## path to levels file
+  MCRROOT    <- file.path(path_quantisnp, "v79/")                             ## path to MCR Run-Time Libraries
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
   CHRRANGE   <- "1:23"   ## chromosomes
   CHRX       <- "23"     ## which chromosome is X?
   OUTDIR     <- file.path(path_output, sample_name)    ## output directory
@@ -65,8 +71,10 @@ for (i in 1:nrow(dat_gender)) {
 
   
   if (!file.exists(OUTDIR)) dir.create(OUTDIR)
-  
-  cmd <- paste(file.path(path_to_quantisnp, "2.3/quantisnp/linux64/run_quantisnp.sh"),
+
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  
+  cmd <- paste(file.path(path_quantisnp, "quantisnp/linux64/run_quantisnp2.sh"),
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                MCRROOT, 
                paste("--chr", CHRRANGE),
                paste("--outdir", OUTDIR), 
@@ -86,14 +94,17 @@ for (i in 1:nrow(dat_gender)) {
   job.name <- sample_name
   log.file <- file.path(OUTDIR, paste0(sample_name, ".quantisnp.log"))
   err.file <- file.path(OUTDIR, paste0(sample_name, ".quantisnp.err"))
-  
-  bsub.cmd <- paste("bsub -n 2 -W 02:00 -R 'rusage[mem=5000]' -P [account]", ## modify based on specific system
+
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+## configure based on your system  
+  bsub.cmd <- paste("bsub -n 2 -W 02:00 -R 'rusage[mem=5000]' -P <account>",
                     "-J", job.name,
                     "-q premium",
                     "-oo", log.file,
                     "-eo", err.file ,
                     shQuote(cmd))
-  
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
   cat("i =", i, bsub.cmd, "\n")
   system(bsub.cmd)
   Sys.sleep(0.1)
