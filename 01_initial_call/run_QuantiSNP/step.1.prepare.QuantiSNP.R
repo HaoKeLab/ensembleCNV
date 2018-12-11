@@ -17,11 +17,11 @@ suppressPackageStartupMessages(require(optparse))
 option_list <- list(
   make_option(c("-q", "--quantisnp"), action = "store", default = NA, type = "character",
               help = "path to QuantiSNP installation folder."),  
-  make_option(c("-i", "--input"), action = "store", default = NA, type = "character",
+  make_option(c("-d", "--data"), action = "store", default = NA, type = "character",
               help = "data folder for runing QuantiSNP"),
   make_option(c("-s", "--sample"), action = "store", default = NA, type = "character",
               help = "sample file with Sample_ID and Gender information for runing QuantiSNP"),            
-  make_option(c("-o", "--output"), action = "store", default = NA, type = "character",
+  make_option(c("-r", "--result"), action = "store", default = NA, type = "character",
               help = "output folder for QuantiSNP results")
 )
 
@@ -48,7 +48,7 @@ for (i in 1:nrow(dat_sample)) {
   ## check if folder exists
   res_files <- list.files(path = file.path(path_output, sample_name))
   idx <- grep(pattern = "cnv", res_files)
-  if (length(idx) >0) {
+  if (length(idx) > 0) {
     cat("i:", sample_name, "\n")
     next
   }
