@@ -2,17 +2,21 @@
 
 ### Installation
 
-To install QuantiSNP, please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads). For more information about PennCNV, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
+To download and install QuantiSNP, please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component (MCR) Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
 
 After installation, set up environment variable QUANTISNP: `export QUANTISNP='/path/to/quantisnp'`
 
+Please organize the installation folder in the following way:
+
+- MATLAB Run-Time Component (MCR) Libraries root directory: `${QUANTISNP}/v79/`
+- QuantiSNP root directory: `${QUANTISNP}/quantisnp/`
+- GC content data (take b37/hg19 data for example) directory: `${QUANTISNP}/data/b37`
+
 Note:
 
-- Matlab
+- Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component Libraries in accompany with QuantiSNP.
 
-- CentOS 6.9 Ubuntu 16.04 openjdk 1.8
-
-- directory data b37
+- We have successfully installed MCR and QuantiSNP on the Linux CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8.
 
 ### Analysis workflow
 
@@ -22,7 +26,7 @@ Note:
 
 - PennCNV was originally designed to sequentially analyze one sample at a time. Please refer to [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for how to run PennCNV in a sequential way. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
 
-- In the following steps (2) and (3), the scripts regarding job submission embraced by "##<<<... ##>>>..." in the scripts need to be specified by the users based on the system the users are using.
+- In the following steps (1) and (2), the scripts regarding job submission embraced by "##<<<... ##>>>..." in the scripts need to be specified by the users based on the system the users are using.
 
 We run PennCNV analysis with the following 5 steps:
 

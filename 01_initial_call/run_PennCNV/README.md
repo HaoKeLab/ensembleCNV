@@ -2,7 +2,7 @@
 
 ### Installation
 
-To install PennCNV, please follow the detailed instructions (including trouble shooting) at the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/install/). For more information about PennCNV, please refer to their original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/).
+To download and install PennCNV, please follow the detailed instructions (including trouble shooting) at the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/install/). For more information about PennCNV, please refer to their original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/).
 
 After installation, set up environment variable PENNCNV: `export PENNCNV='/path/to/penncnv'`
 
