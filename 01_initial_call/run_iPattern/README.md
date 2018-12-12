@@ -8,7 +8,8 @@ After obtaining the package (e.g., ipn.0.581.tar.gz is the version we received),
 
 #### Requirements
 - R (2.7.1+)
-- The R ppc package – it can be downloaded from http://www-stat.stanford.edu/~tibs/PPC/Rdist/index.html
+  - The R "ppc" package – it can be downloaded from http://www-stat.stanford.edu/~tibs/PPC/Rdist/index.html
+  - The R "cluster" package (1.15.2+)
 - Python (2.5.5+)
 
 #### Setup

@@ -2,7 +2,7 @@
 
 ### Installation
 
-To download and install QuantiSNP (version 2), please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
+To download and install QuantiSNP (version 2), please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to download MATLAB Run-Time Component Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
 
 After installation, set up environment variable QUANTISNP: `export QUANTISNP='/path/to/quantisnp'`
 
@@ -14,9 +14,9 @@ Please organize the installation folder in the following way:
 
 Note:
 
-- Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component (MCR) Libraries in accompany with QuantiSNP.
+- Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component Libraries in accompany with QuantiSNP.
 
-- We have checked that the installation of MATLAB Run-Time Component Libraries and QuantiSNP worked properly on at least two versions of Linux: CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8. 
+- We have checked that the installation of MATLAB Run-Time Component Libraries and QuantiSNP worked properly on two versions of Linux: CentOS 6.9 with openjdk 1.6 (the system used on [Minverva](https://hpc.mssm.edu/) cluster) or Ubuntu 16.04 with openjdk 1.8. The installation of the two components will probably require some further tweaking for different systems, due to tricky JRE (Java Runtime Environment) and libxp dependencies.
 
 ### Analysis workflow
 
