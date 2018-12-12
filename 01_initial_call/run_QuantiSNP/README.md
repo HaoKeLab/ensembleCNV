@@ -2,7 +2,7 @@
 
 ### Installation
 
-To download and install QuantiSNP, please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component (MCR) Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
+To download and install QuantiSNP (version 2), please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component (MCR) Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
 
 After installation, set up environment variable QUANTISNP: `export QUANTISNP='/path/to/quantisnp'`
 
