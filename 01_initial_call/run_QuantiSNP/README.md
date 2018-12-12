@@ -2,21 +2,21 @@
 
 ### Installation
 
-To download and install QuantiSNP (version 2), please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component (MCR) Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
+To download and install QuantiSNP (version 2), please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads), which provides links to MATLAB Run-Time Component Libraries, QuantiSNP package and GC content data. For more information about QuantiSNP, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
 
 After installation, set up environment variable QUANTISNP: `export QUANTISNP='/path/to/quantisnp'`
 
 Please organize the installation folder in the following way:
 
-- MATLAB Run-Time Component (MCR) Libraries root directory: `${QUANTISNP}/v79/`
+- MATLAB Run-Time Component Libraries root directory: `${QUANTISNP}/v79/`
 - QuantiSNP root directory: `${QUANTISNP}/quantisnp/`
 - GC content data (take b37/hg19 data for example) directory: `${QUANTISNP}/data/b37`
 
 Note:
 
-- Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component Libraries in accompany with QuantiSNP.
+- Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component (MCR) Libraries in accompany with QuantiSNP.
 
-- We have checked that the installation of MCR and QuantiSNP worked properly on at least two versions of Linux: CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8. 
+- We have checked that the installation of MATLAB Run-Time Component Libraries and QuantiSNP worked properly on at least two versions of Linux: CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8. 
 
 ### Analysis workflow
 
