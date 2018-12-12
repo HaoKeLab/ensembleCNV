@@ -10,7 +10,7 @@ Please organize the installation folder in the following way:
 
 - MATLAB Run-Time Component Libraries root directory: `${QUANTISNP}/v79/`
 - QuantiSNP root directory: `${QUANTISNP}/quantisnp/`
-- GC content data (take b37/hg19 data for example) directory: `${QUANTISNP}/data/b37`
+- GC content data (take b37/hg19 data for example) directory: `${QUANTISNP}/data/b37/`
 
 Note:
 
@@ -36,7 +36,9 @@ Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.1.prepare.QuantiSNP.R \
 --sample ${WKDIR}/data/Samples_Table.txt \
 --result ${WKDIR}/01_initial_call/run_QuantiSNP/results/res
 ```
-
+When the analysis is completed, there will be subfolders named after sample IDs, each for one sample respectively, created in the directory `${WKDIR}/01_initial_call/run_QuantiSNP/results/res`. Within each sample subfolders, two files (among others) will be generated and used in downstream analysis:
+- `<Sample_ID>.qc`: chromosome-level summary statistics, which will be summarized later at sample level and used in checking [batch effect](https://github.com/HaoKeLab/ensembleCNV#pca-on-summary-statistics). 
+- `<Sample_ID>.cnv`: raw CNV calls for each sample.
 
 (2) Check job status and resubmit unfinishing jobs
 ```sh
@@ -46,6 +48,7 @@ Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.2.check.QuantiSNP.R \
 --sample ${WKDIR}/data/Samples_Table.txt \
 --result ${WKDIR}/01_initial_call/run_QuantiSNP/results/res
 ```
+This step checks if the jobs submitted for each sample in step (1) are successfully completed and resubmits failed jobs if there is any.
 
 (3) Combine PennCNV results from each sample, including the content in ".cnv" files
 ```sh
@@ -53,3 +56,4 @@ perl ${WKDIR}/01_initial_call/run_QuantiSNP/step.3.combine.QuantiSNP.pl \
 --in_dir ${WKDIR}/01_initial_call/run_QuantiSNP/results/res \
 --out_dir ${WKDIR}/01_initial_call/run_QuantiSNP/results
 ```
+When the analysis is completed, you will find `quantisnp.cnv`, which will be used by ensembleCNV, in the directory `${WKDIR}/01_initial_call/run_QuantiSNP/results`. `quantisnp.cnv` combines the CNV calls from all samples generated in steps (1) and (2).
