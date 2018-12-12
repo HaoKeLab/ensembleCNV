@@ -38,6 +38,8 @@ Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.1.prepare.QuantiSNP.R \
 --sample ${WKDIR}/data/Samples_Table.txt \
 --result ${WKDIR}/01_initial_call/run_QuantiSNP/results/res
 ```
+Note: For details about `Samples_Table.txt`, please check the section [data](https://github.com/HaoKeLab/ensembleCNV#data).
+
 When the analysis is completed, there will be subfolders named after sample IDs, each for one sample respectively, created in the directory `${WKDIR}/01_initial_call/run_QuantiSNP/results/res`. Within each sample subfolders, two files (among others) will be generated and used in downstream analysis:
 - `<Sample_ID>.qc`: chromosome-level summary statistics, which will be summarized later at sample level and used in checking [batch effect](https://github.com/HaoKeLab/ensembleCNV#pca-on-summary-statistics). 
 - `<Sample_ID>.cnv`: raw CNV calls for each sample.
