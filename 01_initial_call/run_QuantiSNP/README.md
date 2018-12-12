@@ -2,9 +2,9 @@
 
 ### Installation
 
-To install QuantiSNP, please follow the detailed instructions at the [page](http://penncnv.openbioinformatics.org/en/latest/user-guide/install/). For more information about PennCNV, please refer to their original [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/).
+To install QuantiSNP, please follow the detailed instructions at the [page](https://sites.google.com/site/quantisnp/downloads). For more information about PennCNV, please refer to their original [QuantiSNP website](https://sites.google.com/site/quantisnp/home).
 
-After installation, set up environment variable PENNCNV: `export QUANTISNP='/path/to/quantisnp'`
+After installation, set up environment variable QUANTISNP: `export QUANTISNP='/path/to/quantisnp'`
 
 Note:
 
