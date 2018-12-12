@@ -30,7 +30,7 @@ Note:
 
 We run QuantiSNP analysis with the following 3 steps:
 
-(1) Run QuantiSNP for each sample in parallel (through job scheduling system on cluster)
+(1) Run QuantiSNP for each sample in parallel (through job submitting system)
 ```sh
 Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.1.prepare.QuantiSNP.R \
 --quantisnp ${QUANTISNP} \
