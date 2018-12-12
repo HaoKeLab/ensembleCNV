@@ -74,7 +74,7 @@ WKDIR=</path/to/working_directory>
 ./create_new_project.sh $WKDIR
 ```
 
-Please go through the detailed step-by-step instructions as follows when using ensembleCNV for the first time. For your reference, we also prepared a template script to facilitate running the whole pipeline.
+Please go through the detailed step-by-step instructions as follows when using ensembleCNV for the first time. For your reference, we also prepared a template script [run_ensembleCNV_template.sh](https://github.com/HaoKeLab/ensembleCNV/blob/master/run_ensembleCNV_template.sh) to facilitate running the whole pipeline.
 
 ## Data
 
