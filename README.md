@@ -74,7 +74,7 @@ WKDIR=</path/to/working_directory>
 ./create_new_project.sh $WKDIR
 ```
 
-Please go through the detailed step-by-step instructions as follows when using ensembleCNV for the first time.
+Please go through the detailed step-by-step instructions as follows when using ensembleCNV for the first time. For your reference, we also prepared a template script to facilitate running the whole pipeline.
 
 ## Data
 

@@ -1,0 +1,18 @@
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  #
+  cmd <- paste(file.path(path_to_quantisnp, "2.3/quantisnp/linux64/run_quantisnp.sh"),#
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+               MCRROOT, #
+               paste("--chr", CHRRANGE),#
+               paste("--outdir", OUTDIR), #
+               paste("--sampleid", SAMPLEID),#
+               paste("--gender", GENDER), #
+               paste("--emiters", EMITERS), #
+               paste("--lsetting", LSETTING), #
+               paste("--gcdir", GCDIR),#
+               "--plot", #
+               "--genotype", #
+               paste("--config", PARAMSFILE), #
+               paste("--levels", LEVELSFILE), #
+               paste("--input-files", INFILE), #
+               paste("--chrX", CHRX), #
+               "--doXcorrect")
