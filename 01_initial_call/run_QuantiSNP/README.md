@@ -16,22 +16,17 @@ Note:
 
 - Running QuantiSNP does not require MATLAB, but rather the developers provided a self-contained MATLAB Run-Time Component Libraries in accompany with QuantiSNP.
 
-- We have successfully installed MCR and QuantiSNP on the Linux CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8.
+- We have checked that the installation of MCR and QuantiSNP worked properly on at least two versions of Linux: CentOS 6.9 with openjdk 1.6 or Ubuntu 16.04 with openjdk 1.8. 
 
 ### Analysis workflow
 
-Note: The auxiliary scripts we provide here were used on our high performance cluster. The users need to modifiy the scripts according to the specific system the users are using. Please refer to original [QuantiSNP website](https://sites.google.com/site/quantisnp/) for more information.
-
 Note: 
 
-- PennCNV was originally designed to sequentially analyze one sample at a time. Please refer to [PennCNV website](http://penncnv.openbioinformatics.org/en/latest/) for how to run PennCNV in a sequential way. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
+- QuantiSNP was originally designed to analyze one sample at a time or a batch of samples sequentially. Please refer to the original QuantiSNP [usage](https://sites.google.com/site/quantisnp/howto) for more details. Here, we provide scripts to run the analysis on multiple samples in parallel via job submitting system (one sample per job) in a cluster environment. 
 
 - In the following steps (1) and (2), the scripts regarding job submission embraced by "##<<<... ##>>>..." in the scripts need to be specified by the users based on the system the users are using.
 
-We run PennCNV analysis with the following 5 steps:
-
-
-Running QuantiSNP includes the following 3 steps:
+We run QuantiSNP analysis with the following 3 steps:
 
 (1) Run QuantiSNP for each sample in parallel (through job scheduling system on cluster)
 ```sh
@@ -41,6 +36,8 @@ Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.1.prepare.QuantiSNP.R \
 --sample ${WKDIR}/data/Samples_Table.txt \
 --result ${WKDIR}/01_initial_call/run_QuantiSNP/results/res
 ```
+
+
 (2) Check job status and resubmit unfinishing jobs
 ```sh
 Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.2.check.QuantiSNP.R \
