@@ -142,7 +142,7 @@ Rscript ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/transform_fro
 --startChr <INT> \ ## default: 1
 --endChr <INT>  ## default: 22
 ```
-The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 <= startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chrosomes (i.e., Chr 1 ~ 22) will be processed by default. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
+The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 <= startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chromosomes (i.e., Chr 1 ~ 22) will be processed by default. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
 Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing and genotyping CNVs in sex chromosomes is yet to be developed.
 
