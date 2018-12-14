@@ -114,8 +114,8 @@ ${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted \
 ## NOTE: In "step.2.run.PennCNV.jobs.R", the scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
 Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.2.run.PennCNV.jobs.R \
 --penncnv ${PENNCNV} \
---data ${WKDIR}/01_initial_call/run_PennCNV/data \      ## generated with finalreport_to_PennCNV.pl
---wkdir ${WKDIR}/01_initial_call/run_PennCNV/results \  ## output directory
+--data ${WKDIR}/01_initial_call/run_PennCNV/data \
+--wkdir ${WKDIR}/01_initial_call/run_PennCNV/results \
 --pfb ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 --gcmodel ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.gcmodel \
 --hmm ${PENNCNV}/lib/hhall.hmm
