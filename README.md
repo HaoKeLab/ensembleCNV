@@ -144,7 +144,7 @@ Rscript ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/transform_fro
 ```
 The parameters `--startChr` and `--endChr` indicate the range of chromosomes (1 <= startChr <= endChr <= 22) to be processed. When `--startChr` and `--endChr` are not specified, all the autosomal chromosomes (i.e., Chr 1 ~ 22) will be processed by default. If you are interested in CNVs in a particular chromosome, e.g., chr 3, set `--startChr 3 --endChr 3`.
 
-Note: In current version, we focus on CNVs in autosomal chromosomes, and a module for processing and genotyping CNVs in sex chromosomes is yet to be developed.
+Note: In current version, we focus on detecting and genotyping CNVs in autosomal chromosomes. Functionality for analyzing CNVs of sex chromosomes is part of our future development plans.
 
 When finishing running the scripts, there will be two folders `LRR` and `BAF` created under the folder specified by `--output`. In `LRR` (`BAF`) folder, you will see LRR (BAF) matrices stored in `matrix_chr_*_LRR.rds` (`matrix_chr_*_BAF.rds`) for each chromosome respectively. In the matrix, each row corresponds to a sample while each column a SNP. The data will be later used for CNV genotyping for each CNVR.
 
