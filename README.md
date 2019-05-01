@@ -125,7 +125,7 @@ We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```sh
-perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_to_matrix_LRR_and_BAF.pl \
+perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_matrix_LRR_BAF.pl \
 ${WKDIR}/data/final_report.txt \
 ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
 ```
