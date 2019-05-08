@@ -4,11 +4,11 @@ mode_zz <- function(dt_cnvr) {
   cutoffs <- quantile(dt$LRR_median, c(0.1, 0.9))
   dt1 <- dt[which(dt$LRR_median >= cutoffs[1] & dt$LRR_median <= cutoffs[2]), ]
   md1 <- mlv(x = dt1$LRR_median, method = "parzen", kernel = "gaussian")
-  m1  <- md1$M
+  #m1  <- md1$M
   
   sd1 <- sd(dt1$LRR_median)
   
-  return(list(mu = m1, sigma = sd1))
+  return(list(mu = md1, sigma = sd1))
 }
 
 # CN = 1 and 3 all have more 10 samples
