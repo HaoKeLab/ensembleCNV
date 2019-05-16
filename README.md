@@ -223,7 +223,7 @@ Besides CNV calls, iPattern, PennCNV and QuantiSNP also generate 10 sample-level
 Rscript ${WKDIR}/02_batch_effect/PCA_on_summary_stats/step.1.prepare.stats.R \
 ${WKDIR}/01_initial_call/run_iPattern/results \
 ${WKDIR}/01_initial_call/run_PennCNV/results \
-${WKDIR}/01_initial_call/run_QuantiSNP/results \
+${WKDIR}/01_initial_call/run_QuantiSNP/results/res \
 ${WKDIR}/02_batch_effect/PCA_on_summary_stats   ## summary statistics IPQ.stats.txt from iPattern, PennCNV and QuantiSNP results
 ```
 
