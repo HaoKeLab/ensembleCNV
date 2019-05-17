@@ -41,8 +41,8 @@ Note:
 
 ```sh
 perl ${PENNCNV}/bin/cal_gc_snp.pl \
-${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted \
+${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 -output ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.gcmodel
 ```
 
