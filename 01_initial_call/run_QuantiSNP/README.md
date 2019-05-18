@@ -54,7 +54,7 @@ Rscript ${WKDIR}/01_initial_call/run_QuantiSNP/step.2.check.QuantiSNP.R \
 ```
 This step checks if the jobs submitted for each sample in step (1) are successfully completed and resubmits failed jobs if there is any.
 
-(3) Combine PennCNV results from each sample, including the content in ".cnv" files
+(3) Combine QuantiSNP results from each sample, including the content in ".cnv" files
 ```sh
 perl ${WKDIR}/01_initial_call/run_QuantiSNP/step.3.combine.QuantiSNP.pl \
 --in_dir ${WKDIR}/01_initial_call/run_QuantiSNP/results/res \
