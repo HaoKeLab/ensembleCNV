@@ -1,11 +1,6 @@
 #!/usr/bin/env Rscript
 
-##############################
-###### THIS IS MODIFIED ###### 
-##############################
-
-## NOTE: here I reorganized the sript in order to makes it work with PBS and the qsub command --S.M.
-## All the change should be commented
+## MODIFIED version of the script for PBS clusters 
 
 ## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
 
