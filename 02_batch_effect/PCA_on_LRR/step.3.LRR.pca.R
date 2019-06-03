@@ -13,7 +13,7 @@ suppressMessages({
 })
 
 
-  dat_LRR <- fread(input = file.path( wk_dir, filename_matrix) )  
+  dat_LRR <- fread(input = file.path(filename_matrix) )  
   dat_LRR <- as.data.frame(dat_LRR, stringsAsFactors = FALSE)
   dat_LRR <- column_to_rownames(dat_LRR, var = "V1")
   
