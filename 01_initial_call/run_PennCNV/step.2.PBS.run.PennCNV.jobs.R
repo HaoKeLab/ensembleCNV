@@ -1,13 +1,7 @@
 #!/usr/bin/env Rscirpt
 
-##############################
-###### THIS IS MODIFIED ###### 
-##############################
-
-## NOTE: here I reorganized the sript in order to makes it work with PBS and the qsub command --S.M.
-## All the change should be commented
-
-## NOTE: that it is necessary to copy the script run_detect_cnv.sh into $PENNCNV/bin/ to make this work 
+## MODIFIED script for PBS clusters
+## NOTE: it is necessary to copy the script run_detect_cnv.sh into $PENNCNV/bin/ to make this work 
 
 ## NOTE: The scripts embraced by "##<<<... ##>>>..." need to be specified based on your system
 
@@ -97,7 +91,7 @@ cmd_PennCNV <- function(file_hmm, file_pfb, file_gcmodel,
   file_log   <- file.path(path_res_sample, paste0(samplename, ".log"))
   file_rawcnv <- file.path(path_res_sample, paste0(samplename, ".rawcnv"))
 	
-## here main changes
+## here the main changes
 
   cmd <- paste("-v HMM=", file_hmm,
                 ",PFB=", file_pfb,
