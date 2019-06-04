@@ -24,7 +24,7 @@ mkdir -p ${wkdir}/01_initial_call/run_PennCNV/results
 
 mkdir -p ${wkdir}/01_initial_call/run_QuantiSNP/data
 mkdir -p ${wkdir}/01_initial_call/run_QuantiSNP/results
-mkdir -p ${WKDIR}/01_initial_call/run_QuantiSNP/results/res
+mkdir -p ${wkdir}/01_initial_call/run_QuantiSNP/results/res
 
 ## 02_batch_effect
 cp -ru ./02_batch_effect $wkdir
