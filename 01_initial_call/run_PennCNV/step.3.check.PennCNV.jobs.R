@@ -73,7 +73,7 @@ cmd_submitjob <- function(cmd.sample, samplename) {
   bsub.cmd <- paste("bsub -n 2 -W 00:30 -R 'rusage[mem=5000]' -P <account>",
                     "-J", samplename,
                     "-q premium",
-                    shQuote(cmd))
+                    shQuote(cmd.sample))
 ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   bsub.cmd
