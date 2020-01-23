@@ -26,14 +26,14 @@ option_list <- list(
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
-if (is.na(opt$input) | is.na(opt$output)) {
+if (is.na(opt$data) | is.na(opt$result)) {
   stop("All input and output arguments must be supplied.")
 }
 
 path_quantisnp <- opt$quantisnp
-path_dat       <- opt$input
+path_dat       <- opt$data
 sample_file    <- opt$sample
-path_output    <- opt$output
+path_output    <- opt$result
 
 dat_sample <- read.delim(file = sample_file, as.is = TRUE)
 
