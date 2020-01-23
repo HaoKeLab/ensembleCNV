@@ -106,8 +106,8 @@ sort -k 2,2 -k 3,3n \
 >${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted
 
 perl ${PENNCNV}/bin/cal_gc_snp.pl \
-${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 ${WKDIR}/01_initial_call/run_PennCNV/data_aux/gc5Base_hg19.txt.sorted \
+${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.pfb \
 -output ${WKDIR}/01_initial_call/run_PennCNV/data_aux/SNP.gcmodel
 
 #### (2) Run PennCNV for each sample in parallel (through job submitting system on cluster)
