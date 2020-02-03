@@ -15,10 +15,10 @@ run.quantisnp <- function(path_output, path_dat, sample_name, gender) {
   EMITERS    <- "10"        ## number of EM iterations to use during training
   LSETTING   <- "2000000"   ## characteristic CNV length parameter
 ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  GCDIR      <- file.path(path_to_quantisnp, "data/b37/")                        ## path to GC data files (contents of gc_data.zip)
-  PARAMSFILE <- file.path(path_to_quantisnp, "quantisnp/config/params.dat")      ## path to parameters file
-  LEVELSFILE <- file.path(path_to_quantisnp, "quantisnp/config/levels-hd.dat")   ## path to levels file
-  MCRROOT    <- file.path(path_to_quantisnp, "v79/")                             ## path to MCR Run-Time Libraries
+  GCDIR      <- file.path(path_quantisnp, "data/b37/")                        ## path to GC data files (contents of gc_data.zip)
+  PARAMSFILE <- file.path(path_quantisnp, "quantisnp/config/params.dat")      ## path to parameters file
+  LEVELSFILE <- file.path(path_quantisnp, "quantisnp/config/levels-hd.dat")   ## path to levels file
+  MCRROOT    <- file.path(path_quantisnp, "v79/")                             ## path to MCR Run-Time Libraries
 ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    
   CHRRANGE   <- "1:23"   ## chromosome
   CHRX       <- "23"     ## which chromosome is X?
