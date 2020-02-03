@@ -99,7 +99,7 @@ while( my $line = <REPORT>) {
     my @line = split(/\t/, $line);
     
     my $n1 = scalar(@line); ## each row must have the same number of fields as the header line
-    confess "Error: different number of fields: $n1 than header line at line: $count_line\n" if $n_field != $n1 ;
+    confess "Error: different number of fields: $n1 than header at data line: $content_line\n" if $n_field != $n1 ;
     
     my $sample = $line[$sample_index];
     my $chr = $line[$chr_index];
