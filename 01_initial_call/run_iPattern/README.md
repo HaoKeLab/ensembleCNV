@@ -49,7 +49,7 @@ When the processing is completed, three files are supposed to be generated at  `
 #### Run iPattern
 
 ```sh
-${IPNBASE}/ipn_0.581/preprocess/ilmn/ilmn_run.py \
+${IPNBASE}/preprocess/ilmn/ilmn_run.py \
 --data-file-list   ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_data_file.txt \
 --gender-file      ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_gender_file.txt \
 --bad-sample-file  ${WKDIR}/01_initial_call/run_iPattern/data_aux/${PROJECT_NAME}_bad_samples.txt \
