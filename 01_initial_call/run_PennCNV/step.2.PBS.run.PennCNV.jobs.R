@@ -115,7 +115,7 @@ cmd_submitjob <- function(cmd.sample, samplename) {
 ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ## configure based on your system
 
-qsub.cmd <- paste("qsub -l nodes=2,ncpus=10,mem=10gb,walltime=0:15:00 -q <queque.name> -o", qsub.log.file,"-e", qsub.err.file , "-N", samplename, cmd.sample)
+qsub.cmd <- paste("qsub -l nodes=1,ncpus=5,mem=5gb,walltime=0:15:00 -q short_cpuQ -o", qsub.log.file,"-e", qsub.err.file , "-N", samplename, cmd.sample)
 
 
 ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
