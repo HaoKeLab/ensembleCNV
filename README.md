@@ -125,7 +125,7 @@ We provide [perl scripts](https://github.com/HaoKeLab/ensembleCNV/tree/master/01
 
 (1) Create LRR and BAF (tab delimited) matrices from final report
 ```sh
-perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_to_matrix_LRR_and_BAF.pl \
+perl ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/finalreport_matrix_LRR_BAF.pl \
 ${WKDIR}/data/final_report.txt \
 ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF
 ```
@@ -223,7 +223,7 @@ Besides CNV calls, iPattern, PennCNV and QuantiSNP also generate 10 sample-level
 Rscript ${WKDIR}/02_batch_effect/PCA_on_summary_stats/step.1.prepare.stats.R \
 ${WKDIR}/01_initial_call/run_iPattern/results \
 ${WKDIR}/01_initial_call/run_PennCNV/results \
-${WKDIR}/01_initial_call/run_QuantiSNP/results \
+${WKDIR}/01_initial_call/run_QuantiSNP/results/res \
 ${WKDIR}/02_batch_effect/PCA_on_summary_stats   ## summary statistics IPQ.stats.txt from iPattern, PennCNV and QuantiSNP results
 ```
 
@@ -260,6 +260,7 @@ Rscript ${WKDIR}/03_create_CNVR/step.2.create.CNVR.R \
 --qcnv ${WKDIR}/03_create_CNVR/cnv.quantisnp.txt \
 --snp ${WKDIR}/01_initial_call/finalreport_to_matrix_LRR_and_BAF/SNP_pos.txt \
 --centromere ${WKDIR}/data/centromere_hg19.txt   ## for other assemblies, check UCSC genome browser (see above)
+--output ${WKDIR}/03_create_CNVR
 ```
 Two tab-delimited tables will be generated in this step: i) `cnvr_clean.txt` with the information for each constructed CNVR; ii) `cnv_clean.txt` with the information for each CNV calls from individual methods, including which CNVR each CNV belongs to.
 

@@ -84,7 +84,7 @@ When the analysis is completed, there will be subfolders named after sample IDs,
 Note: In `step.3.check.PennCNV.jobs.R`, the scripts regarding job submission embraced by "##<<<... ##>>>..." need to be specified based on your system.
 
 ```sh
-Rscrip ${WKDIR}/01_initial_call/run_PennCNV/step.3.check.PennCNV.jobs.R \
+Rscript ${WKDIR}/01_initial_call/run_PennCNV/step.3.check.PennCNV.jobs.R \
 --penncnv ${PENNCNV} \                                  ## direct to ${PENNCNV}/bin/detect_cnv.pl
 --data ${WKDIR}/01_initial_call/run_PennCNV/data/ \     ## generated with finalreport_to_PennCNV.pl
 --wkdir ${WKDIR}/01_initial_call/run_PennCNV/results \  ## output directory
